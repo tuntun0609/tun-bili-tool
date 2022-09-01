@@ -4,64 +4,8 @@ export const config: PlasmoContentScript = {
 	matches: ['*://t.bilibili.com/*'],
 };
 
+import { API, Tool } from '~utils';
 import '../css/show-all-liver.css';
-
-const API = {
-	// 封装get方法
-	get: async (props) => {
-		const { url: baseUrl, params = {} } = props;
-		const pStr = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
-		const url = `${baseUrl}${pStr !== '' ? '?' : ''}${pStr}`;
-		try {
-			const res = await fetch(url, {
-				credentials: 'include',
-			});
-			return (await res.json()).data;
-		} catch (error) {
-			console.error('get Error', error);
-		}
-	},
-	// 通过关键词获取视频数据
-	getLiver: async (num = 0) => {
-		try {
-			let params = {};
-			if (num !== 0) {
-				params = {
-					size: num,
-				};
-			}
-			const res = await API.get({
-				url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/w_live_users',
-				params,
-			});
-			return res;
-		} catch (error) {
-			console.log('getLiver', error);
-		}
-	},
-	getCard: async (mid) => {
-		try {
-			const res = await API.get({
-				url: 'https://api.bilibili.com/x/web-interface/card',
-				params: {
-					mid,
-					photo: 'true',
-				},
-			});
-			return res;
-		} catch (error) {
-			console.log('getCard', error);
-		}
-	},
-};
-
-const Tool = {
-	// 大数转万
-	formatBigNumber: num => num > 10000 ? `${(num / 10000).toFixed(2)}万` : num,
-	// 字符串转DOM
-	s2d: (string: string) => new DOMParser().parseFromString(string, 'text/html').body
-		.childNodes[0],
-};
 
 const getListItemTemplete = prop => `
     <div class="bili-dyn-live-users__item">
