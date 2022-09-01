@@ -1,28 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function IndexPopup() {
-  const [data, setData] = useState('');
+	const [data, setData] = useState('');
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 16
-      }}>
-      <h2>
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				padding: 16,
+			}}>
+			<h2>
         Welcome to your{' '}
-        <a href="https://www.plasmo.com" target="_blank">
+				<a href="https://www.plasmo.com" target="_blank" rel="noreferrer">
           Plasmo
-        </a>{' '}
+				</a>{' '}
         Extension!
-      </h2>
-      <input onChange={(e) => setData(e.target.value)} value={data} />
-      <a href="https://docs.plasmo.com" target="_blank">
+			</h2>
+			<input onChange={e => setData(e.target.value)} value={data} />
+			<a href="https://docs.plasmo.com" target="_blank" rel="noreferrer">
         View Doc
-      </a>
-    </div>
-  );
+			</a>
+		</div>
+	);
 }
 
 export default IndexPopup;

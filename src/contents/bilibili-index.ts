@@ -1,10 +1,10 @@
-import type { PlasmoContentScript } from 'plasmo'
+import type { PlasmoContentScript } from 'plasmo';
 
 export const config: PlasmoContentScript = {
-  matches: ['*://t.bilibili.com/*']
-}
+	matches: ['*://t.bilibili.com/*'],
+};
 
-let styleStr = `
+const styleStr = `
   .bili-dyn-home--member {
     width: 1524px !important;
   }
@@ -54,7 +54,7 @@ let styleStr = `
       width: 1272px !important;;
     }
   }
-`
+`;
 // chrome.runtime.sendMessage(
 // {
 //   type: 'getDataFromStorage',
@@ -71,8 +71,8 @@ let styleStr = `
 //   }
 // );
 
-let body = document.body;
-let styleDom = document.createElement('style');
-styleDom.id = 'tuntun-bilibili-index'
+const {body} = document;
+const styleDom = document.createElement('style');
+styleDom.id = 'tuntun-bilibili-index';
 styleDom.innerHTML = styleStr;
 body.appendChild(styleDom);
