@@ -1,4 +1,7 @@
 import type { PlasmoContentScript } from 'plasmo';
+import { Storage } from '@plasmohq/storage';
+
+const storage = new Storage();
 
 import historyWarp from 'url:~utils/history-wrap';
 import { injectScript } from '~utils';
@@ -32,21 +35,22 @@ const repeat = (time = 0) => {
 		}
 	}, time);
 };
-
-document.addEventListener('visibilitychange', () => {
-	repeat(3000);
-});
-window.addEventListener('pushState', () => {
-	repeat();
-});
-window.addEventListener('popstate', () => {
-	repeat();
-});
-
 window.addEventListener(
 	'load',
 	async () => {
-		repeat(3000);
+		const isVideoLoop = await storage.get('isVideoLoop');
+		if (isVideoLoop) {
+			repeat(3000);
+			document.addEventListener('visibilitychange', () => {
+				repeat(3000);
+			});
+			window.addEventListener('pushState', () => {
+				repeat();
+			});
+			window.addEventListener('popstate', () => {
+				repeat();
+			});
+		}
 	},
 	false,
 );
