@@ -1,0 +1,26 @@
+* {
+	box-sizing: border-box;
+}
+
+a{
+	text-decoration:none;
+}
+
+a:link {
+	color: black; /*未访问的链接颜色*/
+}
+
+a:visited {
+	color: black; /*已访问的链接颜色*/
+}
+
+.option-content {
+	padding-top: 84px;
+	padding-left: 258px;
+	background-color: white;
+	.option-card {
+		width: 100%;
+		height: calc(100vh - 84px);
+		padding: 30px;
+	}
+}

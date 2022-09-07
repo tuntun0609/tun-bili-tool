@@ -15,7 +15,8 @@
     "antd": "^4.22.8",
     "plasmo": "0.52.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-router-dom": "6"
   },
   "devDependencies": {
     "@plasmohq/prettier-plugin-sort-imports": "1.2.0",
