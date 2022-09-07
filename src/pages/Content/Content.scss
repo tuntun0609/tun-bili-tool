@@ -1,0 +1,10 @@
+.option-content {
+	padding-top: 84px;
+	padding-left: 258px;
+	background-color: white;
+	.option-card {
+		width: 100%;
+		height: calc(100vh - 84px);
+		padding: 30px;
+	}
+}
