@@ -1,16 +1,24 @@
-import React, { ReactNode } from 'react';
-import { Card } from 'antd';
-import { Route, Routes } from 'react-router-dom';
+import React, { ReactNode, useMemo } from 'react';
+import { Card, Typography } from 'antd';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { LiveSetting, MainSetting, NotFind, OtherSetting, VideoSetting } from '~pages';
+import { routerItems } from '~components';
 
 import './Content.scss';
+import type { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 
-const cardStyle = {
+const { Title } = Typography;
+
+const cardStyle: React.CSSProperties = {
 	width: '100%',
 	height: '100%',
 	borderRadius: '10px',
 	boxShadow: '0px 2px 8px 0px rgba(99, 99, 99, 0.1)',
+};
+
+const cardBodyStyle: React.CSSProperties = {
+	padding: '20px 25px',
 };
 
 interface routerIndex {
@@ -54,11 +62,19 @@ const routerConfig: routerIndex[] = [
 ];
 
 export const Content: React.FC = () => {
-	console.log('Content');
+	const { pathname } = useLocation();
+	const title = useMemo(() => {
+		const formatPath = pathname.slice(1);
+		if (formatPath === '') {
+			return (routerItems[0] as MenuItemType).label;
+		}
+		return ((routerItems as MenuItemType[]).find(item => item.key === formatPath)).label;
+	}, [pathname]);
 	return (
 		<div className='option-content'>
 			<div className='option-card'>
-				<Card style={cardStyle}>
+				<Card style={cardStyle} bodyStyle={cardBodyStyle}>
+					<Title level={2}>{title}</Title>
 					<Routes>
 						{
 							routerConfig.map(item => (

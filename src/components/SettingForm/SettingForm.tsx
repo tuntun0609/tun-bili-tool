@@ -40,15 +40,27 @@ export const SettingForm: React.FC<{ items: SettingFormItem[] }> = ({ items }) =
 			return null;
 		}
 	};
+	const layout = {
+		labelCol: {
+			style: {
+				minWidth: '200px',
+			},
+		},
+	};
 	return (
 		<Form
+			{...layout}
+			labelWrap
 			labelAlign={'left'}
-			labelCol={{ span: 6 }}
-			size={'large'}
+			size={'middle'}
 		>
 			{
 				items.map(item => (
-					<Form.Item key={item.name} label={<div style={{ fontSize: '14px' }}>{item.label}</div>} name={item.name}>
+					<Form.Item
+						key={item.name}
+						label={<div style={{ fontSize: '14px' }}>{item.label}</div>}
+						name={item.name}
+					>
 						{
 							getFormItem(item)
 						}
