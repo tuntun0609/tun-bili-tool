@@ -35,22 +35,47 @@ const repeat = (time = 0) => {
 		}
 	}, time);
 };
+// 点击宽屏
+const widescreen = (time = 0) => {
+	setTimeout(() => {
+		const widescreenBtn: HTMLInputElement = document.querySelector(
+			'.bpx-player-ctrl-wide',
+		);
+		if (widescreenBtn) {
+			widescreenBtn.click();
+		}
+	}, time);
+};
+
 window.addEventListener(
 	'load',
 	async () => {
 		const isVideoLoop = await storage.get('isVideoLoop');
+		const isWidescreen = await storage.get('isWidescreen');
+		const pathChangeFun = () => {
+			if (isVideoLoop) {
+				repeat();
+			}
+		};
 		if (isVideoLoop) {
 			repeat(3000);
-			document.addEventListener('visibilitychange', () => {
-				repeat(3000);
-			});
-			window.addEventListener('pushState', () => {
-				repeat();
-			});
-			window.addEventListener('popstate', () => {
-				repeat();
-			});
 		}
+		if (isWidescreen) {
+			widescreen(1500);
+		}
+		window.addEventListener('visibilitychange', () => {
+			if (document.visibilityState === 'visible' && firstVisible && isVideoLoop) {
+				if(isVideoLoop) {
+					repeat(3000);
+				}
+				if (isWidescreen) {
+					widescreen(1500);
+				}
+				firstVisible = !firstVisible;
+			}
+		});
+		window.addEventListener('pushState', pathChangeFun);
+		window.addEventListener('popstate', pathChangeFun);
 	},
 	false,
 );
