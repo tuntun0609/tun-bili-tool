@@ -1,12 +1,12 @@
 {
   "name": "tun-chrome-extension",
   "displayName": "Tun chrome extension",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Tun chrome extension",
   "author": "TunTun",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
+    "build": "plasmo build --zip",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/"
   },
   "dependencies": {
