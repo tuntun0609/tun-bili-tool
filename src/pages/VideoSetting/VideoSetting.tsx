@@ -7,6 +7,7 @@ import { FromType, SettingForm, SettingFormItem } from '~components';
 export const VideoSetting: React.FC = () => {
 	const [videoLoop, setVideoLoop] = useStorage('isVideoLoop', false);
 	const [wideScreen, setWideScreen] = useStorage('isWideScreen', false);
+	const [videoTool, setVideoTool] = useStorage('isTool', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
@@ -27,6 +28,17 @@ export const VideoSetting: React.FC = () => {
 				checked: wideScreen,
 				onClick: (checked) => {
 					setWideScreen(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '是否开启视频工具',
+			name: 'isTool',
+			formProps: {
+				checked: videoTool,
+				onClick: (checked) => {
+					setVideoTool(checked);
 				},
 			},
 		},
