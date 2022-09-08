@@ -1,8 +1,38 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from 'react';
+import { useStorage } from '@plasmohq/storage';
+
+import { FromType, SettingForm, SettingFormItem } from '~components';
 
 export const VideoSetting: React.FC = () => {
-	console.log('VideoSetting');
+	const [videoLoop, setVideoLoop] = useStorage('isVideoLoop', false);
+	const [wideScreen, setWideScreen] = useStorage('isWideScreen', false);
+	const formConfig: SettingFormItem[] = [
+		{
+			type: FromType.SWITCH,
+			label: '是否自动开启洗脑循环',
+			name: 'isVideoLoop',
+			formProps: {
+				checked: videoLoop,
+				onClick: (checked) => {
+					setVideoLoop(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '是否开启默认宽屏',
+			name: 'isWidescreen',
+			formProps: {
+				checked: wideScreen,
+				onClick: (checked) => {
+					setWideScreen(checked);
+				},
+			},
+		},
+	];
 	return (
-		<div>VideoSetting</div>
+		<SettingForm items={formConfig}></SettingForm>
 	);
 };
+

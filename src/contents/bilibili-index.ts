@@ -1,4 +1,7 @@
 import type { PlasmoContentScript } from 'plasmo';
+import { Storage } from '@plasmohq/storage';
+
+const storage = new Storage();
 
 export const config: PlasmoContentScript = {
 	matches: ['*://t.bilibili.com/*'],
@@ -71,8 +74,13 @@ const styleStr = `
 //   }
 // );
 
-const {body} = document;
-const styleDom = document.createElement('style');
-styleDom.id = 'tuntun-bilibili-index';
-styleDom.innerHTML = styleStr;
-body.appendChild(styleDom);
+const init = async () => {
+	const isTwoRow = await storage.get('isTwoRow');
+	if (isTwoRow) {
+		const styleDom = document.createElement('style');
+		styleDom.id = 'tuntun-bilibili-index';
+		styleDom.innerHTML = styleStr;
+		document.body.appendChild(styleDom);
+	}
+};
+init();

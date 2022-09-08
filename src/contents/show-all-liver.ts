@@ -1,4 +1,7 @@
 import type { PlasmoContentScript } from 'plasmo';
+import { Storage } from '@plasmohq/storage';
+
+const storage = new Storage();
 
 export const config: PlasmoContentScript = {
 	matches: ['*://t.bilibili.com/*'],
@@ -38,7 +41,6 @@ const init = async (isReflash = false) => {
 		if (liveUpListDom) {
 			liveUpListDom.innerHTML = '';
 			const allLiver = await API.getLiver(liverNum);
-			// let addLiverItem = allLiver.items.slice(10);
 			allLiver.items.forEach((item) => {
 				if (liveUpListDom !== null) {
 					liveUpListDom.appendChild(Tool.s2d(getListItemTemplete(item)));
@@ -49,6 +51,7 @@ const init = async (isReflash = false) => {
 	}
 };
 
+// 添加刷新按钮
 const addRefleshBtn = () => {
 	const header = document.querySelector('.bili-dyn-live-users__header');
 	const more = document.querySelector('.bili-dyn-live-users__more');
@@ -76,7 +79,10 @@ const addRefleshBtn = () => {
 window.addEventListener(
 	'load',
 	async () => {
-		await init();
-		addRefleshBtn();
+		const isLivingList = await storage.get('isLivingList');
+		if (isLivingList) {
+			await init();
+			addRefleshBtn();
+		}
 	},
 );

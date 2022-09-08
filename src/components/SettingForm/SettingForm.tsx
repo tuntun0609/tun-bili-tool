@@ -43,7 +43,7 @@ export const SettingForm: React.FC<{ items: SettingFormItem[] }> = ({ items }) =
 	const layout = {
 		labelCol: {
 			style: {
-				minWidth: '200px',
+				minWidth: '250px',
 			},
 		},
 	};

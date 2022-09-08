@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo } from 'react';
-import { Card, Typography } from 'antd';
+import { Card, Typography, Divider } from 'antd';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { LiveSetting, MainSetting, NotFind, OtherSetting, VideoSetting } from '~pages';
@@ -74,7 +74,8 @@ export const Content: React.FC = () => {
 		<div className='option-content'>
 			<div className='option-card'>
 				<Card style={cardStyle} bodyStyle={cardBodyStyle}>
-					<Title level={2}>{title}</Title>
+					<Title level={2} >{title}</Title>
+					<Divider />
 					<Routes>
 						{
 							routerConfig.map(item => (

@@ -1,32 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React from 'react';
 import { useStorage } from '@plasmohq/storage';
 
 import { FromType, SettingForm, SettingFormItem } from '~components';
 
 export const MainSetting: React.FC = () => {
-	const [videoLoop, setVideoLoop] = useStorage('isVideoLoop', false);
-	const [widescreen, setWidescreen] = useStorage('isWidescreen', false);
+	const [twoRow, setTwoRow] = useStorage('isTwoRow', false);
+	const [livingList, setLivingList] = useStorage('isLivingList', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
-			label: '是否自动开启洗脑循环',
-			name: 'isVideoLoop',
+			label: '是否开启动态首页双列展示',
+			name: 'isTwoRow',
 			formProps: {
-				checked: videoLoop,
+				checked: twoRow,
 				onClick: (checked) => {
-					setVideoLoop(checked);
+					setTwoRow(checked);
 				},
 			},
 		},
 		{
 			type: FromType.SWITCH,
-			label: '是否开启默认宽屏',
-			name: 'isWidescreen',
+			label: '是否开启【正在直播】列表加强版',
+			name: 'isLivingList',
 			formProps: {
-				checked: widescreen,
+				checked: livingList,
 				onClick: (checked) => {
-					setWidescreen(checked);
+					setLivingList(checked);
 				},
 			},
 		},
