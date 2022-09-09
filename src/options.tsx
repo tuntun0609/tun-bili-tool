@@ -10,6 +10,7 @@ import {
 
 import './options.scss';
 import 'antd/dist/antd.variable.min.css';
+// import 'antd/dist/antd.css';
 
 // 自定义主题
 ConfigProvider.config({

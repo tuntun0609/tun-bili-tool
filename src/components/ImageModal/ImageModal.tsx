@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { Modal, Image, ModalProps } from 'antd';
 
 interface ImageModalProps extends ModalProps {

@@ -15,7 +15,7 @@ export interface HeaderProps {
 export const Header: React.FC<{items: HeaderProps[]}> = ({ items }) => {
 	console.log('Header');
 	return (
-		<div className={'footer'}>
+		<div className='header'>
 			<div className='logo'>
 				<img className='img' src={logo} alt="tuntun-logo" />
 				<div className='title'>BiliBili Tools</div>
