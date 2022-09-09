@@ -125,6 +125,29 @@ export const API = {
 			console.log('getStatusZInfoByUids', error);
 		}
 	},
+	getVideoInfo: async (bvId: string) => {
+		const baseUrl = 'https://api.bilibili.com/x/web-interface/view';
+		const paramsData = {
+			bvid: bvId,
+		};
+		try {
+			const res = await API.get({
+				url: baseUrl,
+				params: {
+					...paramsData,
+				},
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				option: {
+					credentials: 'omit',
+				},
+			});
+			return res.data;
+		} catch (error) {
+			console.log('getVideoInfo', error);
+		}
+	},
 	// 通过视频地址获取短链
 	getShortUrl: async (url) => {
 		const baseUrl = 'https://api.bilibili.com/x/share/click';

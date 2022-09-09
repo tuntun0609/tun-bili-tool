@@ -67,16 +67,15 @@ export const Tool = {
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 			ctx.drawImage(img, 0, 0);
 			canvas.toBlob(async (blob) => {
-				console.log(blob);
 				const data = [
 					new window.ClipboardItem({
 						[blob.type]: blob,
 					}),
 				];
 				await navigator.clipboard.write(data).then(() => {
-					console.log('Copied to clipboard successfully!');
+					// console.log('Copied to clipboard successfully!');
 				}, () => {
-					console.error('Unable to write to clipboard.');
+					// console.error('Unable to write to clipboard.');
 				});
 			});
 		};

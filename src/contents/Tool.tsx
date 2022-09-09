@@ -5,7 +5,7 @@ import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
 
 import toolCss from 'data-text:./Tool.scss';
-import antdCss from 'data-text:antd/dist/antd.variable.min.css';
+import antdCss from 'data-text:antd/dist/antd.css';
 import toolPopupCss from 'data-text:../components/ToolPopup/ToolPopup.scss';
 import { ToolPopup } from '~components';
 import { Popover } from 'antd';
@@ -72,6 +72,7 @@ const Tool = () => {
 		const offsetY = e.clientY - top;
 		window.onmousemove = (mousemoveEvent: MouseEvent) => {
 			if (offsetX <= TOOL_SIZE && offsetY <= TOOL_SIZE) {
+				mousemoveEvent.preventDefault();
 				setTop(getY(mousemoveEvent.clientY - offsetY));
 				setRight(getX(document.body.offsetWidth - mousemoveEvent.pageX - offsetX));
 			}
