@@ -2,31 +2,34 @@
   z-index: 99999 !important;
 }
 
-.main {
+.tun-tool-main {
 	box-sizing: border-box;
 	width: 36px;
 	height: 36px;
-	background-color: #fb7299;
-	border-radius: 50%;
 	position: fixed;
 	right: 100px;
 	top: 100px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-top: 4px;
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-	cursor: pointer;
-	transition: transform 300ms ease 0s;
-	&:active {
-		transform: scale(0.9);
-	}
-	&:hover .icon{
-		transform: scale(1.1);
-	}
-	.icon {
-		color: white;
-		font-size: 22px;
+	.icon-main {
+		width: 36px;
+		height: 36px;
+		background-color: #fb7299;
 		transition: transform 300ms ease 0s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+		cursor: pointer;
+		&:active {
+			transform: scale(0.9);
+		}
+		&:hover .icon{
+			transform: scale(1.1);
+		}
+		.icon {
+			color: white;
+			font-size: 22px;
+			transition: transform 300ms ease 0s;
+		}
 	}
 }

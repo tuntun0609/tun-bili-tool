@@ -1,10 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { MouseEventHandler, useEffect, useState } from 'react';
 import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
 
-import cssText from 'data-text:./Tool.scss';
-import { MouseEventHandler, useEffect, useState } from 'react';
+import toolCss from 'data-text:./Tool.scss';
+import antdCss from 'data-text:antd/dist/antd.variable.min.css';
+import toolPopupCss from 'data-text:../components/ToolPopup/ToolPopup.scss';
+import { ToolPopup } from '~components';
+import { Popover } from 'antd';
 
 const storage = new Storage();
 
@@ -16,9 +20,11 @@ export const getMountPoint = async () => document.querySelector('body');
 
 export const getStyle = () => {
 	const style = document.createElement('style');
-	style.textContent = cssText;
+	style.textContent = toolCss + antdCss + toolPopupCss;
 	return style;
 };
+
+export const getShadowHostId = () => 'tun-tool-popup';
 
 const Tool = () => {
 	const TOOL_SIZE = 36;
@@ -26,6 +32,9 @@ const Tool = () => {
 	const [position, setPosition] = useState({ top: -TOOL_SIZE, right: -TOOL_SIZE });
 	const [top, setTop] = useState(-TOOL_SIZE);
 	const [right, setRight] = useState(-TOOL_SIZE);
+	const [popupShow, setPopupShow] = useState(false);
+
+	const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
 
 	useEffect(() => {
 		const main = async () => {
@@ -40,39 +49,54 @@ const Tool = () => {
 		setRight(position.right);
 	}, [position]);
 
+	const getY = (y: number) => {
+		if (y < 0) {
+			return 0;
+		} else if (y > document.body.offsetHeight - TOOL_SIZE) {
+			return document.body.offsetHeight - TOOL_SIZE;
+		}
+		return y;
+	};
+	const getX = (x: number) => {
+		if (x < 0) {
+			return 0;
+		} else if (x > document.body.offsetWidth - TOOL_SIZE) {
+			return document.body.offsetWidth - TOOL_SIZE;
+		}
+		return x;
+	};
+
 	const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
-		e.preventDefault();
-		const offsetY = e.clientY - top;
+		setStartPosition({ x: e.clientX, y: e.clientY });
 		const offsetX = document.body.offsetWidth - e.pageX - right;
-		window.onmousemove = (e: MouseEvent) => {
-			const getY = (y: number) => {
-				if (y < 0) {
-					return 0;
-				} else if (y > document.body.offsetHeight - TOOL_SIZE) {
-					return document.body.offsetHeight - TOOL_SIZE;
-				}
-				return y;
-			};
-			const getX = (x: number) => {
-				if (x < 0) {
-					return 0;
-				} else if (x > document.body.offsetWidth - TOOL_SIZE) {
-					return document.body.offsetWidth - TOOL_SIZE;
-				}
-				return x;
-			};
-			setTop(getY(e.clientY - offsetY));
-			setRight(getX(document.body.offsetWidth - e.pageX - offsetX));
+		const offsetY = e.clientY - top;
+		window.onmousemove = (mousemoveEvent: MouseEvent) => {
+			if (offsetX <= TOOL_SIZE && offsetY <= TOOL_SIZE) {
+				setTop(getY(mousemoveEvent.clientY - offsetY));
+				setRight(getX(document.body.offsetWidth - mousemoveEvent.pageX - offsetX));
+			}
 		};
 	};
 	const onMouseUp: MouseEventHandler<HTMLDivElement> = async () => {
 		window.onmousemove = null;
 		storage.set('toolPosition', { top, right });
 	};
+	const isDrag = (sx: number, sy: number, ex: number, ey: number) => {
+		const dragRange = 5;
+		if(Math.sqrt((sx - ex) * (sx - ex) + (sy - ey) * (sy - ey)) <= dragRange) {
+			return false;
+		}
+		return true;
+	};
+	const onToolClick: MouseEventHandler<HTMLDivElement> = (e) => {
+		if (!isDrag(startPosition.x, startPosition.y, e.clientX, e.clientY)) {
+			setPopupShow(!popupShow);
+		}
+	};
 	return isTool ? (
 		<>
 			<div
-				className='main'
+				className='tun-tool-main'
 				onMouseDown={onMouseDown}
 				onMouseUp={onMouseUp}
 				style={{
@@ -81,7 +105,18 @@ const Tool = () => {
 					zIndex: '99999',
 				}}
 			>
-				<ToolOutlined className='icon' />
+				<Popover
+					content={ToolPopup}
+					visible={popupShow}
+					placement="leftTop"
+					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
+				>
+					<div className='icon-main'
+						onClick={onToolClick}
+					>
+						<ToolOutlined className='icon' />
+					</div>
+				</Popover>
 			</div>
 		</>
 	) : null;

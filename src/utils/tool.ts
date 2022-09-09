@@ -60,7 +60,6 @@ export const Tool = {
 		img.crossOrigin = 'Anonymous';
 		img.src = src;
 		img.onload = () => {
-			console.dir(img);
 			const nw = img.naturalWidth;
 			const nh = img.naturalHeight;
 			canvas.width = nw;
