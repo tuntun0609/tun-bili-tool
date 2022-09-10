@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
@@ -50,13 +50,36 @@ const ToolPopup = () => {
 	const [picBtnLoading, setPicBtnLoading] = useState(false);
 	const [imageModalOpen, setImageModalOpen] = useState(false);
 	const [videoPic, setVideoPic] = useState('');
+	const [videoId, setVideoId] = useState('');
 
+	// 通过网址获取视频唯一标识
+	const getVideoId = () => {
+		const path = location.pathname;
+		const [id] = path.match(/(BV|bv).{10}/);
+		return id;
+	};
+
+	// url改变事件
+	const onUrlChanged = useCallback(() => {
+		setVideoId(getVideoId());
+		console.log('onUrlChanged');
+	}, []);
+
+	useEffect(() => {
+		setVideoId(getVideoId());
+		window.addEventListener('pushState', onUrlChanged);
+		window.addEventListener('popstate', onUrlChanged);
+		return () => {
+			window.removeEventListener('pushState', onUrlChanged);
+			window.removeEventListener('popstate', onUrlChanged);
+		};
+	}, []);
+
+	// 视频封面按钮点击事件
 	const onPicBtnClicked = async () => {
 		setPicBtnLoading(true);
-		const path = location.pathname;
-		const [bvId] = path.match(/(BV|bv).{10}/);
 		try {
-			const videoInfo = await API.getVideoInfo(bvId);
+			const videoInfo = await API.getVideoInfo(videoId);
 			setVideoPic(videoInfo.pic);
 			setPicBtnLoading(false);
 			setImageModalOpen(true);
@@ -64,11 +87,11 @@ const ToolPopup = () => {
 			console.log(error);
 		}
 	};
-
+	// image弹出层退出
 	const imageModalCancel = () => {
 		setImageModalOpen(false);
 	};
-
+	// 复制图片至剪贴板按钮
 	const onCopyImgBtnClicked = async () => {
 		try {
 			tool.copyImg(videoPic);
@@ -79,6 +102,7 @@ const ToolPopup = () => {
 
 	return (
 		<div className='tun-popup-main'>
+			{/* 视频封面 */}
 			<Button onClick={onPicBtnClicked} loading={picBtnLoading}>视频封面</Button>
 			<ImageModal
 				centered
@@ -94,6 +118,7 @@ const ToolPopup = () => {
 					document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement
 				}
 			></ImageModal>
+			{/* 分享 */}
 		</div>
 	);
 };
