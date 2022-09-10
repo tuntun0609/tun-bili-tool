@@ -115,7 +115,7 @@ const ToolPopup = () => {
 				onCancel={imageModalCancel}
 				onOk={onCopyImgBtnClicked}
 				getContainer={
-					document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement
+					document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 				}
 			></ImageModal>
 			{/* 分享 */}
@@ -206,7 +206,6 @@ const Tool = () => {
 				style={{
 					top: top + 'px',
 					right: right + 'px',
-					zIndex: '99999',
 				}}
 			>
 				<Popover
