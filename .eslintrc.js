@@ -108,5 +108,6 @@ module.exports = {
 		'no-whitespace-before-property': ['error'],
 		'@typescript-eslint/no-var-requires': ['off'],
 		'@typescript-eslint/no-explicit-any': ['off'],
+		'react-hooks/exhaustive-deps': ['off'],
 	},
 };
