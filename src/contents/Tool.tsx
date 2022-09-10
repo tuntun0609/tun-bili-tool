@@ -1,10 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
-
+import type { TooltipPlacement } from 'antd/lib/tooltip';
 import { Button, Modal, Popover, Image, ModalProps } from 'antd';
+
 import { API, Tool as tool } from '~utils';
 
 import toolCss from 'data-text:./Tool.scss';
@@ -170,6 +171,7 @@ const Tool = () => {
 			setPopupShow(!popupShow);
 		}
 	};
+	const getPopupContainer = useMemo<TooltipPlacement>(() => `${document.body.offsetWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.offsetHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
 		<>
 			<div
@@ -185,7 +187,7 @@ const Tool = () => {
 				<Popover
 					content={ToolPopup}
 					visible={popupShow}
-					placement="leftTop"
+					placement={getPopupContainer}
 					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
 				>
 					<div className='icon-main'
