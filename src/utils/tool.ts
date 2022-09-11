@@ -1,3 +1,5 @@
+import { isString, isNumber } from 'lodash';
+
 export const Tool = {
 	// 大数转万
 	formatBigNumber: num => num > 10000 ? `${(num / 10000).toFixed(2)}万` : num,
@@ -79,5 +81,13 @@ export const Tool = {
 				});
 			});
 		};
+	},
+	copyDataToClipboard: async (
+		data: any,
+	) => {
+		if (isString(data) || isNumber(data)) {
+			return await navigator.clipboard.writeText(data);
+		}
+		return await navigator.clipboard.write(data);
 	},
 };

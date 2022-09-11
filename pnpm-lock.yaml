@@ -15,6 +15,7 @@ specifiers:
   eslint-plugin-import: ^2.26.0
   eslint-plugin-react: ^7.31.1
   eslint-plugin-react-hooks: ^4.6.0
+  lodash: ^4.17.21
   plasmo: 0.53.0
   prettier: 2.7.1
   react: 18.2.0
@@ -26,7 +27,8 @@ dependencies:
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@plasmohq/storage': 0.9.0_react@18.2.0
   antd: 4.22.8_biqbaboplfbrettd7655fr4n2y
-  plasmo: 0.53.0_biqbaboplfbrettd7655fr4n2y
+  lodash: 4.17.21
+  plasmo: 0.53.0_pvnihi4muhoy7kenlmiyxwzuqy
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
@@ -1343,7 +1345,7 @@ packages:
       nullthrows: 1.1.1
     dev: false
 
-  /@plasmohq/consolidate/0.17.0_biqbaboplfbrettd7655fr4n2y:
+  /@plasmohq/consolidate/0.17.0_pvnihi4muhoy7kenlmiyxwzuqy:
     resolution: {integrity: sha512-Na8imBnvzYPtzkK+9Uv9hPZ/oJti/0jgiQWD222SHxHw2QCVuR4KzslxXCy/rS8gGluSiTs1BGVvc3d2O6aJCA==}
     engines: {node: '>= 0.10.0'}
     peerDependencies:
@@ -1488,6 +1490,7 @@ packages:
         optional: true
     dependencies:
       bluebird: 3.7.2
+      lodash: 4.17.21
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false
@@ -1508,7 +1511,7 @@ packages:
       nullthrows: 1.1.1
     dev: false
 
-  /@plasmohq/parcel-config/0.8.1_biqbaboplfbrettd7655fr4n2y:
+  /@plasmohq/parcel-config/0.8.1_pvnihi4muhoy7kenlmiyxwzuqy:
     resolution: {integrity: sha512-qSsdeuAxPEegta58etL0TbI9pKMC5F96x3vNFfO1n0jMtJSMWqZGX4o+0qLNO2tZIkTrumWDUrdwGZ8o97MScA==}
     dependencies:
       '@parcel/config-default': 2.7.0_@parcel+core@2.7.0
@@ -1531,7 +1534,7 @@ packages:
       '@plasmohq/parcel-transformer-inject-env': 0.0.3
       '@plasmohq/parcel-transformer-manifest': 0.3.1
       '@plasmohq/parcel-transformer-svelte3': 0.1.3
-      '@plasmohq/parcel-transformer-vue3': 0.1.3_biqbaboplfbrettd7655fr4n2y
+      '@plasmohq/parcel-transformer-vue3': 0.1.3_pvnihi4muhoy7kenlmiyxwzuqy
     transitivePeerDependencies:
       - arc-templates
       - atpl
@@ -1664,7 +1667,7 @@ packages:
       '@parcel/utils': 2.7.0
     dev: false
 
-  /@plasmohq/parcel-transformer-vue3/0.1.3_biqbaboplfbrettd7655fr4n2y:
+  /@plasmohq/parcel-transformer-vue3/0.1.3_pvnihi4muhoy7kenlmiyxwzuqy:
     resolution: {integrity: sha512-CTq19bFFX4O3imz1TFTA+nX8U+a8M4lyqz7jaI5kyLLvvBPELKc2Uz5r8HcTYq/eWrwm3tcy2yX8UR+mPec5QA==}
     engines: {parcel: '>= 2.7.0'}
     dependencies:
@@ -1674,7 +1677,7 @@ packages:
       '@parcel/source-map': 2.1.0
       '@parcel/types': 2.7.0_@parcel+core@2.7.0
       '@parcel/utils': 2.7.0
-      '@plasmohq/consolidate': 0.17.0_biqbaboplfbrettd7655fr4n2y
+      '@plasmohq/consolidate': 0.17.0_pvnihi4muhoy7kenlmiyxwzuqy
       '@vue/compiler-sfc': 3.2.38
       nullthrows: 1.1.1
       semver: 7.3.7
@@ -4433,7 +4436,7 @@ packages:
     dev: false
     optional: true
 
-  /plasmo/0.53.0_biqbaboplfbrettd7655fr4n2y:
+  /plasmo/0.53.0_pvnihi4muhoy7kenlmiyxwzuqy:
     resolution: {integrity: sha512-C41ZwgNv4IjzXj1C5AjfD2bwozYhJqJcOkav/sShbW/h6T7HeyEO8rWAtvMfZeyuU/F22X0UXisiuURXWmlTVA==}
     hasBin: true
     dependencies:
@@ -4443,7 +4446,7 @@ packages:
       '@parcel/package-manager': 2.7.0_@parcel+core@2.7.0
       '@parcel/watcher': 2.0.5
       '@plasmohq/init': 0.1.3
-      '@plasmohq/parcel-config': 0.8.1_biqbaboplfbrettd7655fr4n2y
+      '@plasmohq/parcel-config': 0.8.1_pvnihi4muhoy7kenlmiyxwzuqy
       archiver: 5.3.1
       buffer: 6.0.3
       chalk: 5.0.1

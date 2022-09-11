@@ -4,7 +4,11 @@ import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
-import { Button, Modal, Popover, Image, ModalProps } from 'antd';
+import {
+	Button, Modal, Popover,
+	Image, ModalProps, Descriptions,
+	message, Space,
+} from 'antd';
 
 import { API, Tool as tool } from '~utils';
 
@@ -17,20 +21,33 @@ export const config: PlasmoContentScript = {
 	matches: ['*://www.bilibili.com/video/*'],
 };
 
+// 获取挂载节点
 export const getMountPoint = async () => document.querySelector('body');
 
+// 注入style
 export const getStyle = () => {
 	const style = document.createElement('style');
 	style.textContent = toolCss + antdCss;
 	return style;
 };
 
+// shadow节点id名
 export const getShadowHostId = () => 'tun-tool-popup';
 
+// 图片弹出层接口
 interface ImageModalProps extends ModalProps {
 	src?: string;
 }
 
+// 全局message配置
+message.config({
+	top: 70,
+	duration: 1.5,
+	maxCount: 3,
+	getContainer: () => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container'),
+});
+
+// 图片弹出层
 export const ImageModal = (props: ImageModalProps) => {
 	const { src = '' } = props;
 	return (
@@ -45,12 +62,35 @@ export const ImageModal = (props: ImageModalProps) => {
 	);
 };
 
+// 视频详细信息内容组件
+const VideoDesItem = ({ value }: { value: string | number }) => (
+	<div
+		style={{
+			cursor: 'pointer',
+		}}
+		onClick={() => {
+			tool.copyDataToClipboard(value)
+				.then(() => {
+					message.success('复制成功');
+				}).catch((e) => {
+					console.error(e);
+					message.error('复制失败');
+				});
+		}}
+	>{value}</div>
+);
+
 // tool 弹出层
 const ToolPopup = () => {
 	const [picBtnLoading, setPicBtnLoading] = useState(false);
 	const [imageModalOpen, setImageModalOpen] = useState(false);
-	const [videoPic, setVideoPic] = useState('');
 	const [videoId, setVideoId] = useState('');
+	const [videoInfo, setVideoInfo] = useState<any>({
+		pic: '',
+		aid: 0,
+		bvid: '',
+		cid: 0,
+	});
 
 	// 通过网址获取视频唯一标识
 	const getVideoId = () => {
@@ -62,7 +102,6 @@ const ToolPopup = () => {
 	// url改变事件
 	const onUrlChanged = useCallback(() => {
 		setVideoId(getVideoId());
-		console.log('onUrlChanged');
 	}, []);
 
 	useEffect(() => {
@@ -75,16 +114,29 @@ const ToolPopup = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		const updateVideoInfo = async () => {
+			if (videoId !== '') {
+				try {
+					const data = await API.getVideoInfo(videoId);
+					setVideoInfo(data);
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		};
+		updateVideoInfo();
+	}, [videoId]);
+
 	// 视频封面按钮点击事件
 	const onPicBtnClicked = async () => {
 		setPicBtnLoading(true);
 		try {
-			const videoInfo = await API.getVideoInfo(videoId);
-			setVideoPic(videoInfo.pic);
-			setPicBtnLoading(false);
 			setImageModalOpen(true);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
+		} finally {
+			setPicBtnLoading(false);
 		}
 	};
 	// image弹出层退出
@@ -94,31 +146,61 @@ const ToolPopup = () => {
 	// 复制图片至剪贴板按钮
 	const onCopyImgBtnClicked = async () => {
 		try {
-			tool.copyImg(videoPic);
+			tool.copyImg(videoInfo.pic ?? '');
+			message.success('复制成功');
 		} catch (error) {
-			console.log(error);
+			message.error('复制失败');
+			console.error(error);
 		}
 	};
 
+	// 视频信息列表配置
+	const VideoDesConfig = useMemo(() => ([
+		{
+			label: 'av号',
+			value: videoInfo.aid,
+		},
+		{
+			label: 'bv号',
+			value: videoInfo.bvid,
+		},
+		{
+			label: 'cid',
+			value: videoInfo.cid,
+		},
+	]), [videoInfo]);
+
 	return (
 		<div className='tun-popup-main'>
-			{/* 视频封面 */}
-			<Button onClick={onPicBtnClicked} loading={picBtnLoading}>视频封面</Button>
-			<ImageModal
-				centered
-				width={720}
-				title={'视频封面'}
-				src={videoPic}
-				cancelText={'返回'}
-				okText={'复制图片至剪切板'}
-				visible={imageModalOpen}
-				onCancel={imageModalCancel}
-				onOk={onCopyImgBtnClicked}
-				getContainer={
-					document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-				}
-			></ImageModal>
-			{/* 分享 */}
+			<Space style={{ width: '100%' }} direction="vertical">
+				{/* 视频信息 */}
+				<Descriptions bordered column={1} size={'small'} title="视频信息-点击复制">
+					{
+						VideoDesConfig.map(item => (
+							<Descriptions.Item key={item.label} label={item.label}>
+								<VideoDesItem value={item.value}></VideoDesItem>
+							</Descriptions.Item>
+						))
+					}
+				</Descriptions>
+				{/* 视频封面 */}
+				<Button onClick={onPicBtnClicked} loading={picBtnLoading}>视频封面</Button>
+				<ImageModal
+					centered
+					width={720}
+					title={'视频封面'}
+					src={videoInfo.pic ?? ''}
+					cancelText={'返回'}
+					okText={'复制图片至剪切板'}
+					visible={imageModalOpen}
+					onCancel={imageModalCancel}
+					onOk={onCopyImgBtnClicked}
+					getContainer={
+						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+					}
+				></ImageModal>
+				{/* 分享 */}
+			</Space>
 		</div>
 	);
 };
