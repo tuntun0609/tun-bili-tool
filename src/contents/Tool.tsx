@@ -6,14 +6,24 @@ import { ToolOutlined } from '@ant-design/icons';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
 import {
 	Button, Modal, Popover,
-	Image, ModalProps, Descriptions,
-	message, Space,
+	Image as AntImage, ModalProps, Descriptions,
+	message, Space, ConfigProvider,
 } from 'antd';
 
 import { API, Tool as tool } from '~utils';
 
 import toolCss from 'data-text:./Tool.scss';
-import antdCss from 'data-text:antd/dist/antd.css';
+// import antdCss from 'data-text:antd/dist/antd.css';
+import antdCss from 'data-text:antd/dist/antd.variable.min.css';
+
+ConfigProvider.config({
+	theme: {
+		primaryColor: '#fb7299',
+		successColor: '#52c41a',
+		warningColor: '#faad14',
+		errorColor: '#f5222d',
+	},
+});
 
 const storage = new Storage();
 
@@ -52,7 +62,7 @@ export const ImageModal = (props: ImageModalProps) => {
 	const { src = '' } = props;
 	return (
 		<Modal {...props}>
-			<Image
+			<AntImage
 				preview={false}
 				src={src}
 				style={{ borderRadius: '10px' }}
@@ -79,6 +89,21 @@ const VideoDesItem = ({ value }: { value: string | number }) => (
 		}}
 	>{value}</div>
 );
+
+// 分享视频信息按钮
+const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
+	const copyData = async () => {
+		const copyText = `视频标题: ${data.title}\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
+		try {
+			tool.copyDataToClipboard(copyText);
+			message.success('复制成功');
+		} catch (error) {
+			console.error(error);
+			message.error('复制失败');
+		}
+	};
+	return (<Button size={'small'} onClick={copyData}>获取视频分享信息</Button>);
+};
 
 // tool 弹出层
 const ToolPopup = () => {
@@ -174,10 +199,19 @@ const ToolPopup = () => {
 		<div className='tun-popup-main'>
 			<Space style={{ width: '100%' }} direction="vertical">
 				{/* 视频信息 */}
-				<Descriptions bordered column={1} size={'small'} title="视频信息-点击复制">
+				<Descriptions
+					bordered
+					column={1}
+					size={'small'}
+					title="视频信息-点击复制"
+					extra={<ShareVideoInfoBtn data={videoInfo}></ShareVideoInfoBtn>}
+				>
 					{
 						VideoDesConfig.map(item => (
-							<Descriptions.Item key={item.label} label={item.label}>
+							<Descriptions.Item
+								key={item.label}
+								label={item.label}
+							>
 								<VideoDesItem value={item.value}></VideoDesItem>
 							</Descriptions.Item>
 						))
@@ -278,7 +312,7 @@ const Tool = () => {
 			setPopupShow(!popupShow);
 		}
 	};
-	const getPopupContainer = useMemo<TooltipPlacement>(() => `${document.body.offsetWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.offsetHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
+	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.body.offsetWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.offsetHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
 		<>
 			<div
@@ -293,7 +327,7 @@ const Tool = () => {
 				<Popover
 					content={ToolPopup}
 					visible={popupShow}
-					placement={getPopupContainer}
+					placement={popupPlacement}
 					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
 				>
 					<div className='icon-main'

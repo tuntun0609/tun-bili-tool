@@ -74,11 +74,7 @@ export const Tool = {
 						[blob.type]: blob,
 					}),
 				];
-				await navigator.clipboard.write(data).then(() => {
-					// console.log('Copied to clipboard successfully!');
-				}, () => {
-					// console.error('Unable to write to clipboard.');
-				});
+				await Tool.copyDataToClipboard(data);
 			});
 		};
 	},
