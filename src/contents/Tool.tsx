@@ -7,7 +7,8 @@ import type { TooltipPlacement } from 'antd/lib/tooltip';
 import {
 	Button, Modal, Popover,
 	Image as AntImage, ModalProps, Descriptions,
-	message, Space, ConfigProvider, Col, Row, Table,
+	message, Space, ConfigProvider, Col, Row,
+	Table, Select,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import axios from 'axios';
@@ -30,6 +31,7 @@ ConfigProvider.config({
 });
 
 const storage = new Storage();
+const { Option } = Select;
 
 export const config: PlasmoContentScript = {
 	matches: ['*://www.bilibili.com/video/*'],
@@ -160,6 +162,7 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>({});
 	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
 	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
+	const [videoSource, setVideoSource] = useState(0);
 
 	// 视频下载链接
 	const getVideoUrl = async (bvid: string, cid: number, qn?: number) => {
@@ -204,11 +207,11 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	// });
 
 	// 通过浏览器下载
-	const downloadByBrowser = async (qn: number) => {
+	const downloadByBrowser = async (qn: number, scource?: number) => {
 		try {
 			const data = await getVideoUrl(videoInfo.bvid, cid, qn);
 			const allUrl = [data.data.data.durl[0].url, ...data.data.data.durl[0].backup_url];
-			const [url] = allUrl;
+			const url = allUrl[scource ?? 0] ?? allUrl[0];
 			const a = document.createElement('a');
 			a.href = url;
 			a.target = '__blank';
@@ -257,35 +260,60 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 		<Modal
 			{...props}
 		>
-			{
-				videoListData.length !== 1 ?
-					<VideoList
-						rowSelection={{
-							type: 'radio',
-							...videoListRowSelection,
-						}}
-						dataSource={videoListData}
-					></VideoList> : null
-			}
-			<Row
-				wrap
-				align={'middle'}
-				justify={'start'}
-				gutter={[8, 8]}
-			>
+			<Space style={{ width: '100%' }} direction="vertical">
+				{/* 分p选择器 */}
 				{
-					videoDownloadInfo.accept_quality?.map((item: number, index: string | number) => (
-						<Col key={item} span={6}>
-							<Button
-								block
-								onClick={() => {
-									downloadByBrowser(item);
+					videoListData.length !== 1 ?
+						<div>
+							<div className='popup-title'>选择分P</div>
+							<VideoList
+								size="small"
+								rowSelection={{
+									type: 'radio',
+									...videoListRowSelection,
 								}}
-							>{videoDownloadInfo.accept_description[index]}</Button>
-						</Col>
-					))
+								dataSource={videoListData}
+							></VideoList>
+						</div>
+						: null
 				}
-			</Row>
+				{/* 线路选择 */}
+				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+					<div className='popup-title' style={{ marginRight: '8px' }}>下载线路</div>
+					<Select
+						size={'small'}
+						defaultValue={0}
+						onChange={value => setVideoSource(value)}
+						dropdownStyle={{ zIndex: '9999999999' }}
+						getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+					>
+						<Option value={0}>线路1</Option>
+						<Option value={1}>线路2</Option>
+						<Option value={2}>线路3</Option>
+					</Select>
+				</div>
+				{/* 不同清晰度下载按钮 */}
+				<div className='popup-title'>视频下载</div>
+				<Row
+					wrap
+					align={'middle'}
+					justify={'start'}
+					gutter={[8, 8]}
+				>
+					{
+						videoDownloadInfo.accept_quality?.map((item: number, index: string | number) => (
+							<Col key={item} span={6}>
+								<Button
+									block
+									onClick={() => {
+										downloadByBrowser(item, videoSource);
+									}}
+								>{videoDownloadInfo.accept_description[index]}</Button>
+							</Col>
+						))
+					}
+				</Row>
+			</Space>
 		</Modal>
 	);
 };

@@ -42,16 +42,16 @@
 			transition: transform 300ms ease 0s;
 		}
 	}
-	.popup-title {
-		color: #000000d9;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		flex: auto;
-		font-size: 16px;
-		font-weight: 700;
-		line-height: 1.5715;
-		overflow: hidden;
-	}
+}
+
+.popup-title {
+	color: #000000d9;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.5715;
+	overflow: hidden;
 }
 
 .ant-popover-inner {
