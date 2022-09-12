@@ -82,7 +82,7 @@ export const Tool = {
 		data: any,
 	) => {
 		if (isString(data) || isNumber(data)) {
-			return await navigator.clipboard.writeText(data);
+			return await navigator.clipboard.writeText(data.toString());
 		}
 		return await navigator.clipboard.write(data);
 	},

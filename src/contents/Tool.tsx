@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { MouseEventHandler, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
@@ -7,15 +7,18 @@ import type { TooltipPlacement } from 'antd/lib/tooltip';
 import {
 	Button, Modal, Popover,
 	Image as AntImage, ModalProps, Descriptions,
-	message, Space, ConfigProvider,
+	message, Space, ConfigProvider, Col, Row, Table,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
+import axios from 'axios';
+import { isUndefined } from 'lodash';
 
 import { API, Tool as tool } from '~utils';
 
 import toolCss from 'data-text:./Tool.scss';
 // import antdCss from 'data-text:antd/dist/antd.css';
 import antdCss from 'data-text:antd/dist/antd.variable.min.css';
+import type { ColumnsType } from 'antd/lib/table';
 
 ConfigProvider.config({
 	theme: {
@@ -115,17 +118,189 @@ const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
 	return (<Button size={'small'} onClick={copyData}>获取视频分享信息</Button>);
 };
 
+interface DownloadVideoModalProps extends ModalProps {
+	videoInfo: any,
+	onProgress?: (progress: number) => void,
+}
+// videoList数据源接口
+interface VideoListItemType {
+  key: number;
+  title: string;
+	cid: number;
+}
+// videoList列配置
+const videoListColumns: ColumnsType<VideoListItemType> = [
+	{
+		title: '分P数',
+		dataIndex: 'key',
+	},
+	{
+		title: '分P名',
+		dataIndex: 'title',
+	},
+	{
+		title: 'cid',
+		dataIndex: 'cid',
+	},
+];
+// 视频分p展示组件
+const VideoList = (props: any) => (
+	<Table
+		{...props}
+		pagination={{
+			defaultPageSize: 5,
+		}}
+		columns={videoListColumns}
+	></Table>
+);
+
+// 下载视频弹出层
+const DownloadVideoModal = (props: DownloadVideoModalProps) => {
+	const { videoInfo } = props;
+	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>({});
+	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
+	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
+
+	// 视频下载链接
+	const getVideoUrl = async (bvid: string, cid: number, qn?: number) => {
+		const data = await axios.get('https://api.bilibili.com/x/player/playurl', {
+			params: {
+				bvid: bvid,
+				cid: cid,
+				qn: qn,
+				fourk: 1,
+			},
+			withCredentials: true,
+		});
+		// download(data.data.data.durl[0].url, videoInfo.title, 'flv');
+		return data;
+	};
+
+	// 通过axios下载视频方法
+	// const downloadByAxios = (url: string, name: string, type: string) => new Promise<void>((resolve, reject) => {
+	// 	axios(url, {
+	// 		method: 'get',
+	// 		responseType: 'blob',
+	// 		onDownloadProgress: (evt: any) => {
+	// 			if (onProgress !== undefined) {
+	// 				const progress = Math.floor(((evt.loaded / evt.total) * 100) * 100) / 100;
+	// 				onProgress(progress);
+	// 			}
+	// 		},
+	// 	})
+	// 		.then((res) => {
+	// 			const blob = new Blob([res.data]);
+	// 			const a = document.createElement('a');
+	// 			a.download = `${name}.${type}`;
+	// 			a.href = URL.createObjectURL(blob);
+	// 			a.click();
+	// 			URL.revokeObjectURL(a.href);
+	// 			a.remove();
+	// 			resolve();
+	// 		})
+	// 		.catch((err) => {
+	// 			reject(err);
+	// 		});
+	// });
+
+	// 通过浏览器下载
+	const downloadByBrowser = async (qn: number) => {
+		try {
+			const data = await getVideoUrl(videoInfo.bvid, cid, qn);
+			const allUrl = [data.data.data.durl[0].url, ...data.data.data.durl[0].backup_url];
+			const [url] = allUrl;
+			const a = document.createElement('a');
+			a.href = url;
+			a.target = '__blank';
+			a.click();
+			a.remove();
+		} catch (error) {
+			console.error(error);
+			message.error('下载发生错误');
+		}
+	};
+
+	// videoList radio选择事件
+	const videoListRowSelection = {
+		onChange: (_selectedRowKeys: React.Key[], selectedRows: VideoListItemType[]) => {
+			setCid(selectedRows[0].cid);
+		},
+		getCheckboxProps: (record: VideoListItemType) => ({
+			key: record.key,
+			title: record.title,
+			cid: record.cid,
+		}),
+	};
+
+	// bvid改变时
+	useEffect(() => {
+		setCid(videoInfo.cid);
+		const main = async () => {
+			try {
+				if (!isUndefined(videoInfo.bvid)) {
+					setVideoListData(videoInfo.pages.map((item: any, i: number) => ({
+						key: i + 1,
+						title: item.part,
+						cid: item.cid,
+					})));
+					const data = await getVideoUrl(videoInfo.bvid, videoInfo.cid);
+					setVideoDownloadInfo(data.data.data ?? {});
+				}
+			} catch (error) {
+				message.error('获取下载信息错误');
+			}
+		};
+		main();
+	}, [videoInfo]);
+
+	return (
+		<Modal
+			{...props}
+		>
+			{
+				videoListData.length !== 1 ?
+					<VideoList
+						rowSelection={{
+							type: 'radio',
+							...videoListRowSelection,
+						}}
+						dataSource={videoListData}
+					></VideoList> : null
+			}
+			<Row
+				wrap
+				align={'middle'}
+				justify={'start'}
+				gutter={[8, 8]}
+			>
+				{
+					videoDownloadInfo.accept_quality?.map((item: number, index: string | number) => (
+						<Col key={item} span={6}>
+							<Button
+								block
+								onClick={() => {
+									downloadByBrowser(item);
+								}}
+							>{videoDownloadInfo.accept_description[index]}</Button>
+						</Col>
+					))
+				}
+			</Row>
+		</Modal>
+	);
+};
+
+const PopupTitle = (props: { children: ReactNode }) => (
+	<div className='popup-title'>{ props.children }</div>
+);
+
 // tool 弹出层
 const ToolPopup = () => {
 	const [picBtnLoading, setPicBtnLoading] = useState(false);
 	const [imageModalOpen, setImageModalOpen] = useState(false);
+	const [downloadVideoModalOpen, setDownloadVideoModalOpen] = useState(false);
 	const [videoId, setVideoId] = useState('');
-	const [videoInfo, setVideoInfo] = useState<any>({
-		pic: '',
-		aid: 0,
-		bvid: '',
-		cid: 0,
-	});
+	const [videoInfo, setVideoInfo] = useState<any>({});
 
 	// 通过网址获取视频唯一标识
 	const getVideoId = () => {
@@ -164,7 +339,7 @@ const ToolPopup = () => {
 	}, [videoId]);
 
 	// 视频封面按钮点击事件
-	const onPicBtnClicked = async () => {
+	const picBtnClicked = async () => {
 		setPicBtnLoading(true);
 		try {
 			setImageModalOpen(true);
@@ -177,6 +352,14 @@ const ToolPopup = () => {
 	// image弹出层退出
 	const imageModalCancel = () => {
 		setImageModalOpen(false);
+	};
+	// 下载按钮点击事件
+	const downloadVideoBtnClicked = () => {
+		setDownloadVideoModalOpen(true);
+	};
+	// 下载弹出层退出
+	const downloadVideoModalCancel = () => {
+		setDownloadVideoModalOpen(false);
 	};
 	// 复制图片至剪贴板按钮
 	const onCopyImgBtnClicked = async () => {
@@ -199,10 +382,10 @@ const ToolPopup = () => {
 			label: 'bv号',
 			value: videoInfo.bvid,
 		},
-		{
-			label: 'cid',
-			value: videoInfo.cid,
-		},
+		// {
+		// 	label: 'cid',
+		// 	value: videoInfo.cid,
+		// },
 	]), [videoInfo]);
 
 	return (
@@ -228,7 +411,7 @@ const ToolPopup = () => {
 					}
 				</Descriptions>
 				{/* 视频封面 */}
-				<Button onClick={onPicBtnClicked} loading={picBtnLoading}>视频封面</Button>
+				<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
 				<ImageModal
 					centered
 					width={720}
@@ -243,6 +426,22 @@ const ToolPopup = () => {
 						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 					}
 				></ImageModal>
+				{/* 视频下载 */}
+				<PopupTitle>视频下载</PopupTitle>
+				<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
+				<DownloadVideoModal
+					centered
+					width={620}
+					title={'视频下载'}
+					footer={null}
+					visible={downloadVideoModalOpen}
+					onCancel={downloadVideoModalCancel}
+					getContainer={
+						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+					}
+					videoInfo={videoInfo}
+					// onProgress={p => console.log(p)}
+				></DownloadVideoModal>
 			</Space>
 		</div>
 	);
