@@ -14,6 +14,7 @@
     "@plasmohq/storage": "^0.9.0",
     "antd": "^4.22.8",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "plasmo": "0.53.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
