@@ -325,7 +325,9 @@ const PopupTitle = (props: { children: ReactNode }) => (
 // tool 弹出层
 const ToolPopup = () => {
 	const [picBtnLoading, setPicBtnLoading] = useState(false);
-	const [imageModalOpen, setImageModalOpen] = useState(false);
+	const [picModalOpen, setPicModalOpen] = useState(false);
+	const [screenshotModalOpen, setScreenshotModalOpen] = useState(false);
+	const [screenshotData, setScreenshotData] = useState('');
 	const [downloadVideoModalOpen, setDownloadVideoModalOpen] = useState(false);
 	const [videoId, setVideoId] = useState('');
 	const [videoInfo, setVideoInfo] = useState<any>({});
@@ -370,16 +372,51 @@ const ToolPopup = () => {
 	const picBtnClicked = async () => {
 		setPicBtnLoading(true);
 		try {
-			setImageModalOpen(true);
+			setPicModalOpen(true);
 		} catch (error) {
 			console.error(error);
 		} finally {
 			setPicBtnLoading(false);
 		}
 	};
-	// image弹出层退出
-	const imageModalCancel = () => {
-		setImageModalOpen(false);
+	// 视频封面弹出层退出
+	const picModalCancel = () => {
+		setPicModalOpen(false);
+	};
+	// 复制图片至剪贴板按钮
+	const onCopyPicBtnClicked = async () => {
+		try {
+			tool.copyImg(videoInfo.pic ?? '');
+			message.success('复制成功');
+		} catch (error) {
+			message.error('复制失败');
+			console.error(error);
+		}
+	};
+	// 视频截图按钮点击事件
+	const screenshotBtnClicked = () => {
+		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+		const screenshotCanvas = document.createElement('canvas');
+		screenshotCanvas.width = videoElement.videoWidth;
+		screenshotCanvas.height = videoElement.videoHeight;
+		screenshotCanvas.getContext('2d')
+			.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+		setScreenshotData(screenshotCanvas.toDataURL('image/png'));
+		setScreenshotModalOpen(true);
+	};
+	// 视频截图弹窗返回
+	const screenModalCancel = () => {
+		setScreenshotModalOpen(false);
+	};
+	// 复制截图至剪贴板
+	const onCopyScreenshotBtnClicked = () => {
+		try {
+			tool.copyImg(screenshotData ?? '');
+			message.success('复制成功');
+		} catch (error) {
+			message.error('复制失败');
+			console.error(error);
+		}
 	};
 	// 下载按钮点击事件
 	const downloadVideoBtnClicked = () => {
@@ -389,17 +426,6 @@ const ToolPopup = () => {
 	const downloadVideoModalCancel = () => {
 		setDownloadVideoModalOpen(false);
 	};
-	// 复制图片至剪贴板按钮
-	const onCopyImgBtnClicked = async () => {
-		try {
-			tool.copyImg(videoInfo.pic ?? '');
-			message.success('复制成功');
-		} catch (error) {
-			message.error('复制失败');
-			console.error(error);
-		}
-	};
-
 	// 视频信息列表配置
 	const VideoDesConfig = useMemo(() => ([
 		{
@@ -438,38 +464,65 @@ const ToolPopup = () => {
 						))
 					}
 				</Descriptions>
-				{/* 视频封面 */}
-				<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
-				<ImageModal
-					centered
-					width={720}
-					title={'视频封面'}
-					src={videoInfo.pic ?? ''}
-					cancelText={'返回'}
-					okText={'复制图片至剪切板'}
-					visible={imageModalOpen}
-					onCancel={imageModalCancel}
-					onOk={onCopyImgBtnClicked}
-					getContainer={
-						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-					}
-				></ImageModal>
-				{/* 视频下载 */}
-				<PopupTitle>视频下载</PopupTitle>
-				<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
-				<DownloadVideoModal
-					centered
-					width={620}
-					title={'视频下载'}
-					footer={null}
-					visible={downloadVideoModalOpen}
-					onCancel={downloadVideoModalCancel}
-					getContainer={
-						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-					}
-					videoInfo={videoInfo}
-					// onProgress={p => console.log(p)}
-				></DownloadVideoModal>
+				<PopupTitle>视频工具</PopupTitle>
+				<div>
+					{/* 视频封面 */}
+					<Row wrap gutter={16} >
+						<Col span={8}>
+							{/* 视频封面 */}
+							<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
+							<ImageModal
+								centered
+								width={720}
+								title={'视频封面'}
+								src={videoInfo.pic ?? ''}
+								cancelText={'返回'}
+								okText={'复制图片至剪切板'}
+								visible={picModalOpen}
+								onCancel={picModalCancel}
+								onOk={onCopyPicBtnClicked}
+								getContainer={
+									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								}
+							></ImageModal>
+						</Col>
+						<Col span={8}>
+							{/* 视频画面 */}
+							<Button onClick={screenshotBtnClicked}>视频截图</Button>
+							<ImageModal
+								centered
+								width={720}
+								title={'视频截图'}
+								src={screenshotData ?? ''}
+								cancelText={'返回'}
+								okText={'复制图片至剪切板'}
+								visible={screenshotModalOpen}
+								onCancel={screenModalCancel}
+								onOk={onCopyScreenshotBtnClicked}
+								getContainer={
+									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								}
+							></ImageModal>
+						</Col>
+						<Col span={8}>
+							{/* 视频下载 */}
+							<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
+							<DownloadVideoModal
+								centered
+								width={620}
+								title={'视频下载'}
+								footer={null}
+								visible={downloadVideoModalOpen}
+								onCancel={downloadVideoModalCancel}
+								getContainer={
+									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								}
+								videoInfo={videoInfo}
+								// onProgress={p => console.log(p)}
+							></DownloadVideoModal>
+						</Col>
+					</Row>
+				</div>
 			</Space>
 		</div>
 	);
