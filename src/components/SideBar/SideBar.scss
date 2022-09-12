@@ -1,4 +1,4 @@
-.side-bar {
+.sidebar {
 	width: 258px;
 	height: calc(100vh - 84px);
 	position: fixed;
@@ -7,4 +7,29 @@
 	padding-top: 40px;
 	box-shadow: 8 0px 24px -2px rgb(0 0 0 / 5%);
 	background-color: white;
+	.sidebar-item {
+		margin-bottom: 8px;
+  	margin-top: 4px;
+		height: 40px;
+  	line-height: 40px;
+		text-overflow: ellipsis;
+		padding: 0 16px;
+		position: relative;
+		white-space: nowrap;
+		transition: border-color .3s, background .3s, padding .3s cubic-bezier(.645, .045, .355, 1);
+  	display: block;
+  	cursor: pointer;
+		&:hover {
+			color: #1890ff;
+		}
+		.sidebar-item-label {
+			transition: color .3s;
+		}
+		.sidebar-item-label-select {
+			color: #1890ff;
+		}
+	}
+	.sidebar-item-select {
+		background-color: #e6f7ff;
+	}
 }
