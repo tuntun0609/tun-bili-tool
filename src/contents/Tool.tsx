@@ -403,6 +403,7 @@ const ToolPopup = () => {
 			.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
 		setScreenshotData(screenshotCanvas.toDataURL('image/png'));
 		setScreenshotModalOpen(true);
+		screenshotCanvas.remove();
 	};
 	// 视频截图弹窗返回
 	const screenModalCancel = () => {

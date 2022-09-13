@@ -8,7 +8,7 @@ export const config: PlasmoContentScript = {
 };
 
 import { API, Tool } from '~utils';
-import '../css/show-all-liver.css';
+import style from 'data-text:../css/show-all-liver.css';
 
 const getListItemTemplete = prop => `
     <div class="bili-dyn-live-users__item">
@@ -81,6 +81,10 @@ window.addEventListener(
 	async () => {
 		const isLivingList = await storage.get('isLivingList');
 		if (isLivingList) {
+			const styleDom = document.createElement('style');
+			styleDom.id = 'tuntun-bilibili-show-all-liver';
+			styleDom.textContent = style;
+			document.body.appendChild(styleDom);
 			await init();
 			addRefleshBtn();
 		}
