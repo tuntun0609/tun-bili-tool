@@ -20,16 +20,16 @@
   	display: block;
   	cursor: pointer;
 		&:hover {
-			color: #1890ff;
+			color: #fb7299;
 		}
 		.sidebar-item-label {
 			transition: color .3s;
 		}
 		.sidebar-item-label-select {
-			color: #1890ff;
+			color: #fb7299;
 		}
 	}
 	.sidebar-item-select {
-		background-color: #e6f7ff;
+		background-color: #fff1f6;
 	}
 }

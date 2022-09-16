@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Button, ConfigProvider } from 'antd';
 
-function IndexPopup() {
-	const [data, setData] = useState('');
+import './popup.scss';
+import 'antd/dist/antd.variable.min.css';
+// import 'antd/dist/antd.css';
 
+// 自定义主题
+ConfigProvider.config({
+	theme: {
+		primaryColor: '#fb7299',
+		successColor: '#52c41a',
+		warningColor: '#faad14',
+		errorColor: '#f5222d',
+	},
+});
+
+function Popup() {
+	const openOptions = () => {
+		if (chrome.runtime.openOptionsPage) {
+			chrome.runtime.openOptionsPage();
+		} else {
+			window.open(chrome.runtime.getURL('options.html'));
+		}
+	};
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				padding: 16,
-			}}>
-			<h2>
-        Welcome to your{' '}
-				<a href="https://www.plasmo.com" target="_blank" rel="noreferrer">
-          Plasmo
-				</a>{' '}
-        Extension!
-			</h2>
-			<input onChange={e => setData(e.target.value)} value={data} />
-			<a href="https://docs.plasmo.com" target="_blank" rel="noreferrer">
-        View Doc
-			</a>
+		<div className='main'>
+			<Button
+				onClick={openOptions}
+			>选项页</Button>
 		</div>
 	);
 }
 
-export default IndexPopup;
+export default Popup;

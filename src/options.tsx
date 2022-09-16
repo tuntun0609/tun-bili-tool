@@ -14,7 +14,12 @@ import 'antd/dist/antd.variable.min.css';
 
 // 自定义主题
 ConfigProvider.config({
-	theme: {},
+	theme: {
+		primaryColor: '#fb7299',
+		successColor: '#52c41a',
+		warningColor: '#faad14',
+		errorColor: '#f5222d',
+	},
 });
 
 const HeaderItems: HeaderProps[] = [
