@@ -68,6 +68,7 @@ export const ImageModal = (props: ImageModalProps) => {
 	const { src = '' } = props;
 	return (
 		<Modal
+			destroyOnClose
 			bodyStyle={{
 				display: 'flex',
 				justifyContent: 'center',
@@ -154,6 +155,11 @@ const VideoList = (props: any) => (
 		}}
 		columns={videoListColumns}
 	></Table>
+);
+
+// 大会员图标
+const VipIcon = (props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLDivElement> & React.HTMLAttributes<HTMLDivElement>) => (
+	<i {...props} className='tun-vip-icon'></i>
 );
 
 // 下载视频弹出层
@@ -303,12 +309,15 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					{
 						videoDownloadInfo.accept_quality?.map((item: number, index: string | number) => (
 							<Col key={item} span={6}>
-								<Button
-									block
-									onClick={() => {
-										downloadByBrowser(item, videoSource);
-									}}
-								>{videoDownloadInfo.accept_description[index]}</Button>
+								<div style={{ position: 'relative' }}>
+									<Button
+										block
+										onClick={() => {
+											downloadByBrowser(item, videoSource);
+										}}
+									>{videoDownloadInfo.accept_description[index]}</Button>
+									{item >= 112 ? <VipIcon></VipIcon> : null}
+								</div>
 							</Col>
 						))
 					}
@@ -468,7 +477,7 @@ const ToolPopup = () => {
 				<PopupTitle>视频工具</PopupTitle>
 				<div>
 					{/* 视频封面 */}
-					<Row wrap gutter={16} >
+					<Row wrap gutter={[16, 8]} >
 						<Col span={8}>
 							{/* 视频封面 */}
 							<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
