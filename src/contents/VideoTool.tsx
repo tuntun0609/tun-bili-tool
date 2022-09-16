@@ -1,5 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { MouseEventHandler, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	MouseEventHandler, ReactNode, useCallback,
+	useEffect, useMemo, useState,
+} from 'react';
 import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
@@ -16,7 +19,7 @@ import { isUndefined } from 'lodash';
 
 import { API, Tool as tool } from '~utils';
 
-import toolCss from 'data-text:./Tool.scss';
+import toolCss from 'data-text:./VideoTool.scss';
 // import antdCss from 'data-text:antd/dist/antd.css';
 import antdCss from 'data-text:antd/dist/antd.variable.min.css';
 import type { ColumnsType } from 'antd/lib/table';
@@ -436,6 +439,13 @@ const ToolPopup = () => {
 	const downloadVideoModalCancel = () => {
 		setDownloadVideoModalOpen(false);
 	};
+	// 视频弹幕按钮点击事件
+	const getDanmuBtnClicked = async () => {
+		const data = await chrome.runtime.sendMessage({
+			type: 'getDanmu',
+		});
+		console.log(data);
+	};
 	// 视频信息列表配置
 	const VideoDesConfig = useMemo(() => ([
 		{
@@ -531,6 +541,10 @@ const ToolPopup = () => {
 								// onProgress={p => console.log(p)}
 							></DownloadVideoModal>
 						</Col>
+						<Col span={8}>
+							{/* 视频下载 */}
+							<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
+						</Col>
 					</Row>
 				</div>
 			</Space>
@@ -539,7 +553,7 @@ const ToolPopup = () => {
 };
 
 // tool main
-const Tool = () => {
+const VideoTool = () => {
 	const TOOL_SIZE = 36;
 	const [isTool] = useStorage('isTool', false);
 	const [position, setPosition] = useState({ top: -TOOL_SIZE, right: -TOOL_SIZE });
@@ -640,4 +654,4 @@ const Tool = () => {
 	) : null;
 };
 
-export default Tool;
+export default VideoTool;

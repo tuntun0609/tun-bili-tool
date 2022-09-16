@@ -1,0 +1,70 @@
+#plasmo-shadow-container {
+  z-index: 99999 !important;
+}
+
+.tun-popup-main {
+	width: 300px;
+	height: 500px;
+	background-color: white;
+	.ant-descriptions-header {
+		margin-bottom: 8px;
+	}
+}
+
+.tun-tool-main {
+	box-sizing: border-box;
+	width: 36px;
+	height: 36px;
+	position: fixed;
+	right: 100px;
+	top: 100px;
+	z-index: 999;
+	.icon-main {
+		width: 36px;
+		height: 36px;
+		background-color: #fb7299;
+		transition: transform 300ms ease 0s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+		cursor: pointer;
+		&:active {
+			transform: scale(0.9);
+		}
+		&:hover .icon{
+			transform: scale(1.1);
+		}
+		.icon {
+			color: white;
+			font-size: 22px;
+			transition: transform 300ms ease 0s;
+		}
+	}
+}
+
+.popup-title {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.5715;
+	overflow: hidden;
+}
+
+.tun-vip-icon {
+	position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  top: 2px;
+  left: 2px;
+  background-size: 20px;
+  background-image: url(https://i0.hdslb.com/bfs/vip/icon_Certification_big_member_22_3x.png@40w_40h_1c.webp);
+  z-index: 10;
+}
+
+.ant-popover-inner {
+	border-radius: 10px !important;
+}
