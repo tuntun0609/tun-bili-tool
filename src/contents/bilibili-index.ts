@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 // import * as htmlToImage from 'html-to-image';
 
 import { Tool as tool } from '~utils';
+import dark from 'data-text:../css/bilibili-index-dark.css';
 
 const storage = new Storage();
 
@@ -140,8 +141,20 @@ const init = async () => {
 		document.body.appendChild(styleDom);
 	}
 };
+
+const isDark = async () => {
+	const isIndexDark = await storage.get('isIndexDark');
+	if (isIndexDark) {
+		const styleDom = document.createElement('style');
+		styleDom.id = 'tuntun-bilibili-index-dark';
+		styleDom.innerHTML = dark;
+		document.body.appendChild(styleDom);
+	}
+};
+
 init();
 obs();
+isDark();
 
 let isReInit = true;
 setTimeout(() => {

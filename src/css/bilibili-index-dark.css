@@ -1,0 +1,296 @@
+:root {
+  --tun-gray-13: #000000 !important;
+  --tun-gray-12: #141414 !important;
+  --tun-gray-11: #1f1f1f !important;
+  --tun-gray-10: #262626 !important;
+  --tun-gray-9: #434343 !important;
+  --tun-gray-8: #595959 !important;
+  --tun-gray-7: #8c8c8c !important;
+  --tun-gray-6: #bfbfbf !important;
+  --tun-gray-5: #d9d9d9 !important;
+  --tun-gray-4: #f0f0f0 !important;
+  --tun-gray-3: #f5f5f5 !important;
+  --tun-gray-2: #fafafa !important;
+  --tun-gray-1: #ffffff !important;
+}
+
+/* 整体背景 */
+#app>.bg {
+  background: var(--tun-gray-10) !important;
+}
+
+.bili-dyn-home--member {
+  background-color: var(--tun-gray-10) !important;
+}
+
+/* up列表 */
+.bili-dyn-up-list {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-dyn-up-list__item__name {
+  color: var(--tun-gray-6) !important;
+}
+
+.bili-dyn-up-list__item.active .bili-dyn-up-list__item__face {
+  box-shadow: 0 0 0 1px #00a1d6 !important;
+}
+
+.bili-dyn-up-list__item__face {
+  border: 2px solid var(--tun-gray-12) !important;
+  box-shadow: 0 0 0 1px var(--tun-gray-12) !important;
+}
+
+.user-card .bg {
+  background-color: none !important;
+}
+
+/* 动态tab栏 */
+.bili-dyn-list-tabs__list {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-dyn-list-tabs__item {
+  color: var(--tun-gray-6) !important;
+}
+
+.bili-dyn-list-tabs__item.active {
+  color: #00a1d6 !important;
+}
+
+/* 新动态提示 */
+.bili-dyn-list__notification {
+  background-color: #dcd9bc !important;
+  color: #c79f3a !important;
+}
+
+/* 动态卡片 */
+.bili-dyn-item {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-dyn-time {
+  color: var(--tun-gray-6) !important;
+}
+
+.bili-dyn-time:hover {
+  color: #fb7299 !important;
+}
+
+.bili-dyn-title__text.default{
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-rich-text__content {
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-dyn-interaction__item__desc .bili-rich-text-module {
+  color: var(--tun-gray-7) !important;
+}
+
+.bili-rich-text-link, .bili-rich-text-module, .bili-rich-text-topic {
+  color: #178bcf !important;
+}
+
+/* 动态卡片视频 */
+.bili-dyn-card-video__body {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.bili-dyn-card-video {
+  border: 1px solid var(--tun-gray-11) !important;
+}
+
+.bili-dyn-card-video__title {
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-dyn-card-live__body {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.bili-dyn-card-live__title {
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-dyn-card-live {
+  border: 1px solid var(--tun-gray-11) !important;
+}
+
+.bili-dyn-content__orig.reference {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.bili-dyn-card-pgc {
+  border: 1px solid var(--tun-gray-11) !important;
+}
+
+.bili-dyn-card-pgc__title {
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-dyn-card-pgc__body {
+  background-color: var(--tun-gray-11) !important;
+}
+
+/* 动态相关 */
+.dyn-additional-common__wrap {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.dyn-additional-common__detail__title {
+  color: var(--tun-gray-5) !important;
+}
+
+/* 动态评论 */
+.bb-comment {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.tabs-order li{
+  color: var(--tun-gray-5) !important;
+}
+
+.tabs-order li.on {
+  border-bottom: 1px solid #00a1d6 !important;
+  color: #00a1d6 !important;
+}
+
+.bb-comment .comment-header, .comment-bilibili-fold .comment-header {
+  border-bottom: 1px solid var(--tun-gray-9) !important;
+}
+
+.reply-wrap p {
+  color: var(--tun-gray-6) !important;
+}
+
+.paging-box {
+  color: var(--tun-gray-6) !important;
+}
+
+.paging-box a {
+  color: var(--tun-gray-6) !important;
+}
+
+.paging-box a:hover {
+  color: #00a1d6 !important;
+}
+
+.bb-comment .comment-list .list-item .user .text-con, .comment-bilibili-fold .comment-list .list-item .user .text-con {
+  color: var(--tun-gray-6) !important;
+}
+
+.bb-comment .comment-list .list-item .info .btn-hover:hover, .comment-bilibili-fold .comment-list .list-item .info .btn-hover:hover {
+  background: none !important;
+}
+
+.bb-comment .comment-list .list-item .con, .comment-bilibili-fold .comment-list .list-item .con {
+  border-top: 1px solid var(--tun-gray-9) !important;
+}
+
+.bb-comment .comment-send .textarea-container .ipt-txt, .comment-bilibili-fold .comment-send .textarea-container .ipt-txt, .bb-comment .comment-send-lite .textarea-container .ipt-txt, .comment-bilibili-fold .comment-send-lite .textarea-container .ipt-txt {
+  background-color: var(--tun-gray-10) !important;
+  color: var(--tun-gray-6) !important;
+  border: 1px solid var(--tun-gray-9) !important;
+}
+
+.bb-comment .comment-send .comment-emoji, .comment-bilibili-fold .comment-send .comment-emoji, .bb-comment .comment-send-lite .comment-emoji, .comment-bilibili-fold .comment-send-lite .comment-emoji {
+  border: 1px solid var(--tun-gray-9) !important;
+  box-shadow: none !important;
+}
+
+.bb-comment .comment-send .comment-emoji .face, .comment-bilibili-fold .comment-send .comment-emoji .face, .bb-comment .comment-send-lite .comment-emoji .face, .comment-bilibili-fold .comment-send-lite .comment-emoji .face {
+  color: var(--tun-gray-6) !important;
+}
+
+.emoji-box {
+  background-color: var(--tun-gray-10) !important;
+  border: 1px solid var(--tun-gray-9) !important;
+}
+
+.emoji-box .emoji-tabs {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.emoji-box .emoji-tabs .tab-link {
+  background-color: var(--tun-gray-10) !important;
+}
+
+.emoji-box .emoji-tabs .tab-link.on {
+  background-color: var(--tun-gray-11) !important;
+}
+
+.emoji-box .emoji-text {
+  color: var(--tun-gray-6) !important;
+}
+
+.emoji-box .emoji-text:hover {
+  color: #111 !important;
+}
+
+/* 左侧直播栏 */
+.bili-dyn-live-users {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-dyn-live-users__item__uname {
+  color: var(--tun-gray-6) !important;
+}
+
+.bili-dyn-live-users__title {
+  color: var(--tun-gray-6) !important;
+}
+
+.bili-dyn-live-users__header button {
+  background: none !important;
+}
+
+/* 左上角用户页 */
+.bili-dyn-my-info__content {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-dyn-my-info__name {
+  color: var(--tun-gray-5) !important;
+}
+
+.bili-dyn-my-info__name:hover {
+  color: #00a1d6 !important;
+}
+
+.bili-dyn-my-info__stat__item__count {
+  color: var(--tun-gray-6) !important;
+}
+
+/* 发布动态栏 */
+.bili-dyn-publishing {
+  background-color: var(--tun-gray-12) !important;
+}
+
+.bili-rich-textarea__inner {
+  background-color: var(--tun-gray-12) !important;
+  color: var(--tun-gray-5) !important;
+}
+
+/* 右侧公告栏 */
+.bili-dyn-banner {
+  background-color: var(--tun-gray-12);
+}
+
+.bili-dyn-banner__title {
+  color: var(--tun-gray-5);
+}
+
+/* 右侧话题 */
+.topic-panel {
+  background-color: var(--tun-gray-12);
+}
+
+.topic-panel__nav-title {
+  color: var(--tun-gray-5);
+}
+
+.relevant-topic__title {
+  color: var(--tun-gray-6);
+}

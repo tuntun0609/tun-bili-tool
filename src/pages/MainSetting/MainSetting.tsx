@@ -6,6 +6,7 @@ import { FromType, SettingForm, SettingFormItem } from '~components';
 export const MainSetting: React.FC = () => {
 	const [twoRow, setTwoRow] = useStorage('isTwoRow', false);
 	const [livingList, setLivingList] = useStorage('isLivingList', false);
+	const [isIndexDark, setIsIndexDark] = useStorage('isIndexDark', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
@@ -26,6 +27,17 @@ export const MainSetting: React.FC = () => {
 				checked: livingList,
 				onClick: (checked) => {
 					setLivingList(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '是否开启动态首页暗黑模式',
+			name: 'isIndexDark',
+			formProps: {
+				checked: isIndexDark,
+				onClick: (checked) => {
+					setIsIndexDark(checked);
 				},
 			},
 		},
