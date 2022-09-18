@@ -54,7 +54,7 @@ const ToolPopup = () => (
 // tool main
 const LiveTool = () => {
 	const TOOL_SIZE = 36;
-	const [isTool] = useStorage('isTool', false);
+	const [isTool] = useStorage('isLiveTool', false);
 	const [position, setPosition] = useState({ top: -TOOL_SIZE, right: -TOOL_SIZE });
 	const [top, setTop] = useState(-TOOL_SIZE);
 	const [right, setRight] = useState(-TOOL_SIZE);
@@ -64,7 +64,7 @@ const LiveTool = () => {
 
 	useEffect(() => {
 		const main = async () => {
-			const position = await storage.get<{ top: number, right: number }>('toolPosition');
+			const position = await storage.get<{ top: number, right: number }>('liveToolPosition');
 			if (position) {
 				setPosition(position);
 			} else {
@@ -82,35 +82,35 @@ const LiveTool = () => {
 	const getY = (y: number) => {
 		if (y < 0) {
 			return 0;
-		} else if (y > document.body.offsetHeight - TOOL_SIZE) {
-			return document.body.offsetHeight - TOOL_SIZE;
+		} else if (y > document.body.clientHeight - TOOL_SIZE) {
+			return document.body.clientHeight - TOOL_SIZE;
 		}
 		return y;
 	};
 	const getX = (x: number) => {
 		if (x < 0) {
 			return 0;
-		} else if (x > document.body.offsetWidth - TOOL_SIZE) {
-			return document.body.offsetWidth - TOOL_SIZE;
+		} else if (x > document.body.clientWidth - TOOL_SIZE) {
+			return document.body.clientWidth - TOOL_SIZE;
 		}
 		return x;
 	};
 
 	const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
 		setStartPosition({ x: e.clientX, y: e.clientY });
-		const offsetX = document.body.offsetWidth - e.pageX - right;
+		const offsetX = document.body.clientWidth - e.pageX - right;
 		const offsetY = e.clientY - top;
 		window.onmousemove = (mousemoveEvent: MouseEvent) => {
 			if (offsetX <= TOOL_SIZE && offsetY <= TOOL_SIZE) {
 				mousemoveEvent.preventDefault();
 				setTop(getY(mousemoveEvent.clientY - offsetY));
-				setRight(getX(document.body.offsetWidth - mousemoveEvent.pageX - offsetX));
+				setRight(getX(document.body.clientWidth - mousemoveEvent.pageX - offsetX));
 			}
 		};
 	};
 	const onMouseUp: MouseEventHandler<HTMLDivElement> = async () => {
 		window.onmousemove = null;
-		storage.set('toolPosition', { top, right });
+		storage.set('liveToolPosition', { top, right });
 	};
 	const isDrag = (sx: number, sy: number, ex: number, ey: number) => {
 		const dragRange = 5;
@@ -124,7 +124,7 @@ const LiveTool = () => {
 			setPopupShow(!popupShow);
 		}
 	};
-	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.body.offsetWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.offsetHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
+	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.body.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
 			<div
