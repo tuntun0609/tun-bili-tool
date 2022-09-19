@@ -582,31 +582,28 @@ const VideoTool = () => {
 	const getY = (y: number) => {
 		if (y < 0) {
 			return 0;
-		} else if (y > document.body.clientHeight - TOOL_SIZE) {
-			return document.body.clientHeight - TOOL_SIZE;
+		} else if (y > document.documentElement.clientHeight - TOOL_SIZE) {
+			return document.documentElement.clientHeight - TOOL_SIZE;
 		}
 		return y;
 	};
 	const getX = (x: number) => {
 		if (x < 0) {
 			return 0;
-		} else if (x > document.body.clientWidth - TOOL_SIZE) {
-			console.log(document.body.clientWidth - TOOL_SIZE);
-			return document.body.clientWidth - TOOL_SIZE;
+		} else if (x > document.documentElement.clientWidth - TOOL_SIZE) {
+			return document.documentElement.clientWidth - TOOL_SIZE;
 		}
 		return x;
 	};
 
 	const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
 		setStartPosition({ x: e.clientX, y: e.clientY });
-		const offsetX = document.body.clientWidth - e.pageX - right;
+		const offsetX = document.documentElement.clientWidth - e.pageX - right;
 		const offsetY = e.clientY - top;
 		window.onmousemove = (mousemoveEvent: MouseEvent) => {
-			if (offsetX <= TOOL_SIZE && offsetY <= TOOL_SIZE) {
-				mousemoveEvent.preventDefault();
-				setTop(getY(mousemoveEvent.clientY - offsetY));
-				setRight(getX(document.body.clientWidth - mousemoveEvent.pageX - offsetX));
-			}
+			mousemoveEvent.preventDefault();
+			setTop(getY(mousemoveEvent.clientY - offsetY));
+			setRight(getX(document.documentElement.clientWidth - mousemoveEvent.pageX - offsetX));
 		};
 	};
 	const onMouseUp: MouseEventHandler<HTMLDivElement> = async () => {
@@ -625,31 +622,31 @@ const VideoTool = () => {
 			setPopupShow(!popupShow);
 		}
 	};
-	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.body.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.body.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
+	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.documentElement.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.documentElement.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
-			<div
-				className='tun-tool-main'
-				onMouseDown={onMouseDown}
-				onMouseUp={onMouseUp}
-				style={{
-					top: top + 'px',
-					right: right + 'px',
-				}}
+			<Popover
+				content={ToolPopup}
+				visible={popupShow}
+				placement={popupPlacement}
+				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
 			>
-				<Popover
-					content={ToolPopup}
-					visible={popupShow}
-					placement={popupPlacement}
-					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
+				<div
+					className='tun-tool-main'
+					onMouseDown={onMouseDown}
+					onMouseUp={onMouseUp}
+					style={{
+						top: top + 'px',
+						right: right + 'px',
+					}}
 				>
 					<div className='icon-main'
 						onClick={onToolClick}
 					>
 						<ToolOutlined className='icon' />
 					</div>
-				</Popover>
-			</div>
+				</div>
+			</Popover>
 		</ ConfigProvider>
 	) : null;
 };
