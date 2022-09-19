@@ -39,14 +39,18 @@ const init = async (isReflash = false) => {
 	if (isReflash || liverNum > 10) {
 		const liveUpListDom = document.querySelector('.bili-dyn-live-users__body');
 		if (liveUpListDom) {
-			liveUpListDom.innerHTML = '';
-			const allLiver = await API.getLiver(liverNum);
-			allLiver.items.forEach((item) => {
-				if (liveUpListDom !== null) {
-					liveUpListDom.appendChild(Tool.s2d(getListItemTemplete(item)));
-				}
-			});
-			document.querySelector('.bili-dyn-live-users__title span').innerHTML = `(${allLiver.items.length})`;
+			try {
+				const allLiver = await API.getLiver(liverNum);
+				liveUpListDom.innerHTML = '';
+				allLiver.items.forEach((item) => {
+					if (liveUpListDom !== null) {
+						liveUpListDom.appendChild(Tool.s2d(getListItemTemplete(item)));
+					}
+				});
+				document.querySelector('.bili-dyn-live-users__title span').innerHTML = `(${allLiver.items.length})`;
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	}
 };
