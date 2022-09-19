@@ -165,13 +165,24 @@ const VipIcon = (props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLDivE
 	<i {...props} className='tun-vip-icon'></i>
 );
 
+// 音频类型
+enum AudioType {
+	'64K' = 30216,
+	'132K' = 30232,
+	'192K' = 30280,
+	'杜比全景声' = 30250,
+	'Hi-Res无损' = 30251,
+}
+
 // 下载视频弹出层
 const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const { videoInfo } = props;
 	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>({});
+	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>({});
 	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
 	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
 	const [videoSource, setVideoSource] = useState(0);
+	const [audioSource, setAudioSource] = useState(0);
 
 	// 视频下载链接
 	const getVideoUrl = async (bvid: string, cid: number, qn?: number) => {
@@ -184,10 +195,21 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 			},
 			withCredentials: true,
 		});
-		// download(data.data.data.durl[0].url, videoInfo.title, 'flv');
 		return data;
 	};
-
+	// 获取音频
+	const getAudioUrl = async (bvid: string, cid: number) => {
+		const data = await axios.get('https://api.bilibili.com/x/player/playurl', {
+			params: {
+				bvid: bvid,
+				cid: cid,
+				fourk: 1,
+				fnval: 80,
+			},
+			withCredentials: true,
+		});
+		return data;
+	};
 	// 通过axios下载视频方法
 	// const downloadByAxios = (url: string, name: string, type: string) => new Promise<void>((resolve, reject) => {
 	// 	axios(url, {
@@ -215,17 +237,35 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	// 		});
 	// });
 
-	// 通过浏览器下载
-	const downloadByBrowser = async (qn: number, scource?: number) => {
+	// 通过浏览器下载链接资源
+	const downloadByBrowser = (url) => {
+		const a = document.createElement('a');
+		a.href = url;
+		a.target = '__blank';
+		a.click();
+		a.remove();
+	};
+
+	// 通过浏览器下载视频
+	const downloadVideoByBrowser = async (qn: number, scource?: number) => {
 		try {
 			const data = await getVideoUrl(videoInfo.bvid, cid, qn);
 			const allUrl = [data.data.data.durl[0].url, ...data.data.data.durl[0].backup_url];
 			const url = allUrl[scource ?? 0] ?? allUrl[0];
-			const a = document.createElement('a');
-			a.href = url;
-			a.target = '__blank';
-			a.click();
-			a.remove();
+			downloadByBrowser(url);
+		} catch (error) {
+			console.error(error);
+			message.error('下载发生错误');
+		}
+	};
+
+	// 通过浏览器下载音频
+	const downloadAudioByBrowser = async (info: any, scource?: number) => {
+		try {
+			const allUrl = [info.baseUrl, ...info.backupUrl];
+			console.log(allUrl);
+			console.log(scource, allUrl[scource ?? 0] ?? allUrl[0]);
+			downloadByBrowser(allUrl[scource ?? 0] ?? allUrl[0]);
 		} catch (error) {
 			console.error(error);
 			message.error('下载发生错误');
@@ -246,24 +286,32 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 
 	// bvid改变时
 	useEffect(() => {
-		setCid(videoInfo.cid);
+		setCid(videoInfo.cid ?? 0);
+	}, [videoInfo]);
+
+	// cid改变
+	useEffect(() => {
+		console.log(cid);
 		const main = async () => {
 			try {
 				if (!isUndefined(videoInfo.bvid)) {
+					// 所有分p视频列表信息
 					setVideoListData(videoInfo.pages.map((item: any, i: number) => ({
 						key: i + 1,
 						title: item.part,
 						cid: item.cid,
 					})));
-					const data = await getVideoUrl(videoInfo.bvid, videoInfo.cid);
-					setVideoDownloadInfo(data.data.data ?? {});
+					const videoData = await getVideoUrl(videoInfo.bvid, cid);
+					const audioData = await getAudioUrl(videoInfo.bvid, cid);
+					setVideoDownloadInfo(videoData.data.data ?? {});
+					setAudioDownloadInfo(audioData.data.data ?? {});
 				}
 			} catch (error) {
 				message.error('获取下载信息错误');
 			}
 		};
 		main();
-	}, [videoInfo]);
+	}, [cid]);
 
 	return (
 		<Modal
@@ -280,15 +328,16 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 								rowSelection={{
 									type: 'radio',
 									...videoListRowSelection,
+									defaultSelectedRowKeys: [1],
 								}}
 								dataSource={videoListData}
 							></VideoList>
 						</div>
 						: null
 				}
-				{/* 线路选择 */}
+				{/* 视频下载标题以及线路选择 */}
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-					<div className='popup-title' style={{ marginRight: '8px' }}>下载线路</div>
+					<div className='popup-title' style={{ marginRight: '8px' }}>视频下载</div>
 					<Select
 						size={'small'}
 						defaultValue={0}
@@ -301,8 +350,7 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						<Option value={2}>线路3</Option>
 					</Select>
 				</div>
-				{/* 不同清晰度下载按钮 */}
-				<div className='popup-title'>视频下载</div>
+				{/* 不同清晰度视频下载按钮 */}
 				<Row
 					wrap
 					align={'middle'}
@@ -316,10 +364,52 @@ const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 									<Button
 										block
 										onClick={() => {
-											downloadByBrowser(item, videoSource);
+											downloadVideoByBrowser(item, videoSource);
 										}}
 									>{videoDownloadInfo.accept_description[index]}</Button>
-									{item >= 112 ? <VipIcon></VipIcon> : null}
+									{item >= 112 ? <VipIcon style={{
+										position: 'absolute',
+										top: '2px',
+										left: '2px',
+										zIndex: 10,
+									}}></VipIcon> : null}
+								</div>
+							</Col>
+						))
+					}
+				</Row>
+				{/* 视频下载标题以及线路选择 */}
+				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+					<div className='popup-title' style={{ marginRight: '8px' }}>音频下载</div>
+					<Select
+						size={'small'}
+						defaultValue={0}
+						onChange={value => setAudioSource(value)}
+						dropdownStyle={{ zIndex: '9999999999' }}
+						getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+					>
+						<Option value={0}>线路1</Option>
+						<Option value={1}>线路2</Option>
+						<Option value={2}>线路3</Option>
+					</Select>
+				</div>
+				{/* 不同清晰度音频下载按钮 */}
+				<Row
+					wrap
+					align={'middle'}
+					justify={'start'}
+					gutter={[8, 8]}
+				>
+					{
+						audioDownloadInfo.dash?.audio?.map((item: any) => (
+							<Col key={item.id} span={6}>
+								<div style={{ position: 'relative' }}>
+									<Button
+										block
+										onClick={() => {
+											downloadAudioByBrowser(item, audioSource);
+										}}
+									>{AudioType[item.id]}</Button>
 								</div>
 							</Col>
 						))
