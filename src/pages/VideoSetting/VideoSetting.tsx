@@ -1,18 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
-import { useStorage } from '@plasmohq/storage';
+import React from 'react';
+import { useStorage, Storage } from '@plasmohq/storage';
+import { Button, message } from 'antd';
 
 import { FromType, SettingForm, SettingFormItem } from '~components';
+
+const storage = new Storage();
 
 export const VideoSetting: React.FC = () => {
 	const [videoLoop, setVideoLoop] = useStorage('isVideoLoop', false);
 	const [wideScreen, setWideScreen] = useStorage('isWideScreen', false);
 	const [videoTool, setVideoTool] = useStorage('isVideoTool', false);
+
+	const resetVideoToolPosition = () => {
+		try {
+			storage.set('videoToolPosition', {
+				top: 100,
+				right: 100,
+			});
+			message.success('重置成功');
+		} catch (error) {
+			message.error('重置失败');
+		}
+	};
+
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
 			label: '是否自动开启洗脑循环',
 			name: 'isVideoLoop',
+			extraDes: '视频默认开启循环',
 			formProps: {
 				checked: videoLoop,
 				onClick: (checked) => {
@@ -41,6 +58,14 @@ export const VideoSetting: React.FC = () => {
 					setVideoTool(checked);
 				},
 			},
+			extraRender: (
+				<Button
+					style={{
+						marginLeft: '10px',
+					}}
+					onClick={resetVideoToolPosition}
+				>重置按钮位置</Button>
+			),
 		},
 	];
 	return (

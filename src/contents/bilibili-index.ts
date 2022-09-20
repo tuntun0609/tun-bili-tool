@@ -88,10 +88,12 @@ const obs = () => {
 						screenshotBtn.innerText = '正在截图...';
 						try {
 							const main = (addNode as HTMLElement).querySelector('.bili-dyn-item__main');
+							const isIndexDark = await storage.get('isIndexDark');
 							const canvas = await html2canvas(main as HTMLElement, {
 								useCORS: true,
 								allowTaint: true,
 								ignoreElements: e => e.className === 'bili-popover' || e.className === 'bili-dyn-item__footer',
+								backgroundColor: isIndexDark ? '#141414' : '#ffffff',
 							});
 							// const canvas = await htmlToImage.toCanvas(main as HTMLElement, {
 							// 	filter: e => e.className !== 'bili-popover',

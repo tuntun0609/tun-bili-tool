@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, InputProps, Switch, SwitchProps } from 'antd';
+import { Form, InputProps, Switch, SwitchProps, Tooltip } from 'antd';
 
 import './SettingForm.scss';
 
@@ -8,6 +8,8 @@ export type SettingFormItem = SwitchFormItem | InputFormItem;
 interface CommonFormItem {
 	label: string,
 	name: string,
+	extraRender?: React.ReactNode,
+	extraDes?: React.ReactNode,
 }
 
 export enum FromType {
@@ -17,29 +19,28 @@ export enum FromType {
 
 export interface SwitchFormItem extends CommonFormItem {
 	type: FromType.SWITCH,
-	formProps: SwitchProps,
+	formProps?: SwitchProps,
 }
 
 export interface InputFormItem extends CommonFormItem {
 	type: FromType.INPUT,
-	formProps: InputProps,
+	formProps?: InputProps,
 }
 
+const getFormItem = (item: SettingFormItem) => {
+	switch (item.type) {
+	case FromType.SWITCH: {
+		const { formProps } = item;
+		return <Switch
+			{...formProps}
+		></Switch>;
+	}
+	default:
+		return null;
+	}
+};
+
 export const SettingForm: React.FC<{ items: SettingFormItem[] }> = ({ items }) => {
-	const getFormItem = (item: SettingFormItem) => {
-		switch (item.type) {
-		case FromType.SWITCH: {
-			const { formProps } = item;
-			return <Switch
-				onClick={formProps.onClick}
-				checked={formProps.checked}
-				defaultChecked={formProps.checked}
-			></Switch>;
-		}
-		default:
-			return null;
-		}
-	};
 	const layout = {
 		labelCol: {
 			style: {
@@ -58,12 +59,23 @@ export const SettingForm: React.FC<{ items: SettingFormItem[] }> = ({ items }) =
 				items.map(item => (
 					<Form.Item
 						key={item.name}
-						label={<div style={{ fontSize: '14px' }}>{item.label}</div>}
+						label={
+							<Tooltip
+								trigger='hover'
+								title={item.extraDes}
+								style={{ fontSize: '14px' }}
+								color='#fb7299'
+								placement='topLeft'
+							>
+								{item.label}
+							</Tooltip>
+						}
 						name={item.name}
 					>
-						{
-							getFormItem(item)
-						}
+						<div style={{ display: 'flex', alignItems: 'center' }}>
+							{ getFormItem(item) }
+							{ item.extraRender ? item.extraRender : null }
+						</div>
 					</Form.Item>
 				))
 			}

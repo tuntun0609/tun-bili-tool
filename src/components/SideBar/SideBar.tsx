@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './SideBar.scss';
@@ -12,23 +12,35 @@ export const routerItems: { label: ReactNode, key: string }[] = [
 
 export const SideBar: React.FC = () => {
 	const navigate = useNavigate();
-	const [selectItem, setSelectItem] = useState(0);
+	const [selectItem, setSelectItem] = useState<string>();
+
+	useEffect(() => {
+		console.log(location.hash);
+		if (location.hash !== '') {
+			const hash = location.hash.slice(2);
+			const key = routerItems.find(item => item.key === hash)?.key ?? routerItems[0].key;
+			setSelectItem(key);
+		} else {
+			setSelectItem(routerItems[0].key);
+		}
+	}, []);
+
 	const onMenuClick = (e: any) => {
 		navigate(e.key);
 	};
 	return (
 		<div className='sidebar'>
 			{
-				routerItems.map((item, index) => (
+				routerItems.map(item => (
 					<div
 						key={item.key}
-						className={'sidebar-item' + (selectItem === index ? ' sidebar-item-select' : '')}
+						className={'sidebar-item' + (selectItem === item.key ? ' sidebar-item-select' : '')}
 						onClick={() => {
 							onMenuClick(item);
-							setSelectItem(index);
+							setSelectItem(item.key);
 						}}
 					>
-						<div className={'sidebar-item-label' + (selectItem === index ? ' sidebar-item-label-select' : '')}>{item.label}</div>
+						<div className={'sidebar-item-label' + (selectItem === item.key ? ' sidebar-item-label-select' : '')}>{item.label}</div>
 					</div>
 				))
 			}
