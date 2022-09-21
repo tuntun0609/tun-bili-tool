@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Col, Descriptions, message, Row, Space } from 'antd';
+import { Button, Col, Descriptions, message, Row, Slider, Space } from 'antd';
 
 import { API, Tool as tool } from '~utils';
 import { DownloadVideoModal, ImageModal, PopupTitle } from '~contents-components';
@@ -47,6 +47,7 @@ export const VideoToolPopup = () => {
 	const [downloadVideoModalOpen, setDownloadVideoModalOpen] = useState(false);
 	const [videoId, setVideoId] = useState('');
 	const [videoInfo, setVideoInfo] = useState<any>({});
+	const [playbackrate, setPlaybackrate] = useState(1);
 
 	// 通过网址获取视频唯一标识
 	const getVideoId = () => {
@@ -150,6 +151,14 @@ export const VideoToolPopup = () => {
 	// 	});
 	// 	console.log(data);
 	// };
+
+	// 视频倍速值改变事件
+	const onPlaybackrateChange = (value: number) => {
+		setPlaybackrate(value);
+		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+		videoElement.playbackRate = value;
+	};
+
 	// 视频信息列表配置
 	const VideoDesConfig = useMemo(() => ([
 		{
@@ -248,6 +257,25 @@ export const VideoToolPopup = () => {
 						{/* <Col span={8}>
 							<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
 						</Col> */}
+						<Col span={24}>
+							<PopupTitle>
+								视频倍速
+							</PopupTitle>
+						</Col>
+						<Col span={24}>
+							<Slider
+								min={0}
+								max={15}
+								onChange={onPlaybackrateChange}
+								value={playbackrate}
+								step={0.1}
+								getTooltipPopupContainer={
+									() => (
+										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+									)
+								}
+							></Slider>
+						</Col>
 					</Row>
 				</div>
 			</Space>
