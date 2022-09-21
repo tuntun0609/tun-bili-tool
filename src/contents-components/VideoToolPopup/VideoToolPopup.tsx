@@ -155,9 +155,13 @@ export const VideoToolPopup = () => {
 	// 视频倍速值改变事件
 	const onPlaybackrateChange = (value: number) => {
 		setPlaybackrate(value);
-		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
-		videoElement.playbackRate = value;
 	};
+
+	useEffect(() => {
+		console.log(playbackrate);
+		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+		videoElement.playbackRate = playbackrate;
+	}, [playbackrate]);
 
 	// 视频信息列表配置
 	const VideoDesConfig = useMemo(() => ([
@@ -197,87 +201,90 @@ export const VideoToolPopup = () => {
 						))
 					}
 				</Descriptions>
-				<PopupTitle>视频工具</PopupTitle>
-				<div>
-					{/* 视频封面 */}
-					<Row wrap gutter={[16, 8]} >
-						<Col span={8}>
-							{/* 视频封面 */}
-							<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
-							<ImageModal
-								centered
-								width={720}
-								title={'视频封面'}
-								src={videoInfo.pic ?? ''}
-								cancelText={'返回'}
-								okText={'复制图片至剪切板'}
-								visible={picModalOpen}
-								onCancel={picModalCancel}
-								onOk={onCopyPicBtnClicked}
-								getContainer={
-									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-								}
-							></ImageModal>
-						</Col>
-						<Col span={8}>
-							{/* 视频画面 */}
-							<Button onClick={screenshotBtnClicked}>视频截图</Button>
-							<ImageModal
-								centered
-								width={720}
-								title={'视频截图'}
-								src={screenshotData ?? ''}
-								cancelText={'返回'}
-								okText={'复制图片至剪切板'}
-								visible={screenshotModalOpen}
-								onCancel={screenModalCancel}
-								onOk={onCopyScreenshotBtnClicked}
-								getContainer={
-									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-								}
-							></ImageModal>
-						</Col>
-						<Col span={8}>
-							{/* 视频下载 */}
-							<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
-							<DownloadVideoModal
-								centered
-								width={620}
-								title={'视频下载'}
-								footer={null}
-								visible={downloadVideoModalOpen}
-								onCancel={downloadVideoModalCancel}
-								getContainer={
-									document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-								}
-								videoInfo={videoInfo}
-								// onProgress={p => console.log(p)}
-							></DownloadVideoModal>
-						</Col>
-						{/* <Col span={8}>
-							<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
-						</Col> */}
-						<Col span={24}>
-							<PopupTitle>
-								视频倍速
-							</PopupTitle>
-						</Col>
-						<Col span={24}>
-							<Slider
-								min={0}
-								max={15}
-								onChange={onPlaybackrateChange}
-								value={playbackrate}
-								step={0.1}
-								getTooltipPopupContainer={
-									() => (
-										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-									)
-								}
-							></Slider>
-						</Col>
-					</Row>
+				{/* 视频工具 */}
+				<PopupTitle style={{ marginTop: '8px' }}>视频工具</PopupTitle>
+				<Row wrap gutter={[16, 8]} >
+					<Col span={8}>
+						{/* 视频封面 */}
+						<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
+						<ImageModal
+							centered
+							width={720}
+							title={'视频封面'}
+							src={videoInfo.pic ?? ''}
+							cancelText={'返回'}
+							okText={'复制图片至剪切板'}
+							visible={picModalOpen}
+							onCancel={picModalCancel}
+							onOk={onCopyPicBtnClicked}
+							getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+							}
+						></ImageModal>
+					</Col>
+					<Col span={8}>
+						{/* 视频画面 */}
+						<Button onClick={screenshotBtnClicked}>视频截图</Button>
+						<ImageModal
+							centered
+							width={720}
+							title={'视频截图'}
+							src={screenshotData ?? ''}
+							cancelText={'返回'}
+							okText={'复制图片至剪切板'}
+							visible={screenshotModalOpen}
+							onCancel={screenModalCancel}
+							onOk={onCopyScreenshotBtnClicked}
+							getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+							}
+						></ImageModal>
+					</Col>
+					<Col span={8}>
+						{/* 视频下载 */}
+						<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
+						<DownloadVideoModal
+							centered
+							width={620}
+							title={'视频下载'}
+							footer={null}
+							visible={downloadVideoModalOpen}
+							onCancel={downloadVideoModalCancel}
+							getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+							}
+							videoInfo={videoInfo}
+							// onProgress={p => console.log(p)}
+						></DownloadVideoModal>
+					</Col>
+					{/* <Col span={8}>
+						<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
+					</Col> */}
+				</Row>
+				{/* 视频倍速 */}
+				<div style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginTop: '8px',
+				}}>
+					<PopupTitle>
+						视频倍速
+					</PopupTitle>
+					<Button size='small' onClick={() => setPlaybackrate(1)}>重置倍速</Button>
 				</div>
+				<Slider
+					min={0}
+					max={15}
+					onChange={onPlaybackrateChange}
+					value={playbackrate}
+					step={0.1}
+					getTooltipPopupContainer={
+						() => (
+							document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+						)
+					}
+				></Slider>
 			</Space>
 		</div>
 	);
