@@ -4,6 +4,8 @@ import type { ColumnsType } from 'antd/lib/table';
 import axios from 'axios';
 import { isUndefined } from 'lodash';
 
+import { PopupTitle } from '~contents-components';
+
 const { Option } = Select;
 
 interface DownloadVideoModalProps extends ModalProps {
@@ -204,7 +206,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				{
 					videoListData.length !== 1 ?
 						<div>
-							<div className='popup-title'>选择分P</div>
+							<PopupTitle>选择分P</PopupTitle>
 							<VideoList
 								size="small"
 								rowSelection={{
@@ -219,7 +221,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				}
 				{/* 视频下载标题以及线路选择 */}
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-					<div className='popup-title' style={{ marginRight: '8px' }}>视频下载</div>
+					<PopupTitle style={{ marginRight: '8px' }}>视频下载</PopupTitle>
 					<Select
 						size={'small'}
 						defaultValue={0}
@@ -262,7 +264,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				</Row>
 				{/* 视频下载标题以及线路选择 */}
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-					<div className='popup-title' style={{ marginRight: '8px' }}>音频下载</div>
+					<PopupTitle style={{ marginRight: '8px' }}>音频下载</PopupTitle>
 					<Select
 						size={'small'}
 						defaultValue={0}

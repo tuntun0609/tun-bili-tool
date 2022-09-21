@@ -1,4 +1,5 @@
 @import url(../contents-components/DownloadVideoModal/DownloadVideoModal.scss);
+@import url(../contents-components/PopupTitle/PopupTitle.scss);
 
 #plasmo-shadow-container {
   z-index: 99999 !important;
@@ -44,15 +45,6 @@
 			transition: transform 300ms ease 0s;
 		}
 	}
-}
-
-.popup-title {
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	font-size: 16px;
-	font-weight: 700;
-	line-height: 1.5715;
-	overflow: hidden;
 }
 
 .ant-popover-inner {
