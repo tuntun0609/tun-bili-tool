@@ -11,6 +11,7 @@ export const VideoSetting: React.FC = () => {
 	const [videoLoop, setVideoLoop] = useStorage('isVideoLoop', false);
 	const [wideScreen, setWideScreen] = useStorage('isWideScreen', false);
 	const [videoTool, setVideoTool] = useStorage('isVideoTool', false);
+	const [videoDescOpen, setVideoDescOpen] = useStorage('isVideoDescOpen', false);
 
 	const resetVideoToolPosition = () => {
 		try {
@@ -45,6 +46,17 @@ export const VideoSetting: React.FC = () => {
 				checked: wideScreen,
 				onClick: (checked) => {
 					setWideScreen(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '视频简介自动展开',
+			name: 'isVideoDescOpen',
+			formProps: {
+				checked: videoDescOpen,
+				onClick: (checked) => {
+					setVideoDescOpen(checked);
 				},
 			},
 		},

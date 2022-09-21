@@ -46,12 +46,23 @@ const widescreen = (time = 0) => {
 		}
 	}, time);
 };
+// 视频简介自动打开
+const videoDescOpen = (time = 0) => {
+	setTimeout(() => {
+		const openBtn = document.querySelector('#v_desc>div[report-id=abstract_spread]');
+		if (openBtn) {
+			const clickEvent = new Event('click');
+			openBtn.dispatchEvent(clickEvent);
+		}
+	}, time);
+};
 
 window.addEventListener(
 	'load',
 	async () => {
 		const isVideoLoop = await storage.get('isVideoLoop');
 		const isWidescreen = await storage.get('isWidescreen');
+		const isVideoDescOpen = await storage.get('isVideoDescOpen');
 		const pathChangeFun = () => {
 			if (isVideoLoop) {
 				repeat();
@@ -63,13 +74,19 @@ window.addEventListener(
 		if (isWidescreen) {
 			widescreen(1500);
 		}
+		if (isVideoDescOpen) {
+			videoDescOpen(3000);
+		}
 		window.addEventListener('visibilitychange', () => {
-			if (document.visibilityState === 'visible' && firstVisible && isVideoLoop) {
+			if (document.visibilityState === 'visible' && firstVisible) {
 				if(isVideoLoop) {
 					repeat(3000);
 				}
 				if (isWidescreen) {
 					widescreen(1500);
+				}
+				if (isVideoDescOpen) {
+					videoDescOpen(3000);
 				}
 				firstVisible = !firstVisible;
 			}
