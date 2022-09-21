@@ -1,3 +1,5 @@
+@import url(../contents-components/DownloadVideoModal/DownloadVideoModal.scss);
+
 #plasmo-shadow-container {
   z-index: 99999 !important;
 }
@@ -51,14 +53,6 @@
 	font-weight: 700;
 	line-height: 1.5715;
 	overflow: hidden;
-}
-
-.tun-vip-icon {
-  display: block;
-  width: 20px;
-  height: 20px;
-  background-size: 20px;
-  background-image: url(https://i0.hdslb.com/bfs/vip/icon_Certification_big_member_22_3x.png@40w_40h_1c.webp);
 }
 
 .ant-popover-inner {
