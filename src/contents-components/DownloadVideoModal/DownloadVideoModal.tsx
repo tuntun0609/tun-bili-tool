@@ -40,6 +40,7 @@ export const VideoList = (props: any) => (
 		{...props}
 		pagination={{
 			defaultPageSize: 5,
+			hideOnSinglePage: true,
 		}}
 		columns={videoListColumns}
 	></Table>
@@ -205,7 +206,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				{/* 分p选择器 */}
 				{
 					videoListData.length !== 1 ?
-						<div>
+						<div style={{ marginBottom: '8px' }}>
 							<PopupTitle>选择分P</PopupTitle>
 							<VideoList
 								size="small"
@@ -220,7 +221,11 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						: null
 				}
 				{/* 视频下载标题以及线路选择 */}
-				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+				<div style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'start',
+				}}>
 					<PopupTitle style={{ marginRight: '8px' }}>视频下载</PopupTitle>
 					<Select
 						size={'small'}
@@ -233,6 +238,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						<Option value={1}>线路2</Option>
 						<Option value={2}>线路3</Option>
 					</Select>
+					<PopupTitle style={{ marginLeft: '8px' }}>(下载慢或者失败时可切换线路)</PopupTitle>
 				</div>
 				{/* 不同清晰度视频下载按钮 */}
 				<Row
