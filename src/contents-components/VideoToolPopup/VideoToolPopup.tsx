@@ -61,13 +61,20 @@ export const VideoToolPopup = () => {
 		setVideoId(getVideoId());
 	}, []);
 
+	const onRateChange = useCallback((e: Event) => {
+		setPlaybackrate((e.target as HTMLVideoElement).playbackRate);
+	}, []);
+
 	useEffect(() => {
 		setVideoId(getVideoId());
 		window.addEventListener('pushState', onUrlChanged);
 		window.addEventListener('popstate', onUrlChanged);
+		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+		videoElement.addEventListener('ratechange', onRateChange);
 		return () => {
 			window.removeEventListener('pushState', onUrlChanged);
 			window.removeEventListener('popstate', onUrlChanged);
+			videoElement.removeEventListener('ratechange', onRateChange);
 		};
 	}, []);
 
@@ -158,7 +165,6 @@ export const VideoToolPopup = () => {
 	};
 
 	useEffect(() => {
-		console.log(playbackrate);
 		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
 		videoElement.playbackRate = playbackrate;
 	}, [playbackrate]);
@@ -254,7 +260,6 @@ export const VideoToolPopup = () => {
 								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 							}
 							videoInfo={videoInfo}
-							// onProgress={p => console.log(p)}
 						></DownloadVideoModal>
 					</Col>
 					{/* <Col span={8}>
