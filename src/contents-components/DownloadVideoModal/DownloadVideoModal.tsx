@@ -64,7 +64,7 @@ enum AudioType {
 export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const { videoInfo } = props;
 	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>({});
-	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>({});
+	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>([]);
 	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
 	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
 	const [videoSource, setVideoSource] = useState(0);
@@ -149,8 +149,6 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const downloadAudioByBrowser = async (info: any, scource?: number) => {
 		try {
 			const allUrl = [info.baseUrl, ...info.backupUrl];
-			console.log(allUrl);
-			console.log(scource, allUrl[scource ?? 0] ?? allUrl[0]);
 			downloadByBrowser(allUrl[scource ?? 0] ?? allUrl[0]);
 		} catch (error) {
 			console.error(error);
@@ -189,7 +187,9 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					const videoData = await getVideoUrl(videoInfo.bvid, cid);
 					const audioData = await getAudioUrl(videoInfo.bvid, cid);
 					setVideoDownloadInfo(videoData.data.data ?? {});
-					setAudioDownloadInfo(audioData.data.data ?? {});
+					setAudioDownloadInfo(audioData.data.data?.dash?.audio?.sort(
+						(a: { id: number; }, b: { id: number; }) => b.id - a.id,
+					) ?? []);
 				}
 			} catch (error) {
 				message.error('获取下载信息错误');
@@ -291,7 +291,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					gutter={[8, 8]}
 				>
 					{
-						audioDownloadInfo.dash?.audio?.map((item: any) => (
+						audioDownloadInfo.map((item: any) => (
 							<Col key={item.id} span={6}>
 								<div style={{ position: 'relative' }}>
 									<Button
