@@ -1,5 +1,4 @@
 import React, { HTMLAttributeAnchorTarget, ReactNode } from 'react';
-import { LinkOutlined } from '@ant-design/icons';
 
 import logo from 'data-base64:~assets/icon512.png';
 
@@ -25,9 +24,10 @@ export const Header: React.FC<{items: HeaderProps[]}> = ({ items }) => {
 					items.map(item => (
 						<a key={item.name} rel='noreferrer' target={item.target ?? '_blank'} className='item' href={item.url}>
 							<div className='text'>{item.name}</div>
-							<div className='icon' >
-								{item.icon ?? <LinkOutlined />}
-							</div>
+							{ item.icon ?
+								<div className='icon' >
+									{ item.icon }
+								</div> : null }
 						</a>
 					))
 				}
