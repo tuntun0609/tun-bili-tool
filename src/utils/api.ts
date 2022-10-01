@@ -201,7 +201,7 @@ export const API = {
 				'Content-Type': 'application/json',
 			},
 			option: {
-				credentials: 'omit',
+				// credentials: 'include',
 			},
 		});
 		return res;

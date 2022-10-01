@@ -2,9 +2,9 @@ import { isString, isNumber } from 'lodash';
 
 export const Tool = {
 	// 大数转万
-	formatBigNumber: num => num > 10000 ? `${(num / 10000).toFixed(2)}万` : num,
+	formatBigNumber: (num: number) => num > 10000 ? `${(num / 10000).toFixed(2)}万` : num,
 	// 字符串转DOM
-	s2d: string => new DOMParser().parseFromString(string, 'text/html').body
+	s2d: (string: string) => new DOMParser().parseFromString(string, 'text/html').body
 		.childNodes[0],
 	// 发布时间格式化
 	diffTime: (time) => {
@@ -15,8 +15,8 @@ export const Tool = {
 			Day = 24 * 60 * 60 * 1000,
 			Hours = 60 * 60 * 1000,
 			Minutes = 60 * 1000,
-			diffDay = (nowTime - upTime) / Day,
-			diffHours = (nowTime - upTime) / Hours,
+			diffDay = Math.floor((nowTime - upTime) / Day),
+			diffHours = Math.floor((nowTime - upTime) / Hours),
 			diffMinutes = Math.floor((nowTime - upTime) / Minutes);
 		if(diffDay !== 0 && diffDay < 7) {
 			if ( diffDay === 1 ) {
@@ -38,6 +38,17 @@ export const Tool = {
 		}
 		return `${month < 10 ? 0 : ''}${month}-${day < 10 ? 0 : ''}${day}`;
 
+	},
+	formatDuration: (s = 0) => {
+		if (s < 0) s = -s;
+		const time = [
+			// Math.floor(s / 3600) % 24,
+			Math.floor(s / 60) % 60,
+			Math.floor(s) % 60,
+		];
+		return time.map(item => (
+			item > 9 ? item : `0${item}`
+		)).join(':');
 	},
 	// 判断发布时间与现在时间是否过长
 	isTimeTooLate: (time: number, rangeDay = 30) => {

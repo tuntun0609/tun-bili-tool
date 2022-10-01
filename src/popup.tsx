@@ -27,6 +27,9 @@ function Popup() {
 				style={{}}
 				size={'small'}
 				defaultActiveKey='1'
+				tabBarStyle={{
+					marginBottom: 0,
+				}}
 				items={[
 					{
 						label: '首页推荐',
@@ -36,12 +39,12 @@ function Popup() {
 					{
 						label: '视频动态',
 						key: '2',
-						children: 'Content of Tab Pane 2',
+						children: '视频动态',
 					},
 					{
 						label: '直播',
 						key: '3',
-						children: 'Content of Tab Pane 3',
+						children: '直播',
 					},
 				]}
 			/>
