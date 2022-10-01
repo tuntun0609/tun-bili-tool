@@ -4,3 +4,4 @@ export * from './LiveSetting/LiveSetting';
 export * from './NotFind/NotFind';
 export * from './OtherSetting/OtherSetting';
 export * from './Content/Content';
+export * from './PopupIndex/PopupIndex';

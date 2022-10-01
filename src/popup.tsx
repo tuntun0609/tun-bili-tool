@@ -1,5 +1,8 @@
 import React from 'react';
-import { Button, ConfigProvider } from 'antd';
+import { ConfigProvider, Tabs } from 'antd';
+
+import { PopupFooter } from './components';
+import { PopupIndex } from './pages';
 
 import './popup.scss';
 import 'antd/dist/antd.variable.min.css';
@@ -16,18 +19,33 @@ ConfigProvider.config({
 });
 
 function Popup() {
-	const openOptions = () => {
-		if (chrome.runtime.openOptionsPage) {
-			chrome.runtime.openOptionsPage();
-		} else {
-			window.open(chrome.runtime.getURL('options.html'));
-		}
-	};
+	console.log('popup');
 	return (
 		<div className='main'>
-			<Button
-				onClick={openOptions}
-			>选项页</Button>
+			<Tabs
+				centered
+				style={{}}
+				size={'small'}
+				defaultActiveKey='1'
+				items={[
+					{
+						label: '首页推荐',
+						key: '1',
+						children: <PopupIndex></PopupIndex>,
+					},
+					{
+						label: '视频动态',
+						key: '2',
+						children: 'Content of Tab Pane 2',
+					},
+					{
+						label: '直播',
+						key: '3',
+						children: 'Content of Tab Pane 3',
+					},
+				]}
+			/>
+			<PopupFooter></PopupFooter>
 		</div>
 	);
 }

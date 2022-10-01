@@ -178,4 +178,32 @@ export const API = {
 			console.log('getShortUrl', error);
 		}
 	},
+	// 获取推荐视频
+	getRecommendVideo: async (page: number) => {
+		const baseUrl = 'https://api.bilibili.com/x/web-interface/index/top/feed/rcmd';
+		const paramsData = {
+			y_num: 4,
+			fresh_type: 3,
+			feed_version: 'V4',
+			fresh_idx_1h: page + 1,
+			fetch_row: 1,
+			fresh_idx: page + 1,
+			brush: page,
+			homepage_ver: 1,
+			ps: 11,
+		};
+		const res = await API.get({
+			url: baseUrl,
+			params: {
+				...paramsData,
+			},
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			option: {
+				credentials: 'omit',
+			},
+		});
+		return res;
+	},
 };
