@@ -9,6 +9,7 @@ export const PopupVideoItem: React.FC<{ data: any }> = ({ data }) => (
 		<a href={data.uri} onClick={() => {
 			chrome.tabs.create({
 				url: data.uri ?? '',
+				active: false,
 			});
 		}}>
 			<div className='popup-video-item-img-card'>

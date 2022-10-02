@@ -3,9 +3,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { PopupVideoItem } from '../../components';
 import { API } from '../../utils';
 
-import './PopupIndex.scss';
+import './PopupVideoList.scss';
 
-export const PopupIndex: React.FC = () => {
+export const PopupRec: React.FC = () => {
 	const [videoList, setVideoList] = useState<any[]>([]);
 	const [page, setPage] = useState(0);
 	const [loading, setLoading] = useState(false);
