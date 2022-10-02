@@ -4,3 +4,4 @@ export * from './SettingForm/SettingForm';
 export * from './PopupFooter/PopupFooter';
 export * from './PopupVideoItem/PopupRecVideoItem';
 export * from './PopupVideoItem/PopupDynVideoItem';
+export * from './PopupLiveItem/PopupLiveItem';

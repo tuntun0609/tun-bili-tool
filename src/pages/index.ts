@@ -6,3 +6,4 @@ export * from './OtherSetting/OtherSetting';
 export * from './Content/Content';
 export * from './PopupVideoList/PopupRec';
 export * from './PopupVideoList/PopupDynHome';
+export * from './PopupLiveList/PopupLiveList';

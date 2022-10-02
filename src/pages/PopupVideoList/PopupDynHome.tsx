@@ -35,7 +35,7 @@ export const PopupDynHome: React.FC = () => {
 		loadMoreData();
 	}, []);
 	return (
-		<div className='popup-index' id='dynVideoScrollableDiv'>
+		<div className='popup-list' id='dynVideoScrollableDiv'>
 			<InfiniteScroll
 				dataLength={videoList.length}
 				next={loadMoreData}

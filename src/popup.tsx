@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigProvider, Tabs } from 'antd';
 
 import { PopupFooter } from './components';
-import { PopupRec, PopupDynHome } from './pages';
+import { PopupRec, PopupDynHome, PopupLiveList } from './pages';
 
 import './popup.scss';
 import 'antd/dist/antd.variable.min.css';
@@ -44,7 +44,7 @@ function Popup() {
 					{
 						label: '直播',
 						key: '3',
-						children: '直播',
+						children: <PopupLiveList></PopupLiveList>,
 					},
 				]}
 			/>
