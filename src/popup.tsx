@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigProvider, Tabs } from 'antd';
 
 import { PopupFooter } from './components';
-import { PopupIndex } from './pages';
+import { PopupRec, PopupDynHome } from './pages';
 
 import './popup.scss';
 import 'antd/dist/antd.variable.min.css';
@@ -34,12 +34,12 @@ function Popup() {
 					{
 						label: '首页推荐',
 						key: '1',
-						children: <PopupIndex></PopupIndex>,
+						children: <PopupRec></PopupRec>,
 					},
 					{
 						label: '视频动态',
 						key: '2',
-						children: '视频动态',
+						children: <PopupDynHome></PopupDynHome>,
 					},
 					{
 						label: '直播',

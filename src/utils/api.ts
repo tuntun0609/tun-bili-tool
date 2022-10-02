@@ -206,4 +206,20 @@ export const API = {
 		});
 		return res;
 	},
+	getDynVideo: async (page: number, offset: string) => {
+		const baseUrl = 'https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all';
+		const paramsData = {
+			timezone_offset: -480,
+			type: 'video',
+			page: page,
+			offset: offset !== undefined ? offset : '',
+		};
+		const res = await API.get({
+			url: baseUrl,
+			params: {
+				...paramsData,
+			},
+		});
+		return res;
+	},
 };
