@@ -40,7 +40,7 @@ export const PopupRec: React.FC = () => {
 		loadMoreData();
 	}, []);
 	return (
-		<div className='popup-index' id='videoScrollableDiv'>
+		<div className='popup-list' id='videoScrollableDiv'>
 			<InfiniteScroll
 				dataLength={videoList.length}
 				next={loadMoreData}
