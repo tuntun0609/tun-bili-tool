@@ -31,7 +31,6 @@ export const PopupDynHome: React.FC = () => {
 		}
 	};
 	useEffect(() => {
-		// getVideoList();
 		loadMoreData();
 	}, []);
 	return (
@@ -50,11 +49,8 @@ export const PopupDynHome: React.FC = () => {
 			>
 				{
 					videoList.map(item => (
-						// <div
-						// 	key={item.modules?.module_dynamic?.major?.archive?.bvid}
-						// >{item.modules?.module_dynamic?.major?.archive?.title}</div>
 						<PopupDynVideoItem
-							key={item.modules?.module_dynamic?.major?.archive?.bvid}
+							key={item.id_str}
 							data={item}
 						></PopupDynVideoItem>
 					))
