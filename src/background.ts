@@ -98,7 +98,17 @@ chrome.runtime.onInstalled.addListener((_details) => {
 	// chrome.storage.local.set({
 	//   membersInfo: defaultMembersInfo,
 	// })
-	console.log('install');
+	chrome.contextMenus.create({
+		id: 'bilibili',
+		title: '使用bilibili搜索',
+		type: 'normal',
+		contexts: ['selection'],
+	});
+	chrome.contextMenus.onClicked.addListener((info) => {
+		if (info.menuItemId === 'bilibili') {
+			chrome.tabs.create({url: `https://search.bilibili.com/all?keyword=${info.selectionText}`});
+		}
+	});
 });
 
 // 监听storage
