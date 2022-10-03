@@ -55,6 +55,7 @@ export const PopupLiveList: React.FC = () => {
 				display: 'flex',
 				justifyContent: 'space-between',
 				flexWrap: 'wrap',
+				alignContent: 'flex-start',
 			}}>
 				{
 					liveList.map(item => (

@@ -45,6 +45,7 @@ export const PopupDynHome: React.FC = () => {
 					display: 'flex',
 					justifyContent: 'space-between',
 					flexWrap: 'wrap',
+					alignContent: 'flexStart',
 				}}
 			>
 				{
