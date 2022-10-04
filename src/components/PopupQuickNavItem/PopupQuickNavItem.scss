@@ -1,0 +1,40 @@
+.popup-quick-nav-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 49%;
+	height: 60px;
+	margin-top: 12px;
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid #f0f0f0;
+	cursor: pointer;
+	transition: box-shadow 0.3s, border-color 0.3s;
+	&:hover {
+		border-color: transparent;
+		box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
+	}
+	.popup-quick-nav-name {
+		width: calc(100% - 30px);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.popup-quick-nav-delete {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		border-radius: 8px;
+		border: none;
+		align-items: center;
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+	&:hover .popup-quick-nav-delete {
+		opacity: 1;
+	}
+	.popup-quick-nav-delete:hover {
+		border: 1px solid #fb7299;
+	}
+}

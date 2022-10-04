@@ -2,7 +2,10 @@ import React from 'react';
 import { ConfigProvider, Tabs } from 'antd';
 
 import { PopupFooter } from './components';
-import { PopupRec, PopupDynHome, PopupLiveList } from './pages';
+import {
+	PopupRec, PopupDynHome, PopupLiveList,
+	PopupQuickNav,
+} from './pages';
 
 import './popup.scss';
 import 'antd/dist/antd.variable.min.css';
@@ -42,9 +45,14 @@ function Popup() {
 						children: <PopupDynHome></PopupDynHome>,
 					},
 					{
-						label: '直播',
+						label: '直播列表',
 						key: '3',
 						children: <PopupLiveList></PopupLiveList>,
+					},
+					{
+						label: '快速导航',
+						key: '4',
+						children: <PopupQuickNav></PopupQuickNav>,
 					},
 				]}
 			/>
