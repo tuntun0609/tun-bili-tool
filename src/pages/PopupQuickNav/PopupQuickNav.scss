@@ -1,0 +1,17 @@
+.popup-quick-nav-add {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 49%;
+	height: 60px;
+	margin-top: 12px;
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid #f0f0f0;
+	cursor: pointer;
+	transition: box-shadow 0.3s, border-color 0.3s;
+	&:hover {
+		border-color: transparent;
+		box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
+	}
+}

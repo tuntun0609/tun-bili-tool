@@ -1,5 +1,9 @@
 import { defaultMembersInfo, API } from './utils';
+import { Storage } from '@plasmohq/storage';
+
 export { };
+
+const storage = new Storage();
 
 // 直播状态
 const liveStatus = {};
@@ -89,7 +93,7 @@ const closeSetInterval = (id) => {
 // })
 
 // 新安装或者重刷新插件
-chrome.runtime.onInstalled.addListener((_details) => {
+chrome.runtime.onInstalled.addListener(async (_details) => {
 	// chrome.storage.local.get(['isListenLiveStatus'], (result) => {
 	//   if (result.isListenLiveStatus) {
 	//     listenId = listenLiveRoomMain();
@@ -98,6 +102,26 @@ chrome.runtime.onInstalled.addListener((_details) => {
 	// chrome.storage.local.set({
 	//   membersInfo: defaultMembersInfo,
 	// })
+
+	// popup页面 快速导航页面默认数据
+	if (await storage.get('quickNavigationData') === undefined) {
+		storage.set('quickNavigationData', [
+			{
+				name: '番剧',
+				url: 'https://www.bilibili.com/anime',
+			},
+			{
+				name: '动态首页',
+				url: 'https://t.bilibili.com/',
+			},
+			{
+				name: '开发者bb空间',
+				url: 'https://space.bilibili.com/47706697',
+			},
+		]);
+	}
+
+	// 右键搜索
 	chrome.contextMenus.create({
 		id: 'bilibili',
 		title: '使用bilibili搜索',
