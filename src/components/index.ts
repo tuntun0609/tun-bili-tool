@@ -6,3 +6,4 @@ export * from './PopupVideoItem/PopupRecVideoItem';
 export * from './PopupVideoItem/PopupDynVideoItem';
 export * from './PopupLiveItem/PopupLiveItem';
 export * from './PopupQuickNavItem/PopupQuickNavItem';
+export * from './InfiniteScrollLoader/InfiniteScrollLoader';

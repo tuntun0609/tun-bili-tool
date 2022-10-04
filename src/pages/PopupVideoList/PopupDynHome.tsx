@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { PopupDynVideoItem } from '../../components';
+import { PopupDynVideoItem, InfiniteScrollLoader } from '../../components';
 import { API } from '../../utils';
 
 export const PopupDynHome: React.FC = () => {
@@ -39,13 +39,14 @@ export const PopupDynHome: React.FC = () => {
 				dataLength={videoList.length}
 				next={loadMoreData}
 				hasMore={true}
-				loader={'加载中'}
+				loader={<InfiniteScrollLoader />}
 				scrollableTarget="dynVideoScrollableDiv"
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
 					flexWrap: 'wrap',
 					alignContent: 'flexStart',
+					overflow: 'visible',
 				}}
 			>
 				{
