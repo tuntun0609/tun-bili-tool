@@ -41,10 +41,16 @@
     overflow: hidden;
 	}
 	.popup-video-item-video-owner {
-		display: flex;
+		max-width: 100%;
+		display: inline-flex;
 		align-items: center;
 		font-size: 12px;
 		color: #9499A0;
+		transition: fill 0.3s ease, color 0.3s ease;
+		&:hover, &:hover .up-icon {
+			fill: #fb7299;
+			color: #fb7299;
+		}
 		.popup-video-item-video-pubdate {
 			white-space: nowrap;
 			margin-left: 5px;

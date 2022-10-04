@@ -36,7 +36,13 @@ export const PopupDynVideoItem: React.FC<{ data: any }> = ({ data }) => (
 				title={data.modules?.module_dynamic?.major?.archive?.title ?? ''}
 				className='popup-video-item-title'
 			>{data.modules?.module_dynamic?.major?.archive?.title ?? ''}</div>
-			<div className='popup-video-item-video-owner'>
+			<div className='popup-video-item-video-owner' onClick={(e) => {
+				e.stopPropagation();
+				chrome.tabs.create({
+					url: `https://space.bilibili.com/${data.modules?.module_author?.mid}`,
+					active: false,
+				});
+			}}>
 				<svg className='up-icon'>
 					<path
 						fillRule={'evenodd'}
@@ -47,10 +53,10 @@ export const PopupDynVideoItem: React.FC<{ data: any }> = ({ data }) => (
 				</svg>
 				<div style={{
 					marginLeft: '4px',
-					// maxWidth: '90px',
 					textOverflow: 'ellipsis',
 					whiteSpace: 'nowrap',
 					overflow: 'hidden',
+					flex: '1',
 				}} title={data.modules?.module_author?.name ?? ''}>{data.modules?.module_author?.name ?? ''}</div>
 				<div className='popup-video-item-video-pubdate'>
 					· {data.modules?.module_author?.pub_time}

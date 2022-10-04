@@ -36,7 +36,13 @@ export const PopupVideoItem: React.FC<{ data: any }> = ({ data }) => (
 				title={data.title ?? ''}
 				className='popup-video-item-title'
 			>{data.title ?? ''}</div>
-			<div className='popup-video-item-video-owner'>
+			<div className='popup-video-item-video-owner' onClick={(e) => {
+				e.stopPropagation();
+				chrome.tabs.create({
+					url: `https://space.bilibili.com/${data.owner?.mid}`,
+					active: false,
+				});
+			}}>
 				<svg className='up-icon'>
 					<path
 						fillRule={'evenodd'}
@@ -47,10 +53,10 @@ export const PopupVideoItem: React.FC<{ data: any }> = ({ data }) => (
 				</svg>
 				<div style={{
 					marginLeft: '4px',
-					// maxWidth: '90px',
 					textOverflow: 'ellipsis',
 					whiteSpace: 'nowrap',
 					overflow: 'hidden',
+					flex: '1',
 				}} title={data.owner?.name ?? ''}>{data.owner?.name ?? ''}</div>
 				<div className='popup-video-item-video-pubdate'>
 					· {tool.diffTime(data.pubdate)}
