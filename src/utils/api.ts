@@ -222,4 +222,18 @@ export const API = {
 		});
 		return res;
 	},
+	getVideoShot: async (bvid: string) => {
+		const baseUrl = 'https://api.bilibili.com/x/player/videoshot';
+		const paramsData = {
+			index: 1,
+			bvid: bvid,
+		};
+		const res = await API.get({
+			url: baseUrl,
+			params: {
+				...paramsData,
+			},
+		});
+		return res;
+	},
 };
