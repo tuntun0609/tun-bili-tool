@@ -1,8 +1,8 @@
 {
-  "name": "tun-chrome-extension",
-  "displayName": "Tun chrome extension",
+  "name": "tun-bilibili-tool",
+  "displayName": "tun bilibili tool",
   "version": "0.0.1",
-  "description": "Tun chrome extension",
+  "description": "tun bilibili tool",
   "author": "TunTun",
   "scripts": {
     "dev": "plasmo dev",
