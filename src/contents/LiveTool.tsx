@@ -130,7 +130,7 @@ const LiveTool = () => {
 		<ConfigProvider locale={zhCN}>
 			<Popover
 				content={ToolPopup}
-				visible={popupShow}
+				open={popupShow}
 				placement={popupPlacement}
 				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
 			>

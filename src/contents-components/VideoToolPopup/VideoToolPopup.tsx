@@ -220,7 +220,7 @@ export const VideoToolPopup = () => {
 							src={videoInfo.pic ?? ''}
 							cancelText={'返回'}
 							okText={'复制图片至剪切板'}
-							visible={picModalOpen}
+							open={picModalOpen}
 							onCancel={picModalCancel}
 							onOk={onCopyPicBtnClicked}
 							getContainer={
@@ -238,7 +238,7 @@ export const VideoToolPopup = () => {
 							src={screenshotData ?? ''}
 							cancelText={'返回'}
 							okText={'复制图片至剪切板'}
-							visible={screenshotModalOpen}
+							open={screenshotModalOpen}
 							onCancel={screenModalCancel}
 							onOk={onCopyScreenshotBtnClicked}
 							getContainer={
@@ -254,7 +254,7 @@ export const VideoToolPopup = () => {
 							width={620}
 							title={'视频下载'}
 							footer={null}
-							visible={downloadVideoModalOpen}
+							open={downloadVideoModalOpen}
 							onCancel={downloadVideoModalCancel}
 							getContainer={
 								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
@@ -284,11 +284,11 @@ export const VideoToolPopup = () => {
 					onChange={onPlaybackrateChange}
 					value={playbackrate}
 					step={0.1}
-					getTooltipPopupContainer={
-						() => (
+					tooltip={{
+						getPopupContainer: () => (
 							document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-						)
-					}
+						),
+					}}
 				></Slider>
 			</Space>
 		</div>
