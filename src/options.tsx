@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import { YoutubeOutlined } from '@ant-design/icons';
+import { GithubOutlined, YoutubeOutlined } from '@ant-design/icons';
 
 import { Header, HeaderProps, SideBar } from '~components';
 import {
@@ -24,8 +24,13 @@ ConfigProvider.config({
 
 const HeaderItems: HeaderProps[] = [
 	{
+		name: '插件功能文档',
+		url: 'https://bili-tool-doc.vercel.app',
+	},
+	{
 		name: 'GitHub',
 		url: 'https://github.com/tuntun0609/bilibil-tool-mv3',
+		icon: <GithubOutlined />,
 	},
 	{
 		name: 'bilibili',
