@@ -159,6 +159,24 @@ export const VideoToolPopup = () => {
 	// 	console.log(data);
 	// };
 
+	// 获取视频短链
+	const getShortUrl = async () => {
+		const fullUrl = location.origin + location.pathname;
+		try {
+			const data = await chrome.runtime.sendMessage(
+				{
+					type: 'getShortUrl',
+					url: fullUrl,
+				},
+			);
+			tool.copyDataToClipboard(data.content);
+			message.success('复制短链成功');
+		} catch (error) {
+			message.error('复制短链失败');
+			console.error(error);
+		}
+	};
+
 	// 视频倍速值改变事件
 	const onPlaybackrateChange = (value: number) => {
 		setPlaybackrate(value);
@@ -261,6 +279,10 @@ export const VideoToolPopup = () => {
 							}
 							videoInfo={videoInfo}
 						></DownloadVideoModal>
+					</Col>
+					<Col span={8}>
+						{/* 视频短链 */}
+						<Button onClick={getShortUrl}>视频短链</Button>
 					</Col>
 					{/* <Col span={8}>
 						<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
