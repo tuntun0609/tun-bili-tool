@@ -236,4 +236,17 @@ export const API = {
 		});
 		return res;
 	},
+	getLiveInfo: async (roomid: number) => {
+		const baseUrl = 'http://api.live.bilibili.com/room/v1/Room/get_info';
+		const paramsData = {
+			room_id: roomid,
+		};
+		const res = await API.get({
+			url: baseUrl,
+			params: {
+				...paramsData,
+			},
+		});
+		return res;
+	},
 };
