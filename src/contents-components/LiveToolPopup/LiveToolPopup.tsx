@@ -41,6 +41,7 @@ export const LiveToolPopup = () => {
 			if (!isUndefined(roomid)) {
 				try {
 					const data = await API.getLiveInfo(roomid);
+					console.log(data.data);
 					setRoomInfo(data.data);
 				} catch (error) {
 					console.error(error);
@@ -218,23 +219,27 @@ export const LiveToolPopup = () => {
 							}
 						></ImageModal>
 					</Col>
-					<Col span={8}>
-						<Button onClick={backgroundBtnClicked}>直播背景</Button>
-						<ImageModal
-							centered
-							width={720}
-							title={'直播背景'}
-							src={roomInfo.background ?? ''}
-							cancelText={'返回'}
-							okText={'复制图片至剪切板'}
-							open={backgroundModalOpen}
-							onCancel={backgroundModalCancel}
-							onOk={onCopyBackgroundBtnClicked}
-							getContainer={
-								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-							}
-						></ImageModal>
-					</Col>
+					{
+						roomInfo.background
+							? <Col span={8}>
+								<Button onClick={backgroundBtnClicked}>直播背景</Button>
+								<ImageModal
+									centered
+									width={720}
+									title={'直播背景'}
+									src={roomInfo.background ?? ''}
+									cancelText={'返回'}
+									okText={'复制图片至剪切板'}
+									open={backgroundModalOpen}
+									onCancel={backgroundModalCancel}
+									onOk={onCopyBackgroundBtnClicked}
+									getContainer={
+										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+									}
+								></ImageModal>
+							</Col>
+							: null
+					}
 					<Col span={8}>
 						<Button onClick={shareLiveRoom}>分享直播</Button>
 					</Col>
