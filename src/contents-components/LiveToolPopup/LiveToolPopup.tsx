@@ -115,6 +115,19 @@ export const LiveToolPopup = () => {
 		}
 	};
 
+	// 直播间分享
+	const shareLiveRoom = () => {
+		const upName = document.querySelector('.room-owner-username').innerHTML;
+		const copyText = `直播间标题: ${roomInfo.title}\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
+		try {
+			tool.copyDataToClipboard(copyText);
+			message.success('复制成功');
+		} catch (error) {
+			console.error(error);
+			message.error('复制失败');
+		}
+	};
+
 	// 屏蔽选项发生改变
 	const shieldFormChange = (_changedValues: any, allValues: any) => {
 		setLiveShield(allValues);
@@ -145,6 +158,11 @@ export const LiveToolPopup = () => {
 			name: 'emoticon-danmu',
 			label: '表情(弹幕)',
 			style: '.danmaku-item-container .danmaku-emoji img {display:none !important;}',
+		},
+		{
+			name: 'systemMsg',
+			label: '系统公告',
+			style: '.chat-item.system-msg, .chat-item.convention-msg{display:none !important;}',
 		},
 	];
 
@@ -216,6 +234,9 @@ export const LiveToolPopup = () => {
 								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 							}
 						></ImageModal>
+					</Col>
+					<Col span={8}>
+						<Button onClick={shareLiveRoom}>分享直播</Button>
 					</Col>
 				</Row>
 				{/* 直播屏蔽 */}
