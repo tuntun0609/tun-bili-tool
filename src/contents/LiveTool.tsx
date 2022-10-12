@@ -6,8 +6,10 @@ import React, {
 import { Storage, useStorage } from '@plasmohq/storage';
 // import axios from 'axios';
 // import { isUndefined } from 'lodash';
-import { ConfigProvider, Popover, Space } from 'antd';
+import { ConfigProvider, message, Popover } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
+
+import { LiveToolPopup } from '../contents-components';
 
 import toolCss from 'data-text:./LiveTool.scss';
 import antdCss from 'data-text:antd/dist/antd.variable.min.css';
@@ -42,14 +44,13 @@ export const getStyle = () => {
 // shadow节点id名
 export const getShadowHostId = () => 'tun-tool-popup';
 
-// tool 弹出层
-const ToolPopup = () => (
-	<div className='tun-popup-main'>
-		<Space style={{ width: '100%' }} direction="vertical">
-			LiveTool
-		</Space>
-	</div>
-);
+// 全局message配置
+message.config({
+	top: 70,
+	duration: 1.5,
+	maxCount: 3,
+	getContainer: () => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container'),
+});
 
 // tool main
 const LiveTool = () => {
@@ -129,7 +130,7 @@ const LiveTool = () => {
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
 			<Popover
-				content={ToolPopup}
+				content={LiveToolPopup}
 				open={popupShow}
 				placement={popupPlacement}
 				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
