@@ -70,5 +70,11 @@
 }
 
 .ant-form-item {
-	margin: 0 !important;
+	margin: 4px !important;
+	border-radius: 8px;
+	transition: box-shadow 0.3s, border 0.3s;
+}
+
+.ant-form-item:hover {
+	box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
 }
