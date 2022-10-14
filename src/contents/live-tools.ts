@@ -1,8 +1,8 @@
 import type { PlasmoContentScript } from 'plasmo';
 import hotkeys from 'hotkeys-js';
-// import { Storage } from '@plasmohq/storage';
+import { Storage } from '@plasmohq/storage';
 
-// const storage = new Storage();
+const storage = new Storage();
 
 export const config: PlasmoContentScript = {
 	matches: ['*://live.bilibili.com/*'],
@@ -23,6 +23,36 @@ if (isOriginLive()) {
 		video.muted = !video.muted;
 	});
 } else {
-	console.error('tun-bili-tool: 需要在原版直播间使用');
+	console.warn('tun-bili-tool: 需要在原版直播间使用');
 }
 
+// 设置画质
+const setQuality = async (liveQuality: string, time = 3000) => {
+	setTimeout(() => {
+		document.querySelector('#live-player').dispatchEvent(new MouseEvent('mousemove'));
+		const intervalId = setInterval(() => {
+			document.querySelector('#live-player').dispatchEvent(new MouseEvent('mousemove'));
+		}, 100);
+		document.querySelector('.quality-wrap').dispatchEvent(new MouseEvent('mouseenter'));
+		setTimeout(() => {
+			const qualityBtns = document.querySelectorAll('.quality-wrap .panel .quality-it');
+			qualityBtns.forEach((el) => {
+				if (el.innerHTML === liveQuality) {
+					el.dispatchEvent(new Event('click'));
+				}
+			});
+			clearInterval(intervalId);
+			document.querySelector('#live-player').dispatchEvent(new MouseEvent('mouselive'));
+		}, 100);
+	}, time);
+};
+
+window.addEventListener(
+	'load',
+	async () => {
+		const liveQuality = await storage.get('liveDefaultQuality');
+		if (liveQuality && liveQuality !== '不开启' && isOriginLive()) {
+			setQuality(liveQuality);
+		}
+	},
+);
