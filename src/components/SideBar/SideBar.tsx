@@ -15,7 +15,6 @@ export const SideBar: React.FC = () => {
 	const [selectItem, setSelectItem] = useState<string>();
 
 	useEffect(() => {
-		console.log(location.hash);
 		if (location.hash !== '') {
 			const hash = location.hash.slice(2);
 			const key = routerItems.find(item => item.key === hash)?.key ?? routerItems[0].key;
