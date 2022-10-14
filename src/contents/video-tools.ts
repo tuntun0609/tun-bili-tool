@@ -49,7 +49,6 @@ const widescreen = (time = 0) => {
 // 视频简介自动打开
 const videoDescOpen = (time = 0) => {
 	setTimeout(() => {
-		console.log('videoDescOpen');
 		const openBtn = document.querySelector('#v_desc>div[report-id=abstract_spread]');
 		if (openBtn) {
 			const clickEvent = new Event('click');

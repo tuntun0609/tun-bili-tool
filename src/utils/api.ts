@@ -98,7 +98,7 @@ export const API = {
 	getUserInfo: async (mid) => {
 		try {
 			const res = await API.get({
-				url: 'http://api.bilibili.com/x/space/acc/info',
+				url: 'https://api.bilibili.com/x/space/acc/info',
 				params: {
 					mid: mid,
 				},
@@ -112,7 +112,7 @@ export const API = {
 	getStatusZInfoByUids: async (midArr) => {
 		try {
 			const res = await API.post({
-				url: 'http://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids',
+				url: 'https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids',
 				params: {
 					uids: midArr,
 				},
@@ -237,7 +237,7 @@ export const API = {
 		return res;
 	},
 	getLiveInfo: async (roomid: number) => {
-		const baseUrl = 'http://api.live.bilibili.com/room/v1/Room/get_info';
+		const baseUrl = 'https://api.live.bilibili.com/room/v1/Room/get_info';
 		const paramsData = {
 			room_id: roomid,
 		};

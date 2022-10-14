@@ -24,8 +24,15 @@ export const LiveToolPopup = () => {
 	const [form] = Form.useForm();
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
 
+	const getRoomId = () => {
+		if (location.pathname.startsWith('/blanc')) {
+			return parseInt(location.pathname.slice(7), 10);
+		}
+		return parseInt(location.pathname.slice(1), 10);
+	};
+
 	useEffect(() => {
-		setRoomid(parseInt(location.pathname.slice(1), 10));
+		setRoomid(getRoomId());
 		const shieldStyle = document.createElement('style');
 		shieldStyle.id = 'tun-shield-style';
 		document.body.appendChild(shieldStyle);
@@ -181,107 +188,123 @@ export const LiveToolPopup = () => {
 
 	return (
 		<div className='tun-popup-main'>
-			<Space style={{ width: '100%' }} direction="vertical">
-				{/* 直播工具 */}
-				<PopupTitle style={{ marginTop: '8px' }}>直播工具</PopupTitle>
-				<Row wrap gutter={[16, 8]} >
-					<Col span={8}>
-						<Button onClick={screenshotBtnClicked}>直播截图</Button>
-						<ImageModal
-							centered
-							width={720}
-							title={'直播截图'}
-							src={screenshotData ?? ''}
-							cancelText={'返回'}
-							okText={'复制图片至剪切板'}
-							open={screenshotModalOpen}
-							onCancel={screenModalCancel}
-							onOk={onCopyScreenshotBtnClicked}
-							getContainer={
-								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-							}
-						></ImageModal>
-					</Col>
-					<Col span={8}>
-						<Button onClick={userCoverBtnClicked}>直播封面</Button>
-						<ImageModal
-							centered
-							width={720}
-							title={'直播封面'}
-							src={roomInfo.user_cover ?? ''}
-							cancelText={'返回'}
-							okText={'复制图片至剪切板'}
-							open={userCoverModalOpen}
-							onCancel={userCoverModalCancel}
-							onOk={onCopyUserCoverBtnClicked}
-							getContainer={
-								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
-							}
-						></ImageModal>
-					</Col>
-					{
-						roomInfo.background
-							? <Col span={8}>
-								<Button onClick={backgroundBtnClicked}>直播背景</Button>
+			{
+				document.querySelector('article[id="app"]')
+					?
+					(
+						<>
+							<div style={{
+								marginBottom: '6px',
+							}}>使用全部功能需要返回原版直播间</div>
+							<Button onClick={() => {
+								const originUrl = `${window.location.origin}/blanc${window.location.pathname}?liteVersion=true`;
+								window.location.href = originUrl;
+							}}>返回原版直播间</Button>
+						</>
+					)
+					:
+					<Space style={{ width: '100%' }} direction="vertical">
+						{/* 直播工具 */}
+						<PopupTitle style={{ marginTop: '8px' }}>直播工具</PopupTitle>
+						<Row wrap gutter={[16, 8]} >
+							<Col span={8}>
+								<Button onClick={screenshotBtnClicked}>直播截图</Button>
 								<ImageModal
 									centered
 									width={720}
-									title={'直播背景'}
-									src={roomInfo.background ?? ''}
+									title={'直播截图'}
+									src={screenshotData ?? ''}
 									cancelText={'返回'}
 									okText={'复制图片至剪切板'}
-									open={backgroundModalOpen}
-									onCancel={backgroundModalCancel}
-									onOk={onCopyBackgroundBtnClicked}
+									open={screenshotModalOpen}
+									onCancel={screenModalCancel}
+									onOk={onCopyScreenshotBtnClicked}
 									getContainer={
-										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 									}
 								></ImageModal>
 							</Col>
-							: null
-					}
-					<Col span={8}>
-						<Button onClick={shareLiveRoom}>分享直播</Button>
-					</Col>
-				</Row>
-				{/* 直播屏蔽 */}
-				<PopupTitle style={{ marginTop: '8px' }}>直播屏蔽</PopupTitle>
-				<Form
-					form={form}
-					labelWrap
-					labelAlign={'left'}
-					size={'middle'}
-					labelCol={{
-						style: {
-							width: 'calc(100% - 48px)',
-							padding: '2px 0px 2px 4px',
-						},
-					}}
-					wrapperCol={{
-						style: {
-							justifyContent: 'center',
-						},
-					}}
-					onValuesChange={shieldFormChange}
-				>
-					{
-						shieldOptions.map(item => (
-							<Form.Item
-								key={item.name}
-								label={item.label ?? item.name}
-							>
-								<Form.Item
-									noStyle
-									name={item.name}
-									valuePropName="checked"
-								>
-									<Switch />
-								</Form.Item>
-							</Form.Item>
-						))
-					}
-				</Form>
-			</Space>
+							<Col span={8}>
+								<Button onClick={userCoverBtnClicked}>直播封面</Button>
+								<ImageModal
+									centered
+									width={720}
+									title={'直播封面'}
+									src={roomInfo.user_cover ?? ''}
+									cancelText={'返回'}
+									okText={'复制图片至剪切板'}
+									open={userCoverModalOpen}
+									onCancel={userCoverModalCancel}
+									onOk={onCopyUserCoverBtnClicked}
+									getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+									}
+								></ImageModal>
+							</Col>
+							{
+								roomInfo.background
+									? <Col span={8}>
+										<Button onClick={backgroundBtnClicked}>直播背景</Button>
+										<ImageModal
+											centered
+											width={720}
+											title={'直播背景'}
+											src={roomInfo.background ?? ''}
+											cancelText={'返回'}
+											okText={'复制图片至剪切板'}
+											open={backgroundModalOpen}
+											onCancel={backgroundModalCancel}
+											onOk={onCopyBackgroundBtnClicked}
+											getContainer={
+										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+											}
+										></ImageModal>
+									</Col>
+									: null
+							}
+							<Col span={8}>
+								<Button onClick={shareLiveRoom}>分享直播</Button>
+							</Col>
+						</Row>
+						{/* 直播屏蔽 */}
+						<PopupTitle style={{ marginTop: '8px' }}>直播屏蔽</PopupTitle>
+						<Form
+							form={form}
+							labelWrap
+							labelAlign={'left'}
+							size={'middle'}
+							labelCol={{
+								style: {
+									width: 'calc(100% - 48px)',
+									padding: '2px 0px 2px 4px',
+								},
+							}}
+							wrapperCol={{
+								style: {
+									justifyContent: 'center',
+								},
+							}}
+							onValuesChange={shieldFormChange}
+						>
+							{
+								shieldOptions.map(item => (
+									<Form.Item
+										key={item.name}
+										label={item.label ?? item.name}
+									>
+										<Form.Item
+											noStyle
+											name={item.name}
+											valuePropName="checked"
+										>
+											<Switch />
+										</Form.Item>
+									</Form.Item>
+								))
+							}
+						</Form>
+					</Space>
+			}
 		</div>
 	);
 };
