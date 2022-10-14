@@ -4,7 +4,7 @@ import { Storage } from '@plasmohq/storage';
 import html2canvas from 'html2canvas';
 // import * as htmlToImage from 'html-to-image';
 
-import { Tool as tool } from '~utils';
+import { Tool } from '~utils';
 import dark from 'data-text:../css/bilibili-index-dark.css';
 
 const storage = new Storage();
@@ -105,7 +105,7 @@ const obs = () => {
 										[blob.type]: blob,
 									}),
 								];
-								await tool.copyDataToClipboard(data);
+								await Tool.copyDataToClipboard(data);
 								screenshotBtn.innerText = '复制成功';
 								setTimeout(() => {
 									screenshotBtn.innerText = '动态截图';

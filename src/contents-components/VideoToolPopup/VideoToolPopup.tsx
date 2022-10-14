@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Descriptions, message, Row, Slider, Space } from 'antd';
 
-import { API, Tool as tool } from '~utils';
+import { API, Tool } from '~utils';
 import { DownloadVideoModal, ImageModal, PopupTitle } from '~contents-components';
 
 // 视频详细信息内容组件
@@ -12,7 +12,7 @@ const VideoDesItem = ({ value }: { value: string | number }) => (
 			cursor: 'pointer',
 		}}
 		onClick={() => {
-			tool.copyDataToClipboard(value)
+			Tool.copyDataToClipboard(value)
 				.then(() => {
 					message.success('复制成功');
 				}).catch((e) => {
@@ -28,7 +28,7 @@ const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
 	const copyData = async () => {
 		const copyText = `视频标题: ${data.title}\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
 		try {
-			tool.copyDataToClipboard(copyText);
+			Tool.copyDataToClipboard(copyText);
 			message.success('复制成功');
 		} catch (error) {
 			console.error(error);
@@ -110,7 +110,7 @@ export const VideoToolPopup = () => {
 	// 复制图片至剪贴板按钮
 	const onCopyPicBtnClicked = async () => {
 		try {
-			tool.copyImg(videoInfo.pic ?? '');
+			Tool.copyImg(videoInfo.pic ?? '');
 			message.success('复制成功');
 		} catch (error) {
 			message.error('复制失败');
@@ -136,7 +136,7 @@ export const VideoToolPopup = () => {
 	// 复制截图至剪贴板
 	const onCopyScreenshotBtnClicked = () => {
 		try {
-			tool.copyImg(screenshotData ?? '');
+			Tool.copyImg(screenshotData ?? '');
 			message.success('复制成功');
 		} catch (error) {
 			message.error('复制失败');
@@ -169,7 +169,7 @@ export const VideoToolPopup = () => {
 					url: fullUrl,
 				},
 			);
-			tool.copyDataToClipboard(data.content);
+			Tool.copyDataToClipboard(data.content);
 			message.success('复制短链成功');
 		} catch (error) {
 			message.error('复制短链失败');

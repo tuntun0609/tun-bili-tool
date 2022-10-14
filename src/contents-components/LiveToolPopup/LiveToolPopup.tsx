@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
-import { API, Tool as tool, log } from '../../utils';
+import { API, Tool, log } from '../../utils';
 import { ImageModal, PopupTitle } from '~contents-components';
 import { useStorage } from '@plasmohq/storage';
 
@@ -77,7 +77,7 @@ export const LiveToolPopup = () => {
 
 	const onCopyScreenshotBtnClicked = () => {
 		try {
-			tool.copyImg(screenshotData ?? '');
+			Tool.copyImg(screenshotData ?? '');
 			message.success('复制成功');
 		} catch (error) {
 			message.error('复制失败');
@@ -96,7 +96,7 @@ export const LiveToolPopup = () => {
 
 	const onCopyUserCoverBtnClicked = () => {
 		try {
-			tool.copyImg(roomInfo.user_over ?? '');
+			Tool.copyImg(roomInfo.user_cover ?? '');
 			message.success('复制成功');
 		} catch (error) {
 			message.error('复制失败');
@@ -115,7 +115,7 @@ export const LiveToolPopup = () => {
 
 	const onCopyBackgroundBtnClicked = () => {
 		try {
-			tool.copyImg(roomInfo.background ?? '');
+			Tool.copyImg(roomInfo.background ?? '');
 			message.success('复制成功');
 		} catch (error) {
 			message.error('复制失败');
@@ -128,7 +128,7 @@ export const LiveToolPopup = () => {
 		const upName = document.querySelector('.room-owner-username').innerHTML;
 		const copyText = `直播间标题: ${roomInfo.title}\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
 		try {
-			tool.copyDataToClipboard(copyText);
+			Tool.copyDataToClipboard(copyText);
 			message.success('复制成功');
 		} catch (error) {
 			console.error(error);
