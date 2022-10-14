@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
-import { API, Tool as tool } from '../../utils';
+import { API, Tool as tool, log } from '../../utils';
 import { ImageModal, PopupTitle } from '~contents-components';
 import { useStorage } from '@plasmohq/storage';
 
@@ -48,7 +48,7 @@ export const LiveToolPopup = () => {
 			if (!isUndefined(roomid)) {
 				try {
 					const data = await API.getLiveInfo(roomid);
-					console.log(data.data);
+					log(data.data);
 					setRoomInfo(data.data);
 				} catch (error) {
 					console.error(error);

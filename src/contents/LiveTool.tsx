@@ -4,8 +4,6 @@ import React, {
 	useEffect, useMemo, useState,
 } from 'react';
 import { Storage, useStorage } from '@plasmohq/storage';
-// import axios from 'axios';
-// import { isUndefined } from 'lodash';
 import { ConfigProvider, message, Popover } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
 
