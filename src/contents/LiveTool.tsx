@@ -8,6 +8,7 @@ import { ConfigProvider, message, Popover } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
 
 import { LiveToolPopup } from '../contents-components';
+import { isOriginLive } from '~utils';
 
 import toolCss from 'data-text:./LiveTool.scss';
 import antdCss from 'data-text:antd/dist/antd.variable.min.css';
@@ -27,6 +28,7 @@ const storage = new Storage();
 
 export const config: PlasmoContentScript = {
 	matches: ['*://live.bilibili.com/*'],
+	all_frames: true,
 };
 
 // 获取挂载节点
@@ -125,7 +127,7 @@ const LiveTool = () => {
 		}
 	};
 	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.documentElement.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.documentElement.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
-	return isTool ? (
+	return isTool && isOriginLive() ? (
 		<ConfigProvider locale={zhCN}>
 			<Popover
 				content={LiveToolPopup}
