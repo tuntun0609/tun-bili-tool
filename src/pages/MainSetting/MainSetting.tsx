@@ -7,6 +7,7 @@ export const MainSetting: React.FC = () => {
 	const [twoRow, setTwoRow] = useStorage('isTwoRow', false);
 	const [livingList, setLivingList] = useStorage('isLivingList', false);
 	const [isIndexDark, setIsIndexDark] = useStorage('isIndexDark', false);
+	const [isHomeRecRepaint, setIsHomeRecRepaint] = useStorage('isHomeRecRepaint', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
@@ -38,6 +39,17 @@ export const MainSetting: React.FC = () => {
 				checked: isIndexDark,
 				onClick: (checked) => {
 					setIsIndexDark(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '是否开启首页推荐视频布局优化',
+			name: 'isHomeRecRepaint',
+			formProps: {
+				checked: isHomeRecRepaint,
+				onClick: (checked) => {
+					setIsHomeRecRepaint(checked);
 				},
 			},
 		},

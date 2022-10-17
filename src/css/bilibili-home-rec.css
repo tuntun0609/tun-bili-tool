@@ -1,0 +1,9 @@
+.recommended-swipe {
+	display: none;
+}
+.business-card {
+	margin-top: 0 !important;
+}
+.recommended-container .recommended-card:nth-of-type(7) {
+	display: none !important;
+}
