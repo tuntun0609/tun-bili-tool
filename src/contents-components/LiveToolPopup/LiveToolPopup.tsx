@@ -187,12 +187,12 @@ export const LiveToolPopup = () => {
 		{
 			name: 2233,
 			label: '2233娘',
-			style: '#my-dear-haruna-vm{display:none !important;}',
+			style: '#my-dear-haruna-vm {display:none !important;}',
 		},
 		{
 			name: 'fansMedal',
 			label: '粉丝勋章',
-			style: '.chat-item .fans-medal-item-ctnr,.chat-item .title-label{display:none !important;}',
+			style: '.chat-item .fans-medal-item-ctnr,.chat-item .title-label {display:none !important;}',
 		},
 		{
 			name: 'gift',
@@ -202,7 +202,7 @@ export const LiveToolPopup = () => {
 		{
 			name: 'emoticon-chat',
 			label: '表情(聊天栏)',
-			style: '.chat-emoticon {display:none !important;} .emoji-animation-area {display:none !important;}',
+			style: '.chat-emoticon, .emoji-animation-area {display:none !important;}',
 		},
 		{
 			name: 'emoticon-danmu',
@@ -212,7 +212,7 @@ export const LiveToolPopup = () => {
 		{
 			name: 'systemMsg',
 			label: '系统公告',
-			style: '.chat-item.system-msg, .chat-item.convention-msg{display:none !important;}',
+			style: '.chat-item.system-msg, .chat-item.convention-msg, .hot-rank-msg{display:none !important;}',
 		},
 		{
 			name: 'pk',
