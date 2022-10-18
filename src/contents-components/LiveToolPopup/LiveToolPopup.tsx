@@ -271,7 +271,7 @@ export const LiveToolPopup = () => {
 							onCancel={userCoverModalCancel}
 							onOk={onCopyUserCoverBtnClicked}
 							getContainer={
-						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 							}
 						></ImageModal>
 					</Col>
@@ -290,7 +290,7 @@ export const LiveToolPopup = () => {
 									onCancel={backgroundModalCancel}
 									onOk={onCopyBackgroundBtnClicked}
 									getContainer={
-								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+										document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 									}
 								></ImageModal>
 							</Col>
@@ -300,7 +300,7 @@ export const LiveToolPopup = () => {
 						<Button onClick={shareLiveRoom}>分享直播</Button>
 					</Col>
 					{
-						isInIframe
+						isInIframe()
 							? <Col span={8}>
 								<Button onClick={backToOriginRoom}>原直播间</Button>
 							</Col>
