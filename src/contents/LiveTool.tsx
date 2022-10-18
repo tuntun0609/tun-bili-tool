@@ -37,7 +37,9 @@ export const getMountPoint = async () => document.querySelector('body');
 // 注入style
 export const getStyle = () => {
 	const style = document.createElement('style');
-	style.textContent = toolCss + antdCss;
+	if (isOriginLive()) {
+		style.textContent = toolCss + antdCss;
+	}
 	return style;
 };
 

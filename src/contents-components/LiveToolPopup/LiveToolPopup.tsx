@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
-import { API, Tool, log } from '../../utils';
+import { API, Tool, log, isInIframe } from '../../utils';
 import { ImageModal, PopupTitle } from '~contents-components';
 import { useStorage } from '@plasmohq/storage';
 
@@ -173,6 +173,11 @@ export const LiveToolPopup = () => {
 		}
 	};
 
+	// 返回原版直播间
+	const backToOriginRoom = () => {
+		window.top.location.href = `${location.origin}${location.pathname}`;
+	};
+
 	// 屏蔽选项发生改变
 	const shieldFormChange = (_changedValues: any, allValues: any) => {
 		setLiveShield(allValues);
@@ -197,7 +202,7 @@ export const LiveToolPopup = () => {
 		{
 			name: 'emoticon-chat',
 			label: '表情(聊天栏)',
-			style: '.chat-emoticon {display:none !important;}',
+			style: '.chat-emoticon {display:none !important;} .emoji-animation-area {display:none !important;}',
 		},
 		{
 			name: 'emoticon-danmu',
@@ -211,7 +216,7 @@ export const LiveToolPopup = () => {
 		},
 		{
 			name: 'pk',
-			label: 'pk',
+			label: 'PK',
 			style: '#chaos-pk-vm {display:none !important;}',
 		},
 	];
@@ -294,6 +299,13 @@ export const LiveToolPopup = () => {
 					<Col span={8}>
 						<Button onClick={shareLiveRoom}>分享直播</Button>
 					</Col>
+					{
+						isInIframe
+							? <Col span={8}>
+								<Button onClick={backToOriginRoom}>原直播间</Button>
+							</Col>
+							: null
+					}
 				</Row>
 				{/* 直播屏蔽 */}
 				<PopupTitle style={{ marginTop: '8px' }}>直播屏蔽</PopupTitle>
