@@ -60,18 +60,22 @@ export const LiveToolPopup = () => {
 
 	// 直播截图
 	const screenshotBtnClicked = () => {
-		if (roomInfo.live_status !== 0) {
-			const videoElement = document.querySelector('.live-player-mounter video') as HTMLVideoElement;
-			const screenshotCanvas = document.createElement('canvas');
-			screenshotCanvas.width = videoElement.videoWidth;
-			screenshotCanvas.height = videoElement.videoHeight;
-			screenshotCanvas.getContext('2d')
-				.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
-			setScreenshotData(screenshotCanvas.toDataURL('image/png'));
-			setScreenshotModalOpen(true);
-			screenshotCanvas.remove();
-		} else {
-			message.error('主播未开播, 无法截图');
+		try {
+			if (roomInfo.live_status !== 0) {
+				const videoElement = document.querySelector('.live-player-mounter video') as HTMLVideoElement;
+				const screenshotCanvas = document.createElement('canvas');
+				screenshotCanvas.width = videoElement.videoWidth;
+				screenshotCanvas.height = videoElement.videoHeight;
+				screenshotCanvas.getContext('2d')
+					.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+				setScreenshotData(screenshotCanvas.toDataURL('image/png'));
+				setScreenshotModalOpen(true);
+				screenshotCanvas.remove();
+			} else {
+				message.error('主播未开播, 无法截图');
+			}
+		} catch (error) {
+			message.error('发生错误, 请刷新页面');
 		}
 	};
 
@@ -176,6 +180,11 @@ export const LiveToolPopup = () => {
 			label: '系统公告',
 			style: '.chat-item.system-msg, .chat-item.convention-msg{display:none !important;}',
 		},
+		{
+			name: 'pk',
+			label: 'pk',
+			style: '#chaos-pk-vm {display:none !important;}',
+		},
 	];
 
 	// 插入屏蔽style
@@ -209,7 +218,7 @@ export const LiveToolPopup = () => {
 							onCancel={screenModalCancel}
 							onOk={onCopyScreenshotBtnClicked}
 							getContainer={
-						document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 							}
 						></ImageModal>
 					</Col>
