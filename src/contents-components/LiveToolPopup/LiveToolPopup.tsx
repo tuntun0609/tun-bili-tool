@@ -23,6 +23,7 @@ export const LiveToolPopup = () => {
 	const [backgroundModalOpen, setBackgroundModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
+	const [onlineNum, setOnlineNum] = useState(0);
 
 	const getRoomId = () => {
 		if (location.pathname.startsWith('/blanc')) {
@@ -43,19 +44,47 @@ export const LiveToolPopup = () => {
 		injectShieldStyle(liveShield);
 	}, [liveShield]);
 
+	// 更新在线活跃人数
+	const updateOnlineNum = async (props: { ruid: number; roomId: number; page: number; pageSize: number; }) => {
+		try {
+			const data = await API.getOnlineGoldRank(props);
+			setOnlineNum(data.data.onlineNum);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
+		let updateOnlineNumId: string | number | NodeJS.Timeout;
 		const updateLiveInfo = async () => {
 			if (!isUndefined(roomid)) {
 				try {
 					const data = await API.getLiveInfo(roomid);
 					log(data.data);
 					setRoomInfo(data.data);
+					updateOnlineNum({
+						ruid: data.data.uid,
+						roomId: data.data.room_id,
+						page: 1,
+						pageSize: 1,
+					});
+					updateOnlineNumId = setInterval(() => {
+						updateOnlineNum({
+							ruid: data.data.uid,
+							roomId: data.data.room_id,
+							page: 1,
+							pageSize: 1,
+						});
+					}, 60000);
 				} catch (error) {
 					console.error(error);
 				}
 			}
 		};
 		updateLiveInfo();
+		return () => {
+			clearInterval(updateOnlineNumId);
+		};
 	}, [roomid]);
 
 	// 直播截图
@@ -202,6 +231,8 @@ export const LiveToolPopup = () => {
 	return (
 		<div className='tun-popup-main'>
 			<Space style={{ width: '100%' }} direction="vertical">
+				{/* 在线活跃人数 */}
+				<PopupTitle style={{ marginTop: '8px' }}>在线活跃人数: {onlineNum}</PopupTitle>
 				{/* 直播工具 */}
 				<PopupTitle style={{ marginTop: '8px' }}>直播工具</PopupTitle>
 				<Row wrap gutter={[16, 8]} >

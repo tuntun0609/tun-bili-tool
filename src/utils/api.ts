@@ -248,3 +248,21 @@ export const getLiveInfo = async (roomid: number) => {
 	});
 	return res;
 };
+
+export const getOnlineGoldRank = async (props: { ruid: number; roomId: number; page: number; pageSize: number; }) => {
+	const { ruid, roomId, page, pageSize } = props;
+	const baseUrl = 'https://api.live.bilibili.com/xlive/general-interface/v1/rank/getOnlineGoldRank';
+	const paramsData = {
+		ruid,
+		roomId,
+		page,
+		pageSize,
+	};
+	const res = await get({
+		url: baseUrl,
+		params: {
+			...paramsData,
+		},
+	});
+	return res;
+};
