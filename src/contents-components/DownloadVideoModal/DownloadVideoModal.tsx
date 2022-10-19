@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, message, Modal, ModalProps, Row, Select, Space, Table } from 'antd';
+import { Button, Col, message, Modal, ModalProps, Row, Select, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import axios from 'axios';
 import { isUndefined } from 'lodash';
@@ -63,28 +63,16 @@ enum AudioType {
 // 下载视频弹出层
 export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const { videoInfo } = props;
-	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>({});
+	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>([]);
 	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>([]);
+	const [supportFormats, setSupportFormats] = useState<any>([]);
 	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
 	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
 	const [videoSource, setVideoSource] = useState(0);
 	const [audioSource, setAudioSource] = useState(0);
 
-	// 视频下载链接
-	const getVideoUrl = async (bvid: string, cid: number, qn?: number) => {
-		const data = await axios.get('https://api.bilibili.com/x/player/playurl', {
-			params: {
-				bvid: bvid,
-				cid: cid,
-				qn: qn,
-				fourk: 1,
-			},
-			withCredentials: true,
-		});
-		return data;
-	};
 	// 获取音频
-	const getAudioUrl = async (bvid: string, cid: number) => {
+	const getDownloadInfo = async (bvid: string, cid: number) => {
 		const data = await axios.get('https://api.bilibili.com/x/player/playurl', {
 			params: {
 				bvid: bvid,
@@ -132,24 +120,12 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 		a.remove();
 	};
 
-	// 通过浏览器下载视频
-	const downloadVideoByBrowser = async (qn: number, scource?: number) => {
-		try {
-			const data = await getVideoUrl(videoInfo.bvid, cid, qn);
-			const allUrl = [data.data.data.durl[0].url, ...data.data.data.durl[0].backup_url];
-			const url = allUrl[scource ?? 0] ?? allUrl[0];
-			downloadByBrowser(url);
-		} catch (error) {
-			console.error(error);
-			message.error('下载发生错误');
-		}
-	};
-
-	// 通过浏览器下载音频
-	const downloadAudioByBrowser = async (info: any, scource?: number) => {
+	// 通过浏览器下载视频或音频
+	const downloadVideoOrAudioByBrowser = async (info: any, scource?: number) => {
 		try {
 			const allUrl = [info.baseUrl, ...info.backupUrl];
-			downloadByBrowser(allUrl[scource ?? 0] ?? allUrl[0]);
+			const url = allUrl[scource ?? 0] ?? allUrl[0];
+			downloadByBrowser(url);
 		} catch (error) {
 			console.error(error);
 			message.error('下载发生错误');
@@ -184,12 +160,12 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						title: item.part,
 						cid: item.cid,
 					})));
-					const videoData = await getVideoUrl(videoInfo.bvid, cid);
-					const audioData = await getAudioUrl(videoInfo.bvid, cid);
-					setVideoDownloadInfo(videoData.data.data ?? {});
-					setAudioDownloadInfo(audioData.data.data?.dash?.audio?.sort(
+					const data = await getDownloadInfo(videoInfo.bvid, cid);
+					setVideoDownloadInfo(data.data.data?.dash?.video ?? []);
+					setAudioDownloadInfo(data.data.data?.dash?.audio?.sort(
 						(a: { id: number; }, b: { id: number; }) => b.id - a.id,
 					) ?? []);
+					setSupportFormats(data.data.data?.support_formats ?? []);
 				}
 			} catch (error) {
 				message.error('获取下载信息错误');
@@ -238,7 +214,21 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						<Option value={1}>线路2</Option>
 						<Option value={2}>线路3</Option>
 					</Select>
-					<PopupTitle style={{ marginLeft: '8px' }}>(下载慢或者失败时可切换线路)</PopupTitle>
+					<PopupTitle style={{ marginLeft: '8px' }}>
+						<Tooltip
+							zIndex={9999999999}
+							title={
+								<>
+									<div>下载慢或者失败时可切换线路</div>
+									<div>文字相同按钮所下载的视频编码不同</div>
+									<div>按钮处悬浮可查看视频编码</div>
+								</>
+							}
+							getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+						>
+							使用帮助
+						</Tooltip>
+					</PopupTitle>
 				</div>
 				{/* 不同清晰度视频下载按钮 */}
 				<Row
@@ -248,16 +238,33 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					gutter={[8, 8]}
 				>
 					{
-						videoDownloadInfo.accept_quality?.map((item: number, index: string | number) => (
-							<Col key={item} span={6}>
+						videoDownloadInfo.map((item: any) => (
+							<Col key={`${item.codecs}-${item.id}`} span={6}>
 								<div style={{ position: 'relative' }}>
 									<Button
 										block
 										onClick={() => {
-											downloadVideoByBrowser(item, videoSource);
+											downloadVideoOrAudioByBrowser(item, videoSource);
 										}}
-									>{videoDownloadInfo.accept_description[index]}</Button>
-									{item >= 112 ? <VipIcon style={{
+									>
+										<a
+											type={item.mimeType}
+											target={'_blank'}
+											rel={'noreferrer'}
+											title={item.codecs}
+											href={
+												[item.baseUrl, ...item.backupUrl][videoSource] ?? item.baseUrl
+											}
+										>
+											{
+												supportFormats.find((i: { quality: number; }) => (
+													i.quality === item.id
+												))?.new_description ?? item.codecs
+											}
+											<br/>
+										</a>
+									</Button>
+									{item.id >= 112 ? <VipIcon style={{
 										position: 'absolute',
 										top: '2px',
 										left: '2px',
@@ -297,9 +304,20 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 									<Button
 										block
 										onClick={() => {
-											downloadAudioByBrowser(item, audioSource);
+											downloadVideoOrAudioByBrowser(item, audioSource);
 										}}
-									>{AudioType[item.id]}</Button>
+									>
+										<a
+											type={item.mimeType}
+											target={'_blank'}
+											rel={'noreferrer'}
+											href={
+												[item.baseUrl, ...item.backupUrl][videoSource] ?? item.baseUrl
+											}
+										>
+											{AudioType[item.id]}
+										</a>
+									</Button>
 								</div>
 							</Col>
 						))
