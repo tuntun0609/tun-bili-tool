@@ -163,7 +163,7 @@ export const LiveToolPopup = () => {
 	// 直播间分享
 	const shareLiveRoom = () => {
 		const upName = document.querySelector('.room-owner-username').innerHTML;
-		const copyText = `直播间标题: ${roomInfo.title}\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
+		const copyText = `【${roomInfo.title}】\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
 		try {
 			Tool.copyDataToClipboard(copyText);
 			message.success('复制成功');
@@ -207,7 +207,7 @@ export const LiveToolPopup = () => {
 		{
 			name: 'chatBottom',
 			label: '聊天栏底部信息',
-			style: '#brush-prompt {display:none !important;} .chat-history-panel .chat-history-list.with-brush-prompt {height: 100% !important;}',
+			style: '#brush-prompt, #welcome-area-bottom-vm {display:none !important;} .chat-history-panel .chat-history-list.with-brush-prompt {height: 100% !important;}',
 		},
 		{
 			name: 'emoticon-danmu',

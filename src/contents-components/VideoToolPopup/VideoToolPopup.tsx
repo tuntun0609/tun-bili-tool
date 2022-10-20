@@ -26,7 +26,7 @@ const VideoDesItem = ({ value }: { value: string | number }) => (
 // 分享视频信息按钮
 const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
 	const copyData = async () => {
-		const copyText = `视频标题: ${data.title}\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
+		const copyText = `【${data.title}】\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
 		try {
 			Tool.copyDataToClipboard(copyText);
 			message.success('复制成功');
