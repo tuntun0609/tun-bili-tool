@@ -177,6 +177,19 @@ export const VideoToolPopup = () => {
 		}
 	};
 
+	// 获取空降链接
+	const getTimestampUrl = () => {
+		try {
+			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+			const timestampUrl = `${location.href}&t=${Math.floor(videoElement.currentTime)}`;
+			Tool.copyDataToClipboard(timestampUrl);
+			message.success('复制短链成功');
+		} catch (error) {
+			message.error('复制空降链接失败');
+			console.error(error);
+		}
+	};
+
 	// 视频倍速值改变事件
 	const onPlaybackrateChange = (value: number) => {
 		setPlaybackrate(value);
@@ -283,6 +296,10 @@ export const VideoToolPopup = () => {
 					<Col span={8}>
 						{/* 视频短链 */}
 						<Button onClick={getShortUrl}>视频短链</Button>
+					</Col>
+					<Col span={8}>
+						{/* 空降链接 */}
+						<Button onClick={getTimestampUrl}>空降链接</Button>
 					</Col>
 					{/* <Col span={8}>
 						<Button onClick={getDanmuBtnClicked}>获取弹幕</Button>
