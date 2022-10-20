@@ -5,3 +5,16 @@
   background-size: 20px;
   background-image: url(https://i0.hdslb.com/bfs/vip/icon_Certification_big_member_22_3x.png@40w_40h_1c.webp);
 }
+
+.tun-tip {
+  width: 100%;
+  padding: 10px;
+  background-color: #fef0f1;
+  border-left: 5px solid #fb7299;
+  border-radius: 7px;
+  color: #4b1113;
+  ol {
+    margin: 0;
+    padding-inline-start: 15px;
+  }
+}

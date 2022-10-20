@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, message, Modal, ModalProps, Row, Select, Space, Table, Tooltip } from 'antd';
+import { Button, Col, message, Modal, ModalProps, Row, Select, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import axios from 'axios';
 import { isUndefined } from 'lodash';
@@ -202,7 +202,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					alignItems: 'center',
 					justifyContent: 'start',
 				}}>
-					<PopupTitle style={{ marginRight: '8px' }}>视频下载</PopupTitle>
+					<PopupTitle style={{ marginRight: '8px' }}>视频下载(不包括音频)</PopupTitle>
 					<Select
 						size={'small'}
 						defaultValue={0}
@@ -214,21 +214,6 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						<Option value={1}>线路2</Option>
 						<Option value={2}>线路3</Option>
 					</Select>
-					<PopupTitle style={{ marginLeft: '8px' }}>
-						<Tooltip
-							zIndex={9999999999}
-							title={
-								<>
-									<div>下载慢或者失败时可切换线路</div>
-									<div>文字相同按钮所下载的视频编码不同</div>
-									<div>按钮处悬浮可查看视频编码</div>
-								</>
-							}
-							getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
-						>
-							使用帮助
-						</Tooltip>
-					</PopupTitle>
 				</div>
 				{/* 不同清晰度视频下载按钮 */}
 				<Row
@@ -323,6 +308,17 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 						))
 					}
 				</Row>
+				<div className='tun-tip' style={{
+					marginTop: '8px',
+				}}>
+					<ol>
+						<li>由于网站限制, 视频下载只包括画面不包括音频, 如需完整视频请自行合并</li>
+						<li>下载慢或者失败时可切换线路</li>
+						<li>如果切换线路后依然无法下载, 请<strong>右键按钮</strong>并点击<strong>链接另存为</strong>, 以此来下载内容</li>
+						<li>某些文字相同的按钮所下载的视频编码会有所不同, 按钮处悬浮可查看视频编码</li>
+						<li>视频与音频下载文件后缀名均为<strong>m4s</strong>, 实际编码为<strong>mp4</strong>, 下载后可更改拓展名为<strong>mp4</strong></li>
+					</ol>
+				</div>
 			</Space>
 		</Modal>
 	);
