@@ -24,6 +24,7 @@ export const LiveToolPopup = () => {
 	const [form] = Form.useForm();
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
 	const [onlineNum, setOnlineNum] = useState(0);
+	const [onlineNumShow, setOnlineNumShow] = useState(true);
 
 	const getRoomId = () => {
 		if (location.pathname.startsWith('/blanc')) {
@@ -49,6 +50,7 @@ export const LiveToolPopup = () => {
 		try {
 			const data = await API.getOnlineGoldRank(props);
 			setOnlineNum(data.data.onlineNum);
+			return data.data;
 		} catch (error) {
 			console.error(error);
 		}
@@ -62,20 +64,24 @@ export const LiveToolPopup = () => {
 					const data = await API.getLiveInfo(roomid);
 					log(data.data);
 					setRoomInfo(data.data);
-					updateOnlineNum({
+					const onlineData = await updateOnlineNum({
 						ruid: data.data.uid,
 						roomId: data.data.room_id,
 						page: 1,
 						pageSize: 1,
 					});
-					updateOnlineNumId = setInterval(() => {
-						updateOnlineNum({
-							ruid: data.data.uid,
-							roomId: data.data.room_id,
-							page: 1,
-							pageSize: 1,
-						});
-					}, 60000);
+					if (onlineData.OnlineRankItem?.length !== 0) {
+						updateOnlineNumId = setInterval(() => {
+							updateOnlineNum({
+								ruid: data.data.uid,
+								roomId: data.data.room_id,
+								page: 1,
+								pageSize: 1,
+							});
+						}, 60000);
+					} else {
+						setOnlineNumShow(false);
+					}
 				} catch (error) {
 					console.error(error);
 				}
@@ -242,7 +248,9 @@ export const LiveToolPopup = () => {
 		<div className='tun-popup-main'>
 			<Space style={{ width: '100%' }} direction="vertical">
 				{/* 在线活跃人数 */}
-				<PopupTitle style={{ marginTop: '8px' }}>在线活跃人数: {onlineNum}</PopupTitle>
+				{
+					onlineNumShow ? <PopupTitle style={{ marginTop: '8px' }}>在线活跃人数: {onlineNum}</PopupTitle> : null
+				}
 				{/* 直播工具 */}
 				<PopupTitle style={{ marginTop: '8px' }}>直播工具</PopupTitle>
 				<Row wrap gutter={[16, 8]} >
