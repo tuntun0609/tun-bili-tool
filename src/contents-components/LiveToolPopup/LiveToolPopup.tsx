@@ -14,7 +14,10 @@ interface ShieldOption {
 	style?: string,
 }
 
-const scList = [];
+const scList: {
+	danmu: any,
+	price: string,
+}[] = [];
 
 // tool 弹出层
 export const LiveToolPopup = () => {
@@ -43,7 +46,10 @@ export const LiveToolPopup = () => {
 		mutationsList.forEach((item) => {
 			item.addedNodes.forEach((i: HTMLElement) => {
 				if (i.className.indexOf('superChat-card-detail') !== -1 && !isUndefined(i.dataset.danmaku)) {
-					scList.push(i.dataset.danmaku);
+					scList.push({
+						danmu: i.dataset.danmaku,
+						price: i.querySelector('.card-item-top-right')?.innerHTML ?? '未发现价格',
+					});
 					setScL([...scL, i.dataset.danmaku]);
 				}
 			});
