@@ -1,17 +1,20 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
 import { API, Tool, log, isInIframe } from '../../utils';
-import { ImageModal, PopupTitle } from '~contents-components';
+import { ImageModal, PopupTitle, ScListModal } from '~contents-components';
 import { useStorage } from '@plasmohq/storage';
+import { useMutationObservable } from '~utils/useMutationObservable';
 
 interface ShieldOption {
 	name: string | number,
 	label?: string | number,
 	style?: string,
 }
+
+const scList = [];
 
 // tool 弹出层
 export const LiveToolPopup = () => {
@@ -21,10 +24,12 @@ export const LiveToolPopup = () => {
 	const [screenshotModalOpen, setScreenshotModalOpen] = useState(false);
 	const [userCoverModalOpen, setUserCoverModalOpen] = useState(false);
 	const [backgroundModalOpen, setBackgroundModalOpen] = useState(false);
+	const [scListModalOpen, setScListModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
 	const [onlineNum, setOnlineNum] = useState(0);
 	const [onlineNumShow, setOnlineNumShow] = useState(true);
+	const [scL, setScL] = useState([]);
 
 	const getRoomId = () => {
 		if (location.pathname.startsWith('/blanc')) {
@@ -33,12 +38,27 @@ export const LiveToolPopup = () => {
 		return parseInt(location.pathname.slice(1), 10);
 	};
 
+	// sclist监听事件
+	const onScListMutation: MutationCallback = useCallback((mutationsList) => {
+		mutationsList.forEach((item) => {
+			item.addedNodes.forEach((i: HTMLElement) => {
+				if (i.className.indexOf('superChat-card-detail') !== -1 && !isUndefined(i.dataset.danmaku)) {
+					scList.push(i.dataset.danmaku);
+					setScL([...scL, i.dataset.danmaku]);
+				}
+			});
+		});
+	}, []);
+
 	useEffect(() => {
 		setRoomid(getRoomId());
+		// 插入直播屏蔽css
 		const shieldStyle = document.createElement('style');
 		shieldStyle.id = 'tun-shield-style';
 		document.body.appendChild(shieldStyle);
 	}, []);
+
+	useMutationObservable(document.querySelector('#chat-items'), onScListMutation);
 
 	useEffect(() => {
 		form.setFieldsValue(liveShield);
@@ -148,7 +168,7 @@ export const LiveToolPopup = () => {
 	};
 
 	// 直播背景
-	const backgroundBtnClicked = () => {
+	const backgroundBtnClick = () => {
 		setBackgroundModalOpen(true);
 	};
 
@@ -177,6 +197,15 @@ export const LiveToolPopup = () => {
 			console.error(error);
 			message.error('复制失败');
 		}
+	};
+
+	// sc列表
+	const scListBtnClick = () => {
+		setScListModalOpen(true);
+	};
+
+	const scListModalCancel = () => {
+		setScListModalOpen(false);
 	};
 
 	// 返回原版直播间
@@ -291,7 +320,7 @@ export const LiveToolPopup = () => {
 					{
 						roomInfo.background
 							? <Col span={8}>
-								<Button onClick={backgroundBtnClicked}>直播背景</Button>
+								<Button onClick={backgroundBtnClick}>直播背景</Button>
 								<ImageModal
 									centered
 									width={720}
@@ -311,6 +340,21 @@ export const LiveToolPopup = () => {
 					}
 					<Col span={8}>
 						<Button onClick={shareLiveRoom}>分享直播</Button>
+					</Col>
+					<Col span={8}>
+						<Button style={{ width: '88px' }} onClick={scListBtnClick}>SC 列表</Button>
+						<ScListModal
+							centered
+							width={720}
+							title={'直播SC列表(自直播页面开启时开始统计, 非整场直播SC)'}
+							scList={scList}
+							open={scListModalOpen}
+							onCancel={scListModalCancel}
+							footer={null}
+							getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+							}
+						></ScListModal>
 					</Col>
 					{
 						isInIframe()
