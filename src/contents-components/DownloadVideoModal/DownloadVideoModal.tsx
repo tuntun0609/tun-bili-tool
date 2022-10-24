@@ -312,7 +312,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					marginTop: '8px',
 				}}>
 					<ol>
-						<li>由于网站限制, 视频下载只包括画面不包括音频, 如需完整视频请自行合并</li>
+						<li>由于网站限制, 视频下载只包括画面不包括音频, 如需完整视频请自行合并 <a target={'_blank'} href='https://www.yuque.com/docs/share/1855fae2-513a-4abb-99d0-9260d26769ca' rel="noreferrer">合并参考</a></li>
 						<li>下载慢或者失败时可切换线路</li>
 						<li>如果切换线路后依然无法下载, 请<strong>右键按钮</strong>并点击<strong>链接另存为</strong>, 以此来下载内容</li>
 						<li>某些文字相同的按钮所下载的视频编码会有所不同, 按钮处悬浮可查看视频编码</li>
