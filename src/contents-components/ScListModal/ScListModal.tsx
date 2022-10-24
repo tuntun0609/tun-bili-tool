@@ -32,6 +32,7 @@ export const ScListModal = (props: ScListModalProps) => {
 								whiteSpace: 'pre-line',
 								wordBreak: 'break-all',
 								wordWrap: 'break-word',
+								paddingRight: '24px',
 							}}>
 								{item.danmu}
 							</div>
@@ -41,6 +42,10 @@ export const ScListModal = (props: ScListModalProps) => {
 								justifyContent: 'center',
 								alignItems: 'center',
 								borderLeft: '1px solid #C9CCD0',
+								whiteSpace: 'pre-line',
+								wordBreak: 'break-all',
+								wordWrap: 'break-word',
+								padding: '0 8px',
 							}}>
 								<a style={{ color: '#000000d9' }} target={'_blank'} href={`https://space.bilibili.com/${item.uid}`} rel="noreferrer">
 									{item.name}
@@ -52,15 +57,19 @@ export const ScListModal = (props: ScListModalProps) => {
 								justifyContent: 'center',
 								alignItems: 'center',
 								borderLeft: '1px solid #C9CCD0',
+								whiteSpace: 'pre-line',
+								wordBreak: 'break-all',
+								wordWrap: 'break-word',
+								padding: '0 8px',
 							}}>
 								{item.price}
 							</div>
 						</div>
 					</List.Item>
 				)}
-				pagination={{
-					pageSize: 10,
-				}}
+				pagination={scList.length > 8 ? {
+					pageSize: 8,
+				} : false}
 			></List>
 		</Modal>
 	);
