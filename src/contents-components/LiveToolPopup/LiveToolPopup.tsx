@@ -17,6 +17,8 @@ interface ShieldOption {
 const scList: {
 	danmu: any,
 	price: string,
+	name: string,
+	uid: string,
 }[] = [];
 
 // tool 弹出层
@@ -49,6 +51,8 @@ export const LiveToolPopup = () => {
 					scList.push({
 						danmu: i.dataset.danmaku,
 						price: i.querySelector('.card-item-top-right')?.innerHTML ?? '未发现价格',
+						name: i.querySelector('.name').innerHTML,
+						uid: i.dataset.uid,
 					});
 					setScL([...scL, i.dataset.danmaku]);
 				}

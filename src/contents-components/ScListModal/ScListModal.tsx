@@ -28,12 +28,23 @@ export const ScListModal = (props: ScListModalProps) => {
 							justifyContent: 'space-between',
 						}}>
 							<div style={{
-								width: 'calc(100% - 120px)',
+								width: 'calc(100% - 240px)',
 								whiteSpace: 'pre-line',
 								wordBreak: 'break-all',
 								wordWrap: 'break-word',
 							}}>
 								{item.danmu}
+							</div>
+							<div style={{
+								width: '120px',
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								borderLeft: '1px solid #C9CCD0',
+							}}>
+								<a style={{ color: '#000000d9' }} target={'_blank'} href={`https://space.bilibili.com/${item.uid}`} rel="noreferrer">
+									{item.name}
+								</a>
 							</div>
 							<div style={{
 								width: '120px',
