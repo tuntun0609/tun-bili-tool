@@ -57,6 +57,32 @@ const videoDescOpen = (time = 0) => {
 	}, time);
 };
 
+interface ShieldOption {
+	name: string | number,
+	label?: string | number,
+	style?: string,
+}
+
+const shieldOptions: ShieldOption[] = [
+	{
+		name: 'top-left-follow',
+		label: '左上角关注按钮',
+		style: '.bpx-player-top-left-follow {display:none !important;}',
+	},
+];
+
+// 插入屏蔽style
+const injectShieldStyle = (selector: string, options: { [key: string]: any }) => {
+	const shieldStyle = document.querySelector(selector);
+	const styleText = shieldOptions.map(item => (
+		options[item.name]
+			? item.style : ''
+	)).join(' ');
+	if (shieldStyle) {
+		shieldStyle.innerHTML = styleText;
+	}
+};
+
 window.addEventListener(
 	'load',
 	async () => {
@@ -96,6 +122,13 @@ window.addEventListener(
 		});
 		window.addEventListener('pushState', pathChangeFun);
 		window.addEventListener('popstate', pathChangeFun);
+
+		const shieldStyle = document.createElement('style');
+		shieldStyle.id = 'tun-shield-style';
+		document.body.appendChild(shieldStyle);
+		injectShieldStyle('#tun-shield-style', {
+			'top-left-follow': true,
+		});
 	},
 	false,
 );
