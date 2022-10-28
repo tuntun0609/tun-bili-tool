@@ -245,14 +245,14 @@ export const LiveToolPopup = () => {
 			style: '.chat-item.top3-notice, .chat-item.gift-item, #chat-gift-bubble-vm, #penury-gift-msg, #lottery-gift-toast {display:none !important;}',
 		},
 		{
-			name: 'emoticon-chat',
-			label: '表情(聊天栏)',
-			style: '.chat-emoticon, .emoji-animation-area {display:none !important;}',
-		},
-		{
 			name: 'chatBottom',
 			label: '聊天栏底部信息',
 			style: '#brush-prompt, #welcome-area-bottom-vm {display:none !important;} .chat-history-panel .chat-history-list.with-brush-prompt {height: 100% !important;}',
+		},
+		{
+			name: 'emoticon-chat',
+			label: '表情(聊天栏)',
+			style: '.chat-emoticon, .emoji-animation-area {display:none !important;}',
 		},
 		{
 			name: 'emoticon-danmu',
