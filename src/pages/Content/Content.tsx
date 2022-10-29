@@ -3,10 +3,8 @@ import { Card, Typography, Divider } from 'antd';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { LiveSetting, MainSetting, NotFind, OtherSetting, VideoSetting } from '~pages';
-import { routerItems } from '~components';
 
 import './Content.scss';
-import type { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 
 const { Title } = Typography;
 
@@ -24,39 +22,39 @@ const cardBodyStyle: React.CSSProperties = {
 interface routerIndex {
 	key: string,
 	isIndex?: boolean,
+	label?: ReactNode,
 	url?: string,
 	render: ReactNode,
 }
 
-const routerConfig: routerIndex[] = [
+export const routerConfig: routerIndex[] = [
+	{
+		key: 'main-setting',
+		label: '主站设置',
+		render: <MainSetting />,
+	},
+	{
+		key: 'video-setting',
+		label: '视频设置',
+		render: <VideoSetting />,
+	},
+	{
+		key: 'live-setting',
+		label: '直播设置',
+		render: <LiveSetting />,
+	},
+	{
+		key: 'other-setting',
+		label: '辅助功能',
+		render: <OtherSetting />,
+	},
 	{
 		key: 'index',
 		isIndex: true,
 		render: <MainSetting />,
 	},
 	{
-		key: 'main',
-		url: '/main-setting',
-		render: <MainSetting />,
-	},
-	{
-		key: 'video',
-		url: '/video-setting',
-		render: <VideoSetting />,
-	},
-	{
-		key: 'live',
-		url: '/live-setting',
-		render: <LiveSetting />,
-	},
-	{
-		key: 'other',
-		url: '/other-setting',
-		render: <OtherSetting />,
-	},
-	{
-		key: '404',
-		url: '*',
+		key: '*',
 		render: <NotFind />,
 	},
 ];
@@ -66,9 +64,9 @@ export const Content: React.FC = () => {
 	const title = useMemo(() => {
 		const formatPath = pathname.slice(1);
 		if (formatPath === '') {
-			return (routerItems[0] as MenuItemType).label;
+			return routerConfig[0].label;
 		}
-		return ((routerItems as MenuItemType[]).find(item => item.key === formatPath)).label;
+		return (routerConfig.find(item => item.key === formatPath))?.label ?? 'NotFind';
 	}, [pathname]);
 	return (
 		<div className='option-content'>
@@ -83,7 +81,7 @@ export const Content: React.FC = () => {
 									key={item.key}
 									index={item.isIndex ?? false}
 									element={item.render}
-									path={item.url}
+									path={!item.isIndex ? `${item.key !== '*' ? '/' : ''}${item.key}` : undefined}
 								/>
 							))
 						}
