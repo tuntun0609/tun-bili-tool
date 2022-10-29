@@ -180,10 +180,12 @@ export const VideoToolPopup = () => {
 	// 获取空降链接
 	const getTimestampUrl = () => {
 		try {
+			const params = (new URL(location.href)).searchParams;
+			const pNum = params.get('p');
 			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
-			const timestampUrl = `${location.href}&t=${Math.floor(videoElement.currentTime)}`;
+			const timestampUrl = `${location.origin + location.pathname}?${pNum ? `p=${pNum}&` : ''}t=${Math.floor(videoElement.currentTime)}`;
 			Tool.copyDataToClipboard(timestampUrl);
-			message.success('复制短链成功');
+			message.success('复制空降链接成功');
 		} catch (error) {
 			message.error('复制空降链接失败');
 			console.error(error);
