@@ -266,3 +266,51 @@ export const getOnlineGoldRank = async (props: { ruid: number; roomId: number; p
 	});
 	return res;
 };
+
+// 发送弹幕
+export const sendDanmu = async (props: {
+	bubble?: number;
+	msg: string;
+	color?: number;
+	mode?: number;
+	fontsize?: number;
+	rnd?: number;
+	roomid: number;
+	csrf: string;
+}) => {
+	const {
+		bubble = 0,
+		msg,
+		color = 16777215,
+		mode = 1,
+		fontsize = 25,
+		rnd = Math.floor(new Date().getTime() / 1000),
+		roomid,
+		csrf,
+	} = props;
+	const baseUrl = 'https://api.live.bilibili.com/msg/send';
+	const paramsData = {
+		bubble,
+		msg,
+		color,
+		mode,
+		fontsize,
+		rnd,
+		roomid: roomid,
+		csrf: csrf,
+		csrf_token: csrf,
+	};
+	const formData = new FormData();
+	for (const key in paramsData) {
+		if (Object.prototype.hasOwnProperty.call(paramsData, key)) {
+			const item = paramsData[key];
+			formData.append(key, item);
+		}
+	}
+	const res = await fetch(baseUrl, {
+		method: 'post',
+		body: formData,
+		credentials: 'include',
+	});
+	return res;
+};
