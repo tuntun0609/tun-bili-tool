@@ -4,7 +4,7 @@ import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
 import { API, Tool, log, isInIframe } from '../../utils';
-import { ImageModal, PopupTitle, ScListModal } from '~contents-components';
+import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal } from '~contents-components';
 import { useStorage } from '@plasmohq/storage';
 import { useMutationObservable } from '~utils/useMutationObservable';
 
@@ -30,6 +30,7 @@ export const LiveToolPopup = () => {
 	const [userCoverModalOpen, setUserCoverModalOpen] = useState(false);
 	const [backgroundModalOpen, setBackgroundModalOpen] = useState(false);
 	const [scListModalOpen, setScListModalOpen] = useState(false);
+	const [wheelbarrowModalOpen, setWheelbarrowModalOpen] = useState(false);
 	const [form] = Form.useForm();
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
 	const [onlineNum, setOnlineNum] = useState(0);
@@ -218,6 +219,15 @@ export const LiveToolPopup = () => {
 		setScListModalOpen(false);
 	};
 
+	// 独轮车弹出层
+	const wheelbarrowBtnClick = () => {
+		setWheelbarrowModalOpen(true);
+	};
+
+	const wheelbarrowModalCancel = () => {
+		setWheelbarrowModalOpen(false);
+	};
+
 	// 返回原版直播间
 	const backToOriginRoom = () => {
 		window.top.location.href = `${location.origin}${location.pathname}`;
@@ -350,6 +360,21 @@ export const LiveToolPopup = () => {
 					}
 					<Col span={8}>
 						<Button onClick={shareLiveRoom}>分享直播</Button>
+					</Col>
+					<Col span={8}>
+						<Button style={{ width: '88px' }} onClick={wheelbarrowBtnClick}>独轮车</Button>
+						<WheelbarrowModal
+							centered
+							width={720}
+							title={'独轮车'}
+							roomid={roomid}
+							open={wheelbarrowModalOpen}
+							onCancel={wheelbarrowModalCancel}
+							footer={null}
+							getContainer={
+								document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+							}
+						></WheelbarrowModal>
 					</Col>
 					<Col span={8}>
 						<Button style={{ width: '88px' }} onClick={scListBtnClick}>SC 列表</Button>

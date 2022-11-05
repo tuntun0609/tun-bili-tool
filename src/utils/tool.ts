@@ -94,3 +94,23 @@ export const copyDataToClipboard = async (
 	}
 	return await navigator.clipboard.write(data);
 };
+
+// 获取指定cookie值
+export const getCookie = (cname: string) => {
+	let res: string;
+	const name = cname + '=';
+	const ca = document.cookie.split(';');
+	for(let i = 0; i < ca.length; i++) {
+		const c = ca[i].trim();
+		if (c.indexOf(name) === 0) {
+			res = c.substring(name.length, c.length);
+		}
+	}
+	if (res) {
+		return res;
+	}
+	throw new Error('获取cookie失败, 请登录后重试');
+};
+
+// 判断是否为纯数字字符串
+export const isStrNumber = (data: string) => /^\d+$/.test(data);
