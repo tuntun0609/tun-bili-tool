@@ -70,7 +70,11 @@ export const VideoToolPopup = () => {
 		window.addEventListener('pushState', onUrlChanged);
 		window.addEventListener('popstate', onUrlChanged);
 		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
-		videoElement.addEventListener('ratechange', onRateChange);
+		try {
+			videoElement.addEventListener('ratechange', onRateChange);
+		} catch (error) {
+			console.error(error);
+		}
 		return () => {
 			window.removeEventListener('pushState', onUrlChanged);
 			window.removeEventListener('popstate', onUrlChanged);
@@ -119,15 +123,19 @@ export const VideoToolPopup = () => {
 	};
 	// 视频截图按钮点击事件
 	const screenshotBtnClicked = () => {
-		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
-		const screenshotCanvas = document.createElement('canvas');
-		screenshotCanvas.width = videoElement.videoWidth;
-		screenshotCanvas.height = videoElement.videoHeight;
-		screenshotCanvas.getContext('2d')
-			.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
-		setScreenshotData(screenshotCanvas.toDataURL('image/png'));
-		setScreenshotModalOpen(true);
-		screenshotCanvas.remove();
+		try {
+			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+			const screenshotCanvas = document.createElement('canvas');
+			screenshotCanvas.width = videoElement.videoWidth;
+			screenshotCanvas.height = videoElement.videoHeight;
+			screenshotCanvas.getContext('2d')
+				.drawImage(videoElement, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+			setScreenshotData(screenshotCanvas.toDataURL('image/png'));
+			setScreenshotModalOpen(true);
+			screenshotCanvas.remove();
+		} catch (error) {
+			message.error('截图出错');
+		}
 	};
 	// 视频截图弹窗返回
 	const screenModalCancel = () => {
@@ -198,8 +206,12 @@ export const VideoToolPopup = () => {
 	};
 
 	useEffect(() => {
-		const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
-		videoElement.playbackRate = playbackrate;
+		try {
+			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
+			videoElement.playbackRate = playbackrate;
+		} catch (error) {
+			message.error('出现错误');
+		}
 	}, [playbackrate]);
 
 	// 视频信息列表配置
