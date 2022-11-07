@@ -24,6 +24,10 @@ ConfigProvider.config({
 
 const HeaderItems: HeaderProps[] = [
 	{
+		name: '错误反馈',
+		url: 'https://message.bilibili.com/#/whisper/mid47706697',
+	},
+	{
 		name: '插件功能文档',
 		url: 'https://bili-tool-doc.vercel.app',
 	},

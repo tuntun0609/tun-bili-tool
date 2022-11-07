@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 
 import './PopupFooter.scss';
 
@@ -11,12 +11,25 @@ export const PopupFooter: React.FC = () => {
 			window.open(chrome.runtime.getURL('options.html'));
 		}
 	};
+	const bugReport = () => {
+		chrome.tabs.create({
+			url: 'https://message.bilibili.com/#/whisper/mid47706697',
+		});
+	};
 	return (
 		<div className={'footer'}>
-			<Button
-				size='small'
-				onClick={openOptions}
-			>选项页</Button>
+			<Space>
+				<Button
+					size='small'
+					onClick={bugReport}
+				>
+					错误反馈
+				</Button>
+				<Button
+					size='small'
+					onClick={openOptions}
+				>选项页</Button>
+			</Space>
 		</div>
 	);
 };
