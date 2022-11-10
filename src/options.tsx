@@ -29,11 +29,11 @@ const HeaderItems: HeaderProps[] = [
 	},
 	{
 		name: '插件功能文档',
-		url: 'https://bili-tool-doc.vercel.app',
+		url: 'https://tun-bili-tool-doc.vercel.app/',
 	},
 	{
 		name: 'GitHub',
-		url: 'https://github.com/tuntun0609/bilibil-tool-mv3',
+		url: 'https://github.com/tuntun0609/tun-bili-tool',
 		icon: <GithubOutlined />,
 	},
 	{
