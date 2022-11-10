@@ -1,8 +1,8 @@
 {
-  "name": "tun-bilibili-tool",
-  "displayName": "tun bilibili tool",
+  "name": "tun-bili-tool",
+  "displayName": "tun bili tool",
   "version": "0.0.1",
-  "description": "tun bilibili tool",
+  "description": "tun bili tool",
   "author": "TunTun",
   "scripts": {
     "dev": "plasmo dev",
