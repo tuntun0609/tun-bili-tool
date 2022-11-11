@@ -126,28 +126,30 @@ const VideoTool = () => {
 	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.documentElement.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.documentElement.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
-			<Popover
-				content={<ErrorBoundary><VideoToolPopup /></ErrorBoundary>}
-				open={popupShow}
-				placement={popupPlacement}
-				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
-			>
-				<div
-					className='tun-tool-main'
-					onMouseDown={onMouseDown}
-					onMouseUp={onMouseUp}
-					style={{
-						top: top + 'px',
-						right: right + 'px',
-					}}
+			<ErrorBoundary>
+				<Popover
+					content={VideoToolPopup}
+					open={popupShow}
+					placement={popupPlacement}
+					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
 				>
-					<div className='icon-main'
-						onClick={onToolClick}
+					<div
+						className='tun-tool-main'
+						onMouseDown={onMouseDown}
+						onMouseUp={onMouseUp}
+						style={{
+							top: top + 'px',
+							right: right + 'px',
+						}}
 					>
-						<ToolOutlined className='icon' />
+						<div className='icon-main'
+							onClick={onToolClick}
+						>
+							<ToolOutlined className='icon' />
+						</div>
 					</div>
-				</div>
-			</Popover>
+				</Popover>
+			</ErrorBoundary>
 		</ ConfigProvider>
 	) : null;
 };
