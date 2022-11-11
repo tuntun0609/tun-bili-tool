@@ -7,7 +7,7 @@ import { Storage, useStorage } from '@plasmohq/storage';
 import { ConfigProvider, message, Popover } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
 
-import { LiveToolPopup } from '../contents-components';
+import { LiveToolPopup, ErrorBoundary } from '../contents-components';
 import { isOriginLive } from '~utils';
 
 import toolCss from 'data-text:./LiveTool.scss';
@@ -132,7 +132,7 @@ const LiveTool = () => {
 	return isTool && isOriginLive() ? (
 		<ConfigProvider locale={zhCN}>
 			<Popover
-				content={LiveToolPopup}
+				content={<ErrorBoundary><LiveToolPopup /></ErrorBoundary>}
 				open={popupShow}
 				placement={popupPlacement}
 				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}

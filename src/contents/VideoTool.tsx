@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 
-import { VideoToolPopup } from '../contents-components';
+import { VideoToolPopup, ErrorBoundary } from '../contents-components';
 
 import toolCss from 'data-text:./VideoTool.scss';
 // import antdCss from 'data-text:antd/dist/antd.css';
@@ -127,7 +127,7 @@ const VideoTool = () => {
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
 			<Popover
-				content={VideoToolPopup}
+				content={<ErrorBoundary><VideoToolPopup /></ErrorBoundary>}
 				open={popupShow}
 				placement={popupPlacement}
 				getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}

@@ -67,7 +67,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>([]);
 	const [supportFormats, setSupportFormats] = useState<any>([]);
 	const [videoListData, setVideoListData] = useState<VideoListItemType[]>([]);
-	const [cid, setCid] = useState<number>(videoInfo.pages[0].cid ?? 0);
+	const [cid, setCid] = useState<number>(videoInfo.pages?.[0]?.cid ?? 0);
 	const [videoSource, setVideoSource] = useState(0);
 	const [audioSource, setAudioSource] = useState(0);
 
