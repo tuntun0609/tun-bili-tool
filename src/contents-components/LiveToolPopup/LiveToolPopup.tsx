@@ -367,7 +367,7 @@ export const LiveToolPopup = () => {
 							centered
 							width={720}
 							title={'独轮车'}
-							roomid={roomid}
+							roomid={roomInfo.room_id}
 							open={wheelbarrowModalOpen}
 							onCancel={wheelbarrowModalCancel}
 							footer={null}
