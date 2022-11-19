@@ -158,6 +158,7 @@ const VideoTool = () => {
 								borderRadius: '8px',
 								position: 'absolute',
 								opacity: popupShow ? '1' : '0',
+								visibility: popupShow ? 'visible' : 'hidden',
 							}}
 							onMouseDown={e => e.stopPropagation()}
 						>
