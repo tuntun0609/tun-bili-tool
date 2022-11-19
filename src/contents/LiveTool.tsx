@@ -156,15 +156,13 @@ const LiveTool = () => {
 						width: '100%',
 					}}>
 						<div
-							className={`${popupPlacement} popup-content`}
+							className={`${popupPlacement} ${popupShow ? 'popup-content-show' : 'popup-content-hide'} popup-content`}
 							style={{
 								backgroundColor: '#fff',
 								width: '330px',
 								padding: '10px 15px',
 								borderRadius: '8px',
 								position: 'absolute',
-								opacity: popupShow ? '1' : '0',
-								visibility: popupShow ? 'visible' : 'hidden',
 							}}
 							onMouseDown={e => e.stopPropagation()}
 						>
