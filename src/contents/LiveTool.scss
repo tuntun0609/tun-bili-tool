@@ -42,6 +42,33 @@
 			transition: transform 300ms ease 0s;
 		}
 	}
+	.ant-form-item {
+		margin: 4px !important;
+		border-radius: 8px;
+		transition: box-shadow 0.3s, border 0.3s;
+	}
+	.ant-form-item:hover {
+		box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
+	}
+	.leftTop {
+		right: 40px;
+		top: 0;
+	}
+	.rightTop {
+		left: 40px;
+		top: 0;
+	}
+	.leftBottom {
+		right: 40px;
+		bottom: -40px;
+	}
+	.rightBottom {
+		left: 40px;
+		bottom: -40px;
+	}
+	.popup-content {
+		transition: opacity 0.2s;
+	}
 }
 
 .popup-title {
@@ -67,16 +94,4 @@
 
 .ant-popover-inner {
 	border-radius: 10px !important;
-}
-
-.tun-tool-main {
-	.ant-form-item {
-		margin: 4px !important;
-		border-radius: 8px;
-		transition: box-shadow 0.3s, border 0.3s;
-	}
-	
-	.ant-form-item:hover {
-		box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 8%) 0px 0px 0px 1px;
-	}
 }

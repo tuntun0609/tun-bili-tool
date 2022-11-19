@@ -4,7 +4,7 @@ import React, {
 	useEffect, useMemo, useState,
 } from 'react';
 import { Storage, useStorage } from '@plasmohq/storage';
-import { ConfigProvider, message, Popover } from 'antd';
+import { ConfigProvider, message } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
 
 import { LiveToolPopup, ErrorBoundary } from '../contents-components';
@@ -100,6 +100,7 @@ const LiveTool = () => {
 	};
 
 	const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
+		e.preventDefault();
 		setStartPosition({ x: e.clientX, y: e.clientY });
 		const offsetX = document.documentElement.clientWidth - e.pageX - right;
 		const offsetY = e.clientY - top;
@@ -109,7 +110,8 @@ const LiveTool = () => {
 			setRight(getX(document.documentElement.clientWidth - mousemoveEvent.pageX - offsetX));
 		};
 	};
-	const onMouseUp: MouseEventHandler<HTMLDivElement> = async () => {
+	const onMouseUp: MouseEventHandler<HTMLDivElement> = async (e) => {
+		e.preventDefault();
 		window.onmousemove = null;
 		storage.set('liveToolPosition', { top, right });
 	};
@@ -132,29 +134,43 @@ const LiveTool = () => {
 	return isTool && isOriginLive() ? (
 		<ConfigProvider locale={zhCN}>
 			<ErrorBoundary>
-				<Popover
-					content={LiveToolPopup}
-					open={popupShow}
-					placement={popupPlacement}
-					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
+				<div
+					className='tun-tool-main'
+					onMouseDown={onMouseDown}
+					onMouseUp={onMouseUp}
+					style={{
+						top: top + 'px',
+						right: right + 'px',
+					}}
 				>
-					<div
-						className='tun-tool-main'
-						onMouseDown={onMouseDown}
-						onMouseUp={onMouseUp}
-						style={{
-							top: top + 'px',
-							right: right + 'px',
-						}}
-					>
 
-						<div className='icon-main'
-							onClick={onToolClick}
+					<div className='icon-main'
+						onClick={onToolClick}
+					>
+						<ToolOutlined className='icon' />
+					</div>
+					<div style={{
+						position: 'absolute',
+						top: '0px',
+						left: '0px',
+						width: '100%',
+					}}>
+						<div
+							className={`${popupPlacement} popup-content`}
+							style={{
+								backgroundColor: '#fff',
+								width: '330px',
+								padding: '10px 15px',
+								borderRadius: '8px',
+								position: 'absolute',
+								opacity: popupShow ? '1' : '0',
+							}}
+							onMouseDown={e => e.stopPropagation()}
 						>
-							<ToolOutlined className='icon' />
+							<LiveToolPopup></LiveToolPopup>
 						</div>
 					</div>
-				</Popover>
+				</div>
 			</ErrorBoundary>
 		</ ConfigProvider>
 	) : null;
