@@ -1,12 +1,12 @@
+import type { PlasmoContentScript } from 'plasmo';
 import React, {
 	MouseEventHandler, useEffect, useMemo, useState,
 } from 'react';
-import type { PlasmoContentScript } from 'plasmo';
 import { Storage, useStorage } from '@plasmohq/storage';
 import { ToolOutlined } from '@ant-design/icons';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
 import {
-	Popover, message, ConfigProvider,
+	message, ConfigProvider,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 
@@ -98,6 +98,7 @@ const VideoTool = () => {
 	};
 
 	const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
+		e.preventDefault();
 		setStartPosition({ x: e.clientX, y: e.clientY });
 		const offsetX = document.documentElement.clientWidth - e.pageX - right;
 		const offsetY = e.clientY - top;
@@ -107,7 +108,8 @@ const VideoTool = () => {
 			setRight(getX(document.documentElement.clientWidth - mousemoveEvent.pageX - offsetX));
 		};
 	};
-	const onMouseUp: MouseEventHandler<HTMLDivElement> = async () => {
+	const onMouseUp: MouseEventHandler<HTMLDivElement> = async (e) => {
+		e.preventDefault();
 		window.onmousemove = null;
 		storage.set('videoToolPosition', { top, right });
 	};
@@ -127,28 +129,43 @@ const VideoTool = () => {
 	return isTool ? (
 		<ConfigProvider locale={zhCN}>
 			<ErrorBoundary>
-				<Popover
-					content={VideoToolPopup}
-					open={popupShow}
-					placement={popupPlacement}
-					getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('.tun-tool-main') as HTMLElement}
+				<div
+					className='tun-tool-main'
+					onMouseDown={onMouseDown}
+					onMouseUp={onMouseUp}
+					style={{
+						top: top + 'px',
+						right: right + 'px',
+					}}
 				>
-					<div
-						className='tun-tool-main'
-						onMouseDown={onMouseDown}
-						onMouseUp={onMouseUp}
-						style={{
-							top: top + 'px',
-							right: right + 'px',
-						}}
+					<div className='icon-main'
+						onClick={onToolClick}
 					>
-						<div className='icon-main'
-							onClick={onToolClick}
+						<ToolOutlined className='icon' />
+					</div>
+					<div style={{
+						position: 'absolute',
+						top: '0px',
+						left: '0px',
+						width: '100%',
+					}}>
+						<div
+							className={`${popupPlacement} popup-content`}
+							style={{
+								backgroundColor: '#fff',
+								width: '330px',
+								padding: '10px 15px',
+								borderRadius: '8px',
+								position: 'absolute',
+								opacity: popupShow ? '1' : '0',
+								visibility: popupShow ? 'visible' : 'hidden',
+							}}
+							onMouseDown={e => e.stopPropagation()}
 						>
-							<ToolOutlined className='icon' />
+							<VideoToolPopup></VideoToolPopup>
 						</div>
 					</div>
-				</Popover>
+				</div>
 			</ErrorBoundary>
 		</ ConfigProvider>
 	) : null;
