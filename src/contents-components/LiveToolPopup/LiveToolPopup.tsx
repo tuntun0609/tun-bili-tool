@@ -272,7 +272,7 @@ export const LiveToolPopup = () => {
 		{
 			name: 'systemMsg',
 			label: '系统公告',
-			style: '.chat-item.system-msg, .chat-item.convention-msg, .hot-rank-msg{display:none !important;}',
+			style: '.chat-item.system-msg, .chat-item.convention-msg, .hot-rank-msg, .chat-item.common-danmuku-msg{display:none !important;}',
 		},
 		{
 			name: 'pk',
