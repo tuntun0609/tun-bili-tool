@@ -13,7 +13,7 @@ export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 	const [id, setId] = useState(0);
 	const [isTaskRun, setIsTaskRun] = useState(false);
 	const [msg, setMsg] = useState<string>();
-	const [sendTime, setSendTime] = useState<any>(5);
+	const [sendTime, setSendTime] = useState<any>(6);
 	const startSend = () => {
 		if (!Tool.isStrNumber(sendTime)) {
 			message.error('时间间隔只能为数字');
