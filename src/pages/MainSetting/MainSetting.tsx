@@ -8,6 +8,7 @@ export const MainSetting: React.FC = () => {
 	const [livingList, setLivingList] = useStorage('isLivingList', false);
 	const [isIndexDark, setIsIndexDark] = useStorage('isIndexDark', false);
 	const [isHomeRecRepaint, setIsHomeRecRepaint] = useStorage('isHomeRecRepaint', false);
+	const [isCloseHomeFullScreenPreview, setCloseIsHomeFullScreenPreview] = useStorage('isCloseHomeFullScreenPreview', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
@@ -50,6 +51,17 @@ export const MainSetting: React.FC = () => {
 				checked: isHomeRecRepaint,
 				onClick: (checked) => {
 					setIsHomeRecRepaint(checked);
+				},
+			},
+		},
+		{
+			type: FromType.SWITCH,
+			label: '是否关闭首页视频全屏预览',
+			name: 'isHomeFullScreenPreview',
+			formProps: {
+				checked: isCloseHomeFullScreenPreview,
+				onClick: (checked) => {
+					setCloseIsHomeFullScreenPreview(checked);
 				},
 			},
 		},
