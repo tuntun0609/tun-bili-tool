@@ -1,0 +1,9 @@
+.v-inline-player__preview-tip {
+  display: none !important;
+}
+#media-preview {
+  display: none !important;
+}
+body {
+  overflow: auto !important;
+}
