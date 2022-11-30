@@ -8,7 +8,7 @@ export const MainSetting: React.FC = () => {
 	const [livingList, setLivingList] = useStorage('isLivingList', false);
 	const [isIndexDark, setIsIndexDark] = useStorage('isIndexDark', false);
 	const [isHomeRecRepaint, setIsHomeRecRepaint] = useStorage('isHomeRecRepaint', false);
-	const [isCloseHomeFullScreenPreview, setCloseIsHomeFullScreenPreview] = useStorage('isCloseHomeFullScreenPreview', false);
+	const [isCloseHomeFullScreenPreview, setIsCloseHomeFullScreenPreview] = useStorage('isCloseHomeFullScreenPreview', false);
 	const formConfig: SettingFormItem[] = [
 		{
 			type: FromType.SWITCH,
@@ -61,7 +61,7 @@ export const MainSetting: React.FC = () => {
 			formProps: {
 				checked: isCloseHomeFullScreenPreview,
 				onClick: (checked) => {
-					setCloseIsHomeFullScreenPreview(checked);
+					setIsCloseHomeFullScreenPreview(checked);
 				},
 			},
 		},

@@ -106,7 +106,7 @@ export const getUserInfo = async (mid) => {
 	}
 };
 // 通过mid批量获取主播直播状态
-export const getStatusZInfoByUids = async (midArr) => {
+export const getStatusZInfoByUids = async (midArr: number[]) => {
 	try {
 		const res = await post({
 			url: 'https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids',
@@ -114,6 +114,7 @@ export const getStatusZInfoByUids = async (midArr) => {
 				uids: midArr,
 			},
 			options: {
+				credentials: 'omit',
 				headers: {
 					'Content-Type': 'application/json',
 				},
