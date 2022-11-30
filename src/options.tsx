@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { HashRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
 import { GithubOutlined, YoutubeOutlined } from '@ant-design/icons';
 
 import { Header, HeaderProps, SideBar } from '~components';
@@ -44,11 +45,13 @@ const HeaderItems: HeaderProps[] = [
 ];
 
 const Options: FC = () => (
-	<HashRouter>
-		<Header items={HeaderItems}></Header>
-		<SideBar></SideBar>
-		<Content></Content>
-	</HashRouter>
+	<ConfigProvider locale={zhCN}>
+		<HashRouter>
+			<Header items={HeaderItems}></Header>
+			<SideBar></SideBar>
+			<Content></Content>
+		</HashRouter>
+	</ConfigProvider>
 );
 
 export default Options;
