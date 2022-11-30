@@ -54,19 +54,20 @@ const listenLiveRoomMain = async (time = 30000) => {
 	const listenLiveRoomStatusId = setInterval(async () => {
 		const midArr = listenLiveRooms.map(member => (member.key));
 		try {
-			const info = await API.getStatusZInfoByUids(midArr);
-			if (info?.msg !== undefined && info?.msg === 'fail') {
-				// 该接口不稳定，所以不用console.error
-				console.log('getStatusZInfoByUids请求失败');
-				return;
-			}
-			for (const key in info) {
-				if (Object.hasOwnProperty.call(info, key)) {
-					const item = info[key];
-					listenLiveRoomStatus(item);
+			if (midArr?.length !== 0) {
+				const info = await API.getStatusZInfoByUids(midArr);
+				if (info?.msg !== 'success') {
+					// 该接口不稳定，所以不用console.error
+					console.log('getStatusZInfoByUids请求失败');
+					return;
+				}
+				for (const key in info) {
+					if (Object.hasOwnProperty.call(info, key)) {
+						const item = info[key];
+						listenLiveRoomStatus(item);
+					}
 				}
 			}
-			// console.log(liveStatus);
 		} catch (error) {
 			console.error('getStatusZInfoByUids请求失败', error);
 		}
@@ -100,7 +101,6 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 
 	listenLiveRooms = await storage.get('listenLiveRooms') ?? [];
 
-	console.log(listenLiveRooms);
 	// popup页面 快速导航页面默认数据
 	if (await storage.get('quickNavigationData') === undefined) {
 		storage.set('quickNavigationData', [
@@ -136,7 +136,6 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 // 监听storage
 storage.watch({
 	'listenLiveRooms': (data) => {
-		console.log(data.newValue);
 		listenLiveRooms = data.newValue;
 	},
 });
