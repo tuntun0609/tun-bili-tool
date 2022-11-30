@@ -38,6 +38,16 @@ export const LiveSetting: React.FC = () => {
 		{
 			title: '名称',
 			dataIndex: 'name',
+			render: (name, info) => (
+				<a
+					style={{
+						color: '#000',
+					}}
+					href={`https://space.bilibili.com/${info.key}`}
+					target={'_blank'}
+					rel={'noreferrer'}
+				>{name}</a>
+			),
 		},
 		{
 			title: '房间号',
@@ -55,7 +65,7 @@ export const LiveSetting: React.FC = () => {
 		},
 		{
 			title: '操作',
-			width: 160,
+			width: 80,
 			render: (_, userItem) =>
 				(
 					<Space>
@@ -64,7 +74,6 @@ export const LiveSetting: React.FC = () => {
 								setListenLiveRooms([...listenLiveRooms].filter(item => item.key !== userItem.key));
 							}}
 						>删除</Button>
-						<Button>刷新信息</Button>
 					</Space>
 				)
 			,
