@@ -61,9 +61,10 @@ const listenLiveRoomMain = async (time = 30000) => {
 					console.log('getStatusZInfoByUids请求失败');
 					return;
 				}
-				for (const key in info) {
-					if (Object.hasOwnProperty.call(info, key)) {
-						const item = info[key];
+				const { data } = info;
+				for (const key in data) {
+					if (Object.hasOwnProperty.call(data, key)) {
+						const item = data[key];
 						listenLiveRoomStatus(item);
 					}
 				}

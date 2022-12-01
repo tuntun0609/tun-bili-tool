@@ -120,7 +120,7 @@ export const getStatusZInfoByUids = async (midArr: number[]) => {
 				},
 			},
 		});
-		return res.data;
+		return res;
 	} catch (error) {
 		console.log('getStatusZInfoByUids', error);
 	}
