@@ -1,23 +1,17 @@
-import { API } from './utils';
+import { API, log } from './utils';
 import { Storage } from '@plasmohq/storage';
 
 export { };
 
 const storage = new Storage();
 
-// 直播状态
-const liveStatus = {};
-
-// member
-let listenLiveRooms = [];
-
 // 监听事件任务id
-let listenId: string | number | NodeJS.Timer;
+const listenLiveRoomName = 'listenLiveRooms';
 
 // 监听member开播(新)
-const listenLiveRoomStatus = async (info: any) => {
+const listenLiveRoomStatus = async (info: any, rooms: any[], liveStatus: { [x: string]: boolean; }) => {
 	if (info) {
-		const { key } = listenLiveRooms.find(item => item.roomid === info.room_id);
+		const { key } = rooms.find(item => item.roomid === info.room_id);
 		// 如果监控列表无此项，则添加并设置值为false
 		if (liveStatus[key] === undefined) {
 			liveStatus[key] = false;
@@ -48,40 +42,56 @@ const listenLiveRoomStatus = async (info: any) => {
 	}
 };
 
-// 监听进程(新)
-const listenLiveRoomMain = async (time = 30000) => {
-	console.log('开始监听直播间');
-	const listenLiveRoomStatusId = setInterval(async () => {
-		const midArr = listenLiveRooms.map(member => (member.key));
-		try {
-			if (midArr?.length !== 0) {
-				const info = await API.getStatusZInfoByUids(midArr);
-				if (info?.msg !== 'success') {
-					// 该接口不稳定，所以不用console.error
-					console.log('getStatusZInfoByUids请求失败');
-					return;
-				}
-				const { data } = info;
-				for (const key in data) {
-					if (Object.hasOwnProperty.call(data, key)) {
-						const item = data[key];
-						listenLiveRoomStatus(item);
-					}
+const listenLiveRoomMain = async () => {
+	const listenLiveRooms: any[] = await storage.get('listenLiveRooms') ?? [];
+	const midArr = listenLiveRooms.map(member => (member.key));
+	log(midArr, new Date());
+	try {
+		if (midArr?.length !== 0) {
+			const info = await API.getStatusZInfoByUids(midArr);
+			log(info);
+			if (info?.msg !== 'success') {
+				// 该接口不稳定，所以不用console.error
+				console.log('getStatusZInfoByUids请求失败');
+				return;
+			}
+			const { data } = info;
+			const liveStatus = await storage.get('liveStatus') ?? {};
+			for (const key in data) {
+				if (Object.hasOwnProperty.call(data, key)) {
+					const item = data[key];
+					listenLiveRoomStatus(item, listenLiveRooms, liveStatus);
 				}
 			}
-		} catch (error) {
-			console.error('getStatusZInfoByUids请求失败', error);
+			log(liveStatus);
+			await storage.set('liveStatus', liveStatus);
 		}
-	}, time);
-	// 返回监听任务id，方便用户自定义销毁
-	return listenLiveRoomStatusId;
+	} catch (error) {
+		console.error('getStatusZInfoByUids请求失败', error);
+	}
+};
+
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+	if (alarm.name === listenLiveRoomName) {
+		listenLiveRoomMain();
+	}
+});
+
+// 监听进程(新)
+const listenLiveRoom = async (time = 1) => {
+	console.log('开始监听直播间');
+	chrome.alarms.create(listenLiveRoomName, { periodInMinutes: time });
 };
 
 // 停止监听直播间
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const closeSetInterval = (id: string | number | NodeJS.Timeout) => {
-	clearInterval(id);
-	console.log('停止监听直播间');
+const closeAlarm = (name: string) => {
+	chrome.alarms.clear(
+		name,
+		() => {
+			console.log('停止监听直播间');
+			storage.set('liveStatus', {});
+		},
+	);
 };
 
 // 当提示信息被点击时
@@ -97,10 +107,8 @@ chrome.notifications.onClicked.addListener((e) => {
 chrome.runtime.onInstalled.addListener(async (_details) => {
 	const isListenLiveRoom = await storage.get('isListenLiveRoom');
 	if (isListenLiveRoom) {
-		listenId = await listenLiveRoomMain();
+		listenLiveRoom();
 	}
-
-	listenLiveRooms = await storage.get('listenLiveRooms') ?? [];
 
 	// popup页面 快速导航页面默认数据
 	if (await storage.get('quickNavigationData') === undefined) {
@@ -134,19 +142,12 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 	});
 });
 
-// 监听storage
-storage.watch({
-	'listenLiveRooms': (data) => {
-		listenLiveRooms = data.newValue;
-	},
-});
-
 storage.watch({
 	'isListenLiveRoom': async (data) => {
 		if (data.newValue) {
-			listenId = await listenLiveRoomMain();
+			listenLiveRoom();
 		} else {
-			closeSetInterval(listenId);
+			closeAlarm(listenLiveRoomName);
 		}
 	},
 });
