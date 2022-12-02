@@ -105,10 +105,14 @@ chrome.notifications.onClicked.addListener((e) => {
 
 // 新安装或者重刷新插件
 chrome.runtime.onInstalled.addListener(async (_details) => {
+	// 是否默认启动监听
 	const isListenLiveRoom = await storage.get('isListenLiveRoom');
 	if (isListenLiveRoom) {
 		listenLiveRoom();
 	}
+
+	// 重置直播状态
+	storage.set('liveStatus', {});
 
 	// popup页面 快速导航页面默认数据
 	if (await storage.get('quickNavigationData') === undefined) {
@@ -142,6 +146,7 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 	});
 });
 
+// 监听直播监听开启状态
 storage.watch({
 	'isListenLiveRoom': async (data) => {
 		if (data.newValue) {

@@ -5,6 +5,7 @@ const storage = new Storage();
 
 import historyWarp from 'url:~utils/history-wrap';
 import { injectScript } from '~utils';
+import { videoWrapShieldCss } from '../utils';
 
 export const config: PlasmoContentScript = {
 	matches: ['*://www.bilibili.com/video/*'],
@@ -57,29 +58,23 @@ const videoDescOpen = (time = 0) => {
 	}, time);
 };
 
-interface ShieldOption {
-	name: string | number,
-	label?: string | number,
-	style?: string,
-}
-
-const shieldOptions: ShieldOption[] = [
-	{
-		name: 'top-left-follow',
-		label: '左上角关注按钮',
-		style: '.bpx-player-top-left-follow {display:none !important;}',
-	},
-];
-
-// 插入屏蔽style
-const injectShieldStyle = (selector: string, options: { [key: string]: any }) => {
-	const shieldStyle = document.querySelector(selector);
-	const styleText = shieldOptions.map(item => (
-		options[item.name]
-			? item.style : ''
-	)).join(' ');
-	if (shieldStyle) {
-		shieldStyle.innerHTML = styleText;
+// 注入视频卡片屏蔽css
+const injectVideoWrapShieldCSS = async () => {
+	const isVideoWrapShield = await storage.get('isVideoWrapShield');
+	if (isVideoWrapShield) {
+		const videoWrapShieldOptions = await storage.get('videoWrapShieldOptions') ?? [];
+		// 创建style元素
+		const shieldStyle = document.createElement('style');
+		shieldStyle.id = 'tun-shield-style';
+		document.body.appendChild(shieldStyle);
+		// 插入css
+		const styleText = videoWrapShieldCss.map(item => (
+			videoWrapShieldOptions.indexOf(item.value) !== -1
+				? item.style : ''
+		)).join(' ');
+		if (shieldStyle) {
+			shieldStyle.innerHTML = styleText;
+		}
 	}
 };
 
@@ -123,12 +118,7 @@ window.addEventListener(
 		window.addEventListener('pushState', pathChangeFun);
 		window.addEventListener('popstate', pathChangeFun);
 
-		const shieldStyle = document.createElement('style');
-		shieldStyle.id = 'tun-shield-style';
-		document.body.appendChild(shieldStyle);
-		injectShieldStyle('#tun-shield-style', {
-			'top-left-follow': true,
-		});
+		injectVideoWrapShieldCSS();
 	},
 	false,
 );
