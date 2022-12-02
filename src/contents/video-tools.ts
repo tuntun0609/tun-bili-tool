@@ -87,7 +87,7 @@ window.addEventListener(
 	'load',
 	async () => {
 		const isVideoLoop = await storage.get('isVideoLoop');
-		const isWidescreen = await storage.get('isWidescreen');
+		const isWideScreen = await storage.get('isWideScreen');
 		const isVideoDescOpen = await storage.get('isVideoDescOpen');
 		const pathChangeFun = () => {
 			if (isVideoLoop) {
@@ -100,7 +100,7 @@ window.addEventListener(
 		if (isVideoLoop) {
 			repeat(3000);
 		}
-		if (isWidescreen) {
+		if (isWideScreen) {
 			widescreen(1500);
 		}
 		if (isVideoDescOpen) {
@@ -111,7 +111,7 @@ window.addEventListener(
 				if(isVideoLoop) {
 					repeat(3000);
 				}
-				if (isWidescreen) {
+				if (isWideScreen) {
 					widescreen(1500);
 				}
 				if (isVideoDescOpen) {
