@@ -131,19 +131,19 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 			},
 		]);
 	}
+});
 
-	// 右键搜索
-	chrome.contextMenus.create({
-		id: 'bilibili',
-		title: '使用bilibili搜索',
-		type: 'normal',
-		contexts: ['selection'],
-	});
-	chrome.contextMenus.onClicked.addListener((info) => {
-		if (info.menuItemId === 'bilibili') {
-			chrome.tabs.create({url: `https://search.bilibili.com/all?keyword=${info.selectionText}`});
-		}
-	});
+// 右键搜索
+chrome.contextMenus.create({
+	id: 'bilibili',
+	title: '使用bilibili搜索',
+	type: 'normal',
+	contexts: ['selection'],
+});
+chrome.contextMenus.onClicked.addListener((info) => {
+	if (info.menuItemId === 'bilibili') {
+		chrome.tabs.create({url: `https://search.bilibili.com/all?keyword=${info.selectionText}`});
+	}
 });
 
 // 监听直播监听开启状态
@@ -159,13 +159,13 @@ storage.watch({
 
 // 接收各页面事件并处理
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	setTimeout(async () => {
+	(async () => {
 		if (request.type === 'getShortUrl') {
 			const data = await API.getShortUrl(request.url);
 			sendResponse({
-				content: data.content || '',
+				content: data?.content ?? '',
 			});
 		}
-	}, 0);
+	})();
 	return true;
 });
