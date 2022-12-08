@@ -157,8 +157,8 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					// 所有分p视频列表信息
 					setVideoListData(videoInfo.pages.map((item: any, i: number) => ({
 						key: i + 1,
-						title: item.part,
-						cid: item.cid,
+						title: item?.part,
+						cid: item?.cid,
 					})));
 					const data = await getDownloadInfo(videoInfo.bvid, cid);
 					setVideoDownloadInfo(data.data.data?.dash?.video ?? []);
@@ -224,7 +224,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				>
 					{
 						videoDownloadInfo.map((item: any) => (
-							<Col key={`${item.codecs}-${item.id}`} span={6}>
+							<Col key={`${item?.codecs}-${item?.id}`} span={6}>
 								<div style={{ position: 'relative' }}>
 									<Button
 										block
@@ -233,23 +233,23 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 										}}
 									>
 										<a
-											type={item.mimeType}
+											type={item?.mimeType}
 											target={'_blank'}
 											rel={'noreferrer'}
-											title={item.codecs}
+											title={item?.codecs}
 											href={
-												[item.baseUrl, ...item.backupUrl][videoSource] ?? item.baseUrl
+												[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item.baseUrl
 											}
 										>
 											{
 												supportFormats.find((i: { quality: number; }) => (
-													i.quality === item.id
-												))?.new_description ?? item.codecs
+													i.quality === item?.id
+												))?.new_description ?? item?.codecs
 											}
 											<br/>
 										</a>
 									</Button>
-									{item.id >= 112 ? <VipIcon style={{
+									{item?.id >= 112 ? <VipIcon style={{
 										position: 'absolute',
 										top: '2px',
 										left: '2px',
@@ -284,7 +284,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 				>
 					{
 						audioDownloadInfo.map((item: any) => (
-							<Col key={item.id} span={6}>
+							<Col key={item?.id} span={6}>
 								<div style={{ position: 'relative' }}>
 									<Button
 										block
@@ -293,14 +293,14 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 										}}
 									>
 										<a
-											type={item.mimeType}
+											type={item?.mimeType}
 											target={'_blank'}
 											rel={'noreferrer'}
 											href={
-												[item.baseUrl, ...item.backupUrl][videoSource] ?? item.baseUrl
+												[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item?.baseUrl
 											}
 										>
-											{AudioType[item.id]}
+											{AudioType[item?.id]}
 										</a>
 									</Button>
 								</div>
