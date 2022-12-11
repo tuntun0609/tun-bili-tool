@@ -1,14 +1,15 @@
 import React from 'react';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 type Props = any;
 
 export class ErrorBoundary extends React.Component<Props, {
 	hasError: boolean,
+	hide: boolean,
 }> {
 	constructor(props: Props | Readonly<Props>) {
 		super(props);
-		this.state = { hasError: false };
+		this.state = { hasError: false, hide: false };
 	}
 
 	static getDerivedStateFromError() {
@@ -23,6 +24,7 @@ export class ErrorBoundary extends React.Component<Props, {
 		if (this.state.hasError) {
 			return (
 				<div style={{
+					display: this.state.hide ? 'none' : 'block',
 					position: 'fixed',
 					left: '12px',
 					bottom: '12px',
@@ -40,13 +42,25 @@ export class ErrorBoundary extends React.Component<Props, {
 							height: '24px',
 							display: 'flex',
 							fontSize: '18px',
+							justifyContent: 'space-between',
 							alignItems: 'center',
 							color: '#fb7299',
 						}}>
-							<ExclamationCircleOutlined style={{
-								marginRight: '4px',
-							}} />
-							tun bili tool提示：
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+								}}
+							>
+								<ExclamationCircleOutlined style={{
+									marginRight: '4px',
+								}} />
+								tun bili tool提示：
+							</div>
+							<PlusOutlined
+								rotate={45}
+								onClick={() => this.setState({ hide: true })}
+							/>
 						</div>
 						有一些错误导致了插件崩溃,请联系
 						<a target={'_blank'} href='https://message.bilibili.com/#/whisper/mid47706697' rel="noreferrer">开发者</a>
