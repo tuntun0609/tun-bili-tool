@@ -24,11 +24,12 @@ const injectRecCss = async () => {
 	}
 };
 
-const injectCloseHomeFullScreenPreviewCss = async () => {
+const closeHomeFullScreenPreview = async () => {
 	try {
 		const isCloseHomeFullScreenPreview = await storage.get('isCloseHomeFullScreenPreview');
-		console.log(isCloseHomeFullScreenPreview);
 		if (isCloseHomeFullScreenPreview) {
+			localStorage.setItem('preview-fullscreen-opened', '0');
+			localStorage.setItem('preview-volume-opened', '0');
 			const styleDom = document.createElement('style');
 			styleDom.id = 'tuntun-bilibili-home-close-full-screen-preview';
 			styleDom.innerHTML = closeFullSreenPreview;
@@ -54,7 +55,7 @@ const isHome = () => {
 const init = async () => {
 	if (isHome()) {
 		injectRecCss();
-		injectCloseHomeFullScreenPreviewCss();
+		closeHomeFullScreenPreview();
 	}
 };
 
