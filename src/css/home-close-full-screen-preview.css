@@ -1,6 +1,9 @@
 .v-inline-player__preview-tip {
   display: none !important;
 }
+.v-inline-player__preview-tip-text {
+  display: none !important;
+}
 #media-preview {
   display: none !important;
 }
