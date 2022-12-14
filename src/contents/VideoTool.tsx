@@ -2,7 +2,8 @@ import type { PlasmoContentScript } from 'plasmo';
 import React, {
 	MouseEventHandler, useEffect, useMemo, useState,
 } from 'react';
-import { Storage, useStorage } from '@plasmohq/storage';
+import { Storage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { ToolOutlined } from '@ant-design/icons';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
 import {

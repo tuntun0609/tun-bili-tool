@@ -5,7 +5,7 @@ import { isUndefined } from 'lodash';
 
 import { API, Tool, log, isInIframe } from '../../utils';
 import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal } from '~contents-components';
-import { useStorage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { useMutationObservable } from '~utils/useMutationObservable';
 
 interface ShieldOption {

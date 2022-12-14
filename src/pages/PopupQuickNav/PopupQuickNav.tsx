@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStorage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { Form, Input, Modal } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 

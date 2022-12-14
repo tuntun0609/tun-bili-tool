@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStorage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 
 import { FromType, SettingForm, SettingFormItem } from '~components';
 

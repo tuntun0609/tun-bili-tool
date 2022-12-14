@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useStorage, Storage } from '@plasmohq/storage';
+import { Storage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { Button, Checkbox, Form, message, Switch } from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 

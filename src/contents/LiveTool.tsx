@@ -3,7 +3,8 @@ import React, {
 	MouseEventHandler,
 	useEffect, useMemo, useState,
 } from 'react';
-import { Storage, useStorage } from '@plasmohq/storage';
+import { Storage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { ConfigProvider, message } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
 

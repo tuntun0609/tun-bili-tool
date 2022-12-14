@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useStorage, Storage } from '@plasmohq/storage';
+import { Storage } from '@plasmohq/storage';
+import { useStorage } from '@plasmohq/storage/hook';
 import { Button, Form, Input, message, Select, Space, Switch, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
