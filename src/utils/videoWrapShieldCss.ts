@@ -1,23 +1,23 @@
 export const videoWrapShieldCss = [
 	{
 		value: 'like',
-		style: '.bpx-player-popup-three, .bpx-player-popup-animate, .bpx-player-popup-follow, .bpx-player-popup-cyc {display:none !important;}',
+		style: '.bili-guide {display:none !important;}',
 	},
 	{
 		value: 'link',
-		style: '.bpx-player-link {display:none !important;}',
+		style: '.bili-link {display:none !important;}',
 	},
 	{
 		value: 'vote',
-		style: '.bpx-player-popup-vote, .bpx-player-popup .bpx-player-popup-dm-close {display:none !important;}',
+		style: '.bili-vote {display:none !important;}',
 	},
 	{
 		value: 'score',
-		style: '.bpx-player-score {display:none !important;}',
+		style: '.bili-score {display:none !important;}',
 	},
 	{
 		value: 'reserve',
-		style: '.bpx-player-reserve {display:none !important;}',
+		style: '.bili-reserve {display:none !important;}',
 	},
 	{
 		value: 'top-left-follow',
