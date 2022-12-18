@@ -32,9 +32,6 @@ export const config: PlasmoContentScript = {
 	all_frames: true,
 };
 
-// 获取挂载节点
-export const getMountPoint = async () => document.querySelector('body');
-
 // 注入style
 export const getStyle = () => {
 	const style = document.createElement('style');

@@ -11,14 +11,7 @@ export const get = async (props: { url: any; params?: any; options?: any; }) => 
 	});
 	if (res.status === TRUE_STATUS) {
 		const data = await res.json();
-		if (data.msg !== 'invalid params') {
-			return (data);
-		}
-		return {
-			data: {
-				msg: 'fail',
-			},
-		};
+		return (data);
 	}
 	return {
 		data: {
@@ -312,6 +305,25 @@ export const sendDanmu = async (props: {
 		method: 'post',
 		body: formData,
 		credentials: 'include',
+	});
+	return res;
+};
+
+// 查询共同关注
+export const getSameFollowings = async (props: {
+	mid: number,
+	ps?: number,
+	pn?: number,
+}) => {
+	const { mid, ps = 50, pn = 1 } = props;
+	const baseUrl = 'https://api.bilibili.com/x/relation/same/followings';
+	const res = await get({
+		url: baseUrl,
+		params: {
+			vmid: mid,
+			ps,
+			pn,
+		},
 	});
 	return res;
 };
