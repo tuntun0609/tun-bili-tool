@@ -69,6 +69,7 @@ export const ScListModal = (props: ScListModalProps) => {
 				)}
 				pagination={scList.length > 8 ? {
 					pageSize: 8,
+					showSizeChanger: false,
 				} : false}
 			></List>
 		</Modal>
