@@ -36,8 +36,10 @@ export const watchOverlayAnchor = (
 	}, 100);
 };
 
+const shadowRootId = 'tun-same-followings';
+
 // shadow节点id名
-export const getShadowHostId = () => 'tun-same-followings';
+export const getShadowHostId = () => shadowRootId;
 
 export const getStyle = () => {
 	const style = document.createElement('style');
@@ -50,7 +52,7 @@ message.config({
 	top: 70,
 	duration: 1.5,
 	maxCount: 3,
-	getContainer: () => document.querySelector('#tun-same-followings').shadowRoot.querySelector('#plasmo-shadow-container'),
+	getContainer: () => document.querySelector(`#${shadowRootId}`).shadowRoot.querySelector('#plasmo-shadow-container'),
 });
 
 enum Attribute {
@@ -72,14 +74,23 @@ const ShowSameFollowings = () => {
 			ps: 10,
 			pn,
 		});
-		setTotal(followingsList?.data?.total ?? 0);
-		setFollowingsList(followingsList?.data?.list ?? []);
+		if (followingsList?.code === 0) {
+			setTotal(followingsList?.data?.total ?? 0);
+			setFollowingsList(followingsList?.data?.list ?? []);
+		}
+		return followingsList?.code;
 	};
 
 	const sameFollowingsBtnClick = async () => {
 		try {
-			await updateList();
-			setModalOpen(true);
+			const code = await updateList();
+			if (code === 0) {
+				setModalOpen(true);
+			} else if (code === 22115) {
+				message.error('该用户已设置关注列表不可见');
+			} else {
+				message.error('查询共同关注出错');
+			}
 		} catch (error) {
 			message.error('查询共同关注出错');
 		}
@@ -120,7 +131,7 @@ const ShowSameFollowings = () => {
 					onCancel={() => setModalOpen(false)}
 					footer={null}
 					getContainer={
-						document.querySelector('#tun-same-followings').shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
+						document.querySelector(`#${shadowRootId}`).shadowRoot.querySelector('#plasmo-shadow-container') as HTMLElement
 					}
 				>
 					<List
