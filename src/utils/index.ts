@@ -5,3 +5,5 @@ export * from './log';
 export * from './isOriginLive';
 export * from './isInIframe';
 export * from './videoWrapShieldCss';
+export * from './HOST_ID';
+export * from './getMessageConfig';

@@ -5,25 +5,15 @@ import React, {
 } from 'react';
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
-import { ConfigProvider, message } from 'antd';
 import { ToolOutlined } from '@ant-design/icons';
-
-import { LiveToolPopup, ErrorBoundary } from '../contents-components';
-import { isOriginLive } from '~utils';
-
-import toolCss from 'data-text:./LiveTool.scss';
-import antdCss from 'data-text:antd/dist/antd.variable.min.css';
-import zhCN from 'antd/es/locale/zh_CN';
+import { StyleProvider } from '@ant-design/cssinjs';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
 
-ConfigProvider.config({
-	theme: {
-		primaryColor: '#fb7299',
-		successColor: '#52c41a',
-		warningColor: '#faad14',
-		errorColor: '#f5222d',
-	},
-});
+import { LiveToolPopup, ErrorBoundary, ThemeProvider } from '../contents-components';
+import { TOOL_ID, isOriginLive } from '~utils';
+
+import toolCss from 'data-text:./LiveTool.scss';
+import antdResetCssText from 'data-text:antd/dist/reset.css';
 
 const storage = new Storage();
 
@@ -36,21 +26,13 @@ export const config: PlasmoContentScript = {
 export const getStyle = () => {
 	const style = document.createElement('style');
 	if (isOriginLive()) {
-		style.textContent = toolCss + antdCss;
+		style.textContent = toolCss + antdResetCssText;
 	}
 	return style;
 };
 
 // shadow节点id名
-export const getShadowHostId = () => 'tun-tool-popup';
-
-// 全局message配置
-message.config({
-	top: 70,
-	duration: 1.5,
-	maxCount: 3,
-	getContainer: () => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container'),
-});
+export const getShadowHostId = () => TOOL_ID;
 
 // tool main
 const LiveTool = () => {
@@ -130,46 +112,48 @@ const LiveTool = () => {
 	};
 	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.documentElement.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.documentElement.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool && isOriginLive() ? (
-		<ConfigProvider locale={zhCN}>
-			<ErrorBoundary>
-				<div
-					className='tun-tool-main'
-					onMouseDown={onMouseDown}
-					onMouseUp={onMouseUp}
-					style={{
-						top: top + 'px',
-						right: right + 'px',
-					}}
-				>
-
-					<div className='icon-main'
-						onClick={onToolClick}
+		<ThemeProvider>
+			<StyleProvider container={document.querySelector(`#${TOOL_ID}`).shadowRoot}>
+				<ErrorBoundary>
+					<div
+						className='tun-tool-main'
+						onMouseDown={onMouseDown}
+						onMouseUp={onMouseUp}
+						style={{
+							top: top + 'px',
+							right: right + 'px',
+						}}
 					>
-						<ToolOutlined className='icon' />
-					</div>
-					<div style={{
-						position: 'absolute',
-						top: '0px',
-						left: '0px',
-						width: '100%',
-					}}>
-						<div
-							className={`${popupPlacement} ${popupShow ? 'popup-content-show' : 'popup-content-hide'} popup-content`}
-							style={{
-								backgroundColor: '#fff',
-								width: '330px',
-								padding: '10px 15px',
-								borderRadius: '8px',
-								position: 'absolute',
-							}}
-							onMouseDown={e => e.stopPropagation()}
+
+						<div className='icon-main'
+							onClick={onToolClick}
 						>
-							<LiveToolPopup></LiveToolPopup>
+							<ToolOutlined className='icon' />
+						</div>
+						<div style={{
+							position: 'absolute',
+							top: '0px',
+							left: '0px',
+							width: '100%',
+						}}>
+							<div
+								className={`${popupPlacement} ${popupShow ? 'popup-content-show' : 'popup-content-hide'} popup-content`}
+								style={{
+									backgroundColor: '#fff',
+									width: '330px',
+									padding: '10px 15px',
+									borderRadius: '8px',
+									position: 'absolute',
+								}}
+								onMouseDown={e => e.stopPropagation()}
+							>
+								<LiveToolPopup></LiveToolPopup>
+							</div>
 						</div>
 					</div>
-				</div>
-			</ErrorBoundary>
-		</ ConfigProvider>
+				</ErrorBoundary>
+			</StyleProvider>
+		</ ThemeProvider>
 	) : null;
 };
 

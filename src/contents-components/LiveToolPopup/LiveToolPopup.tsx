@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
-import { API, Tool, log, isInIframe } from '../../utils';
+import { API, Tool, log, isInIframe, TOOL_ID, getMessageConfig } from '../../utils';
 import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal } from '~contents-components';
 import { useStorage } from '@plasmohq/storage/hook';
 import { useMutationObservable } from '~utils/useMutationObservable';
@@ -23,6 +23,7 @@ const scList: {
 
 // tool 弹出层
 export const LiveToolPopup = () => {
+	const [messageApi, contextHolder] = message.useMessage(getMessageConfig(`#${TOOL_ID}`));
 	const [roomid, setRoomid] = useState<number>(undefined);
 	const [screenshotData, setScreenshotData] = useState<string>('');
 	const [roomInfo, setRoomInfo] = useState<any>({});
@@ -138,10 +139,10 @@ export const LiveToolPopup = () => {
 				setScreenshotModalOpen(true);
 				screenshotCanvas.remove();
 			} else {
-				message.error('主播未开播, 无法截图');
+				messageApi.error('主播未开播, 无法截图');
 			}
 		} catch (error) {
-			message.error('发生错误, 请刷新页面');
+			messageApi.error('发生错误, 请刷新页面');
 		}
 	};
 
@@ -152,9 +153,9 @@ export const LiveToolPopup = () => {
 	const onCopyScreenshotBtnClicked = () => {
 		try {
 			Tool.copyImg(screenshotData ?? '');
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
-			message.error('复制失败');
+			messageApi.error('复制失败');
 			console.error(error);
 		}
 	};
@@ -171,9 +172,9 @@ export const LiveToolPopup = () => {
 	const onCopyUserCoverBtnClicked = () => {
 		try {
 			Tool.copyImg(roomInfo.user_cover ?? '');
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
-			message.error('复制失败');
+			messageApi.error('复制失败');
 			console.error(error);
 		}
 	};
@@ -190,9 +191,9 @@ export const LiveToolPopup = () => {
 	const onCopyBackgroundBtnClicked = () => {
 		try {
 			Tool.copyImg(roomInfo.background ?? '');
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
-			message.error('复制失败');
+			messageApi.error('复制失败');
 			console.error(error);
 		}
 	};
@@ -203,10 +204,10 @@ export const LiveToolPopup = () => {
 		const copyText = `【${roomInfo.title}】\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
 		try {
 			Tool.copyDataToClipboard(copyText);
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
 			console.error(error);
-			message.error('复制失败');
+			messageApi.error('复制失败');
 		}
 	};
 
@@ -295,6 +296,7 @@ export const LiveToolPopup = () => {
 
 	return (
 		<div className='tun-popup-main'>
+			{contextHolder}
 			<Space style={{ width: '100%' }} direction="vertical">
 				{/* 在线活跃人数 */}
 				{
