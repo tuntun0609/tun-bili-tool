@@ -1,30 +1,19 @@
 import type { PlasmoContentScript } from 'plasmo';
 import React, {
-	MouseEventHandler, useEffect, useMemo, useState,
+	MouseEventHandler,
+	useEffect, useMemo, useState,
 } from 'react';
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
 import { ToolOutlined } from '@ant-design/icons';
+import { StyleProvider } from '@ant-design/cssinjs';
 import type { TooltipPlacement } from 'antd/lib/tooltip';
-import {
-	message, ConfigProvider,
-} from 'antd';
-import zhCN from 'antd/es/locale/zh_CN';
 
-import { VideoToolPopup, ErrorBoundary } from '../contents-components';
+import { VideoToolPopup, ErrorBoundary, ThemeProvider } from '../contents-components';
+import { TOOL_ID } from '~utils';
 
 import toolCss from 'data-text:./VideoTool.scss';
-// import antdCss from 'data-text:antd/dist/antd.css';
-import antdCss from 'data-text:antd/dist/antd.variable.min.css';
-
-ConfigProvider.config({
-	theme: {
-		primaryColor: '#fb7299',
-		successColor: '#52c41a',
-		warningColor: '#faad14',
-		errorColor: '#f5222d',
-	},
-});
+import antdResetCssText from 'data-text:antd/dist/reset.css';
 
 const storage = new Storage();
 
@@ -35,20 +24,12 @@ export const config: PlasmoContentScript = {
 // 注入style
 export const getStyle = () => {
 	const style = document.createElement('style');
-	style.textContent = toolCss + antdCss;
+	style.textContent = toolCss + antdResetCssText;
 	return style;
 };
 
 // shadow节点id名
-export const getShadowHostId = () => 'tun-tool-popup';
-
-// 全局message配置
-message.config({
-	top: 70,
-	duration: 1.5,
-	maxCount: 3,
-	getContainer: () => document.querySelector('#tun-tool-popup').shadowRoot.querySelector('#plasmo-shadow-container'),
-});
+export const getShadowHostId = () => TOOL_ID;
 
 // tool main
 const VideoTool = () => {
@@ -125,45 +106,47 @@ const VideoTool = () => {
 	};
 	const popupPlacement = useMemo<TooltipPlacement>(() => `${document.documentElement.clientWidth - right - TOOL_SIZE > 350 ? 'left' : 'right'}${document.documentElement.clientHeight - top > 530 ? 'Top' : 'Bottom'}`, [top, right]);
 	return isTool ? (
-		<ConfigProvider locale={zhCN}>
-			<ErrorBoundary>
-				<div
-					className='tun-tool-main'
-					onMouseDown={onMouseDown}
-					onMouseUp={onMouseUp}
-					style={{
-						top: top + 'px',
-						right: right + 'px',
-					}}
-				>
-					<div className='icon-main'
-						onClick={onToolClick}
+		<ThemeProvider>
+			<StyleProvider container={document.querySelector(`#${TOOL_ID}`).shadowRoot}>
+				<ErrorBoundary>
+					<div
+						className='tun-tool-main'
+						onMouseDown={onMouseDown}
+						onMouseUp={onMouseUp}
+						style={{
+							top: top + 'px',
+							right: right + 'px',
+						}}
 					>
-						<ToolOutlined className='icon' />
-					</div>
-					<div style={{
-						position: 'absolute',
-						top: '0px',
-						left: '0px',
-						width: '100%',
-					}}>
-						<div
-							className={`${popupPlacement} ${popupShow ? 'popup-content-show' : 'popup-content-hide'} popup-content`}
-							style={{
-								backgroundColor: '#fff',
-								width: '330px',
-								padding: '10px 15px',
-								borderRadius: '8px',
-								position: 'absolute',
-							}}
-							onMouseDown={e => e.stopPropagation()}
+						<div className='icon-main'
+							onClick={onToolClick}
 						>
-							<VideoToolPopup></VideoToolPopup>
+							<ToolOutlined className='icon' />
+						</div>
+						<div style={{
+							position: 'absolute',
+							top: '0px',
+							left: '0px',
+							width: '100%',
+						}}>
+							<div
+								className={`${popupPlacement} ${popupShow ? 'popup-content-show' : 'popup-content-hide'} popup-content`}
+								style={{
+									backgroundColor: '#fff',
+									width: '330px',
+									padding: '10px 15px',
+									borderRadius: '8px',
+									position: 'absolute',
+								}}
+								onMouseDown={e => e.stopPropagation()}
+							>
+								<VideoToolPopup></VideoToolPopup>
+							</div>
 						</div>
 					</div>
-				</div>
-			</ErrorBoundary>
-		</ ConfigProvider>
+				</ErrorBoundary>
+			</StyleProvider>
+		</ ThemeProvider>
 	) : null;
 };
 

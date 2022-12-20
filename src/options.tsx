@@ -3,6 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { GithubOutlined, YoutubeOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 import { Header, HeaderProps, SideBar } from '~components';
 import {
@@ -10,18 +11,10 @@ import {
 } from '~pages';
 
 import './options.scss';
-import 'antd/dist/antd.variable.min.css';
-// import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
+import 'dayjs/locale/zh-cn';
 
-// 自定义主题
-ConfigProvider.config({
-	theme: {
-		primaryColor: '#fb7299',
-		successColor: '#52c41a',
-		warningColor: '#faad14',
-		errorColor: '#f5222d',
-	},
-});
+dayjs.locale('zh-cn');
 
 const HeaderItems: HeaderProps[] = [
 	{
@@ -45,7 +38,17 @@ const HeaderItems: HeaderProps[] = [
 ];
 
 const Options: FC = () => (
-	<ConfigProvider locale={zhCN}>
+	<ConfigProvider
+		theme={{
+			token: {
+				colorPrimary: '#fb7299',
+				colorSuccess: '#52c41a',
+				colorWarning: '#faad14',
+				colorError: '#f5222d',
+			},
+		}}
+		locale={zhCN}
+	>
 		<HashRouter>
 			<Header items={HeaderItems}></Header>
 			<SideBar></SideBar>

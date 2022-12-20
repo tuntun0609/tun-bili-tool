@@ -23,7 +23,7 @@ export const LiveSetting: React.FC = () => {
 	const [isListenLiveRoom, setIsListenLiveRoom] = useStorage('isListenLiveRoom', false);
 	const [addUid, setAddUid] = useState<string>();
 	const [addLoading, setAddLoading] = useState(false);
-
+	const [messageApi, contextHolder] = message.useMessage();
 	useEffect(() => {
 		form.setFieldValue('liveDefaultQuality', liveDefaultQuality);
 	}, [liveDefaultQuality]);
@@ -87,9 +87,9 @@ export const LiveSetting: React.FC = () => {
 				top: 100,
 				right: 100,
 			});
-			message.success('重置成功');
+			messageApi.success('重置成功');
 		} catch (error) {
-			message.error('重置失败');
+			messageApi.error('重置失败');
 		}
 	};
 
@@ -113,15 +113,15 @@ export const LiveSetting: React.FC = () => {
 					loading={addLoading}
 					onClick={async () => {
 						if (!addUid) {
-							message.error('添加uid不能为空');
+							messageApi.error('添加uid不能为空');
 							return;
 						}
 						if (!Tool.isStrNumber(addUid)) {
-							message.error('添加uid请输入数字');
+							messageApi.error('添加uid请输入数字');
 							return;
 						}
 						if (listenLiveRooms.some(item => item.key === parseInt(addUid, 10))) {
-							message.error('添加的监听对象已存在');
+							messageApi.error('添加的监听对象已存在');
 							return;
 						}
 						try {
@@ -129,11 +129,11 @@ export const LiveSetting: React.FC = () => {
 							const addUserInfo = await API.getUserInfo(parseInt(addUid, 10));
 							console.log(addUserInfo);
 							if (!addUserInfo) {
-								message.error('不存在该用户');
+								messageApi.error('不存在该用户');
 								return;
 							}
 							if (!addUserInfo.live_room) {
-								message.error('该用户没有直播间');
+								messageApi.error('该用户没有直播间');
 								return;
 							}
 							setListenLiveRooms([...listenLiveRooms, {
@@ -141,9 +141,9 @@ export const LiveSetting: React.FC = () => {
 								name: addUserInfo.name,
 								roomid: addUserInfo.live_room.roomid,
 							}]);
-							message.success('添加成功');
+							messageApi.success('添加成功');
 						} catch (error) {
-							message.error(error);
+							messageApi.error(error);
 						} finally {
 							setAddLoading(false);
 						}
@@ -154,80 +154,83 @@ export const LiveSetting: React.FC = () => {
 	);
 
 	return (
-		<Form
-			form={form}
-			labelCol={{
-				style: {
-					minWidth: '250px',
-				},
-			}}
-			labelWrap
-			labelAlign={'left'}
-			size={'middle'}
-		>
-			<Form.Item
-				label={'是否自动开启直播工具'}
-				name={'liveTool'}
+		<>
+			{contextHolder}
+			<Form
+				form={form}
+				labelCol={{
+					style: {
+						minWidth: '250px',
+					},
+				}}
+				labelWrap
+				labelAlign={'left'}
+				size={'middle'}
 			>
-				<div>
+				<Form.Item
+					label={'是否自动开启直播工具'}
+					name={'liveTool'}
+				>
+					<div>
+						<Switch
+							checked={liveTool}
+							onClick={(checked) => {
+								setLiveTool(checked);
+							}}
+						></Switch>
+						<Button
+							style={{
+								marginLeft: '10px',
+							}}
+							onClick={resetLiveToolPosition}
+						>重置按钮位置</Button>
+					</div>
+				</Form.Item>
+				<Form.Item
+					label={'直播默认画质'}
+					name={'liveDefaultQuality'}
+				>
+					<Select
+						style={{
+							width: '170px',
+						}}
+						onChange={liveQualityChange}
+					>
+						<Option value='不开启'>不开启</Option>
+						<Option value='原画PRO '>原画PRO</Option>
+						<Option value='原画 '>原画</Option>
+						<Option value='蓝光PRO '>蓝光PRO</Option>
+						<Option value='蓝光 '>蓝光</Option>
+						<Option value='超清PRO '>超清PRO</Option>
+						<Option value='超清 '>超清</Option>
+						<Option value='高清 '>高清</Option>
+						<Option value='流畅 '>流畅</Option>
+					</Select>
+				</Form.Item>
+				<Form.Item
+					label={'是否开启直播监控'}
+				>
 					<Switch
-						checked={liveTool}
+						checked={isListenLiveRoom}
 						onClick={(checked) => {
-							setLiveTool(checked);
+							setIsListenLiveRoom(checked);
 						}}
 					></Switch>
-					<Button
-						style={{
-							marginLeft: '10px',
-						}}
-						onClick={resetLiveToolPosition}
-					>重置按钮位置</Button>
-				</div>
-			</Form.Item>
-			<Form.Item
-				label={'直播默认画质'}
-				name={'liveDefaultQuality'}
-			>
-				<Select
-					style={{
-						width: '170px',
-					}}
-					onChange={liveQualityChange}
-				>
-					<Option value='不开启'>不开启</Option>
-					<Option value='原画PRO '>原画PRO</Option>
-					<Option value='原画 '>原画</Option>
-					<Option value='蓝光PRO '>蓝光PRO</Option>
-					<Option value='蓝光 '>蓝光</Option>
-					<Option value='超清PRO '>超清PRO</Option>
-					<Option value='超清 '>超清</Option>
-					<Option value='高清 '>高清</Option>
-					<Option value='流畅 '>流畅</Option>
-				</Select>
-			</Form.Item>
-			<Form.Item
-				label={'是否开启直播监控'}
-			>
-				<Switch
-					checked={isListenLiveRoom}
-					onClick={(checked) => {
-						setIsListenLiveRoom(checked);
-					}}
-				></Switch>
-			</Form.Item>
-			{
-				isListenLiveRoom
-					? <Table
-						bordered
-						style={{
-							maxWidth: '800px',
-						}}
-						footer={getTableFooter}
-						columns={columns}
-						dataSource={listenLiveRooms}
-					></Table>
-					: null
-			}
-		</Form>
+				</Form.Item>
+				{
+					isListenLiveRoom
+						? <Table
+							bordered
+							style={{
+								maxWidth: '800px',
+							}}
+							footer={getTableFooter}
+							columns={columns}
+							dataSource={listenLiveRooms}
+						></Table>
+						: null
+				}
+			</Form>
+		</>
 	);
 };

@@ -2,44 +2,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Descriptions, message, Row, Slider, Space } from 'antd';
 
-import { API, Tool } from '~utils';
+import { API, TOOL_ID, Tool, getMessageConfig } from '~utils';
 import { DownloadVideoModal, ImageModal, PopupTitle } from '~contents-components';
-
-// 视频详细信息内容组件
-const VideoDesItem = ({ value }: { value: string | number }) => (
-	<div
-		style={{
-			cursor: 'pointer',
-		}}
-		onClick={() => {
-			Tool.copyDataToClipboard(value)
-				.then(() => {
-					message.success('复制成功');
-				}).catch((e) => {
-					console.error(e);
-					message.error('复制失败');
-				});
-		}}
-	>{value}</div>
-);
-
-// 分享视频信息按钮
-const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
-	const copyData = async () => {
-		const copyText = `【${data.title}】\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
-		try {
-			Tool.copyDataToClipboard(copyText);
-			message.success('复制成功');
-		} catch (error) {
-			console.error(error);
-			message.error('复制失败');
-		}
-	};
-	return (<Button size={'small'} onClick={copyData}>获取视频分享信息</Button>);
-};
 
 // tool 弹出层
 export const VideoToolPopup = () => {
+	const [messageApi, contextHolder] = message.useMessage(getMessageConfig(`#${TOOL_ID}`));
 	const [picBtnLoading, setPicBtnLoading] = useState(false);
 	const [picModalOpen, setPicModalOpen] = useState(false);
 	const [screenshotModalOpen, setScreenshotModalOpen] = useState(false);
@@ -64,6 +32,39 @@ export const VideoToolPopup = () => {
 	const onRateChange = useCallback((e: Event) => {
 		setPlaybackrate((e.target as HTMLVideoElement).playbackRate);
 	}, []);
+
+	// 视频详细信息内容组件
+	const VideoDesItem = ({ value }: { value: string | number }) => (
+		<div
+			style={{
+				cursor: 'pointer',
+			}}
+			onClick={() => {
+				Tool.copyDataToClipboard(value)
+					.then(() => {
+						messageApi.success('复制成功');
+					}).catch((e) => {
+						console.error(e);
+						messageApi.error('复制失败');
+					});
+			}}
+		>{value}</div>
+	);
+
+	// 分享视频信息按钮
+	const ShareVideoInfoBtn = ({ data = {} }: { data: any }) => {
+		const copyData = async () => {
+			const copyText = `【${data.title}】\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
+			try {
+				Tool.copyDataToClipboard(copyText);
+				messageApi.success('复制成功');
+			} catch (error) {
+				console.error(error);
+				messageApi.error('复制失败');
+			}
+		};
+		return (<Button size={'small'} onClick={copyData}>获取视频分享信息</Button>);
+	};
 
 	useEffect(() => {
 		setVideoId(getVideoId());
@@ -115,9 +116,9 @@ export const VideoToolPopup = () => {
 	const onCopyPicBtnClicked = async () => {
 		try {
 			Tool.copyImg(videoInfo.pic ?? '');
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
-			message.error('复制失败');
+			messageApi.error('复制失败');
 			console.error(error);
 		}
 	};
@@ -134,7 +135,7 @@ export const VideoToolPopup = () => {
 			setScreenshotModalOpen(true);
 			screenshotCanvas.remove();
 		} catch (error) {
-			message.error('截图出错');
+			messageApi.error('截图出错');
 		}
 	};
 	// 视频截图弹窗返回
@@ -145,9 +146,9 @@ export const VideoToolPopup = () => {
 	const onCopyScreenshotBtnClicked = () => {
 		try {
 			Tool.copyImg(screenshotData ?? '');
-			message.success('复制成功');
+			messageApi.success('复制成功');
 		} catch (error) {
-			message.error('复制失败');
+			messageApi.error('复制失败');
 			console.error(error);
 		}
 	};
@@ -178,9 +179,9 @@ export const VideoToolPopup = () => {
 				},
 			);
 			Tool.copyDataToClipboard(data.content);
-			message.success('复制短链成功');
+			messageApi.success('复制短链成功');
 		} catch (error) {
-			message.error('复制短链失败');
+			messageApi.error('复制短链失败');
 			console.error(error);
 		}
 	};
@@ -193,9 +194,9 @@ export const VideoToolPopup = () => {
 			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
 			const timestampUrl = `${location.origin + location.pathname}?${pNum ? `p=${pNum}&` : ''}t=${Math.floor(videoElement.currentTime)}`;
 			Tool.copyDataToClipboard(timestampUrl);
-			message.success('复制空降链接成功');
+			messageApi.success('复制空降链接成功');
 		} catch (error) {
-			message.error('复制空降链接失败');
+			messageApi.error('复制空降链接失败');
 			console.error(error);
 		}
 	};
@@ -210,7 +211,7 @@ export const VideoToolPopup = () => {
 			const videoElement = document.querySelector('#bilibili-player video') as HTMLVideoElement;
 			videoElement.playbackRate = playbackrate;
 		} catch (error) {
-			message.error('出现错误');
+			messageApi.error('出现错误');
 		}
 	}, [playbackrate]);
 
@@ -232,6 +233,7 @@ export const VideoToolPopup = () => {
 
 	return (
 		<div className='tun-popup-main'>
+			{contextHolder}
 			<Space style={{ width: '100%' }} direction="vertical">
 				{/* 视频信息 */}
 				<Descriptions

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { isUndefined } from 'lodash';
 
 import { PopupTitle } from '~contents-components';
+import { TOOL_ID, getMessageConfig } from '~utils';
 
 const { Option } = Select;
 
@@ -63,6 +64,7 @@ enum AudioType {
 // 下载视频弹出层
 export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 	const { videoInfo } = props;
+	const [messageApi, contextHolder] = message.useMessage(getMessageConfig(`#${TOOL_ID}`));
 	const [videoDownloadInfo, setVideoDownloadInfo] = useState<any>([]);
 	const [audioDownloadInfo, setAudioDownloadInfo] = useState<any>([]);
 	const [supportFormats, setSupportFormats] = useState<any>([]);
@@ -128,7 +130,7 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 			downloadByBrowser(url);
 		} catch (error) {
 			console.error(error);
-			message.error('下载发生错误');
+			messageApi.error('下载发生错误');
 		}
 	};
 
@@ -168,158 +170,167 @@ export const DownloadVideoModal = (props: DownloadVideoModalProps) => {
 					setSupportFormats(data.data.data?.support_formats ?? []);
 				}
 			} catch (error) {
-				message.error('获取下载信息错误');
+				messageApi.error('获取下载信息错误');
 			}
 		};
 		main();
 	}, [cid]);
 
 	return (
-		<Modal
-			{...props}
-		>
-			<Space style={{ width: '100%' }} direction="vertical">
-				{/* 分p选择器 */}
-				{
-					videoListData.length !== 1 ?
-						<div style={{ marginBottom: '8px' }}>
-							<PopupTitle>选择分P</PopupTitle>
-							<VideoList
-								size="small"
-								rowSelection={{
-									type: 'radio',
-									...videoListRowSelection,
-									defaultSelectedRowKeys: [1],
-								}}
-								dataSource={videoListData}
-							></VideoList>
-						</div>
-						: null
-				}
-				{/* 视频下载标题以及线路选择 */}
-				<div style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'start',
-				}}>
-					<PopupTitle style={{ marginRight: '8px' }}>视频下载(不包括音频)</PopupTitle>
-					<Select
-						size={'small'}
-						defaultValue={0}
-						onChange={value => setVideoSource(value)}
-						dropdownStyle={{ zIndex: '9999999999' }}
-						getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
-					>
-						<Option value={0}>线路1</Option>
-						<Option value={1}>线路2</Option>
-						<Option value={2}>线路3</Option>
-					</Select>
-				</div>
-				{/* 不同清晰度视频下载按钮 */}
-				<Row
-					wrap
-					align={'middle'}
-					justify={'start'}
-					gutter={[8, 8]}
-				>
+		<>
+			{contextHolder}
+			<Modal
+				{...props}
+			>
+				<Space style={{ width: '100%' }} direction="vertical">
+					{/* 分p选择器 */}
 					{
-						videoDownloadInfo.map((item: any) => (
-							<Col key={`${item?.codecs}-${item?.id}`} span={6}>
-								<div style={{ position: 'relative' }}>
-									<Button
-										block
-										onClick={() => {
-											downloadVideoOrAudioByBrowser(item, videoSource);
-										}}
-									>
-										<a
-											type={item?.mimeType}
-											target={'_blank'}
-											rel={'noreferrer'}
-											title={item?.codecs}
-											href={
-												[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item.baseUrl
-											}
-										>
-											{
-												supportFormats.find((i: { quality: number; }) => (
-													i.quality === item?.id
-												))?.new_description ?? item?.codecs
-											}
-											<br/>
-										</a>
-									</Button>
-									{item?.id >= 112 ? <VipIcon style={{
-										position: 'absolute',
-										top: '2px',
-										left: '2px',
-										zIndex: 10,
-									}}></VipIcon> : null}
-								</div>
-							</Col>
-						))
+						videoListData.length !== 1 ?
+							<div style={{ marginBottom: '8px' }}>
+								<PopupTitle>选择分P</PopupTitle>
+								<VideoList
+									size="small"
+									rowSelection={{
+										type: 'radio',
+										...videoListRowSelection,
+										defaultSelectedRowKeys: [1],
+									}}
+									dataSource={videoListData}
+								></VideoList>
+							</div>
+							: null
 					}
-				</Row>
-				{/* 视频下载标题以及线路选择 */}
-				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-					<PopupTitle style={{ marginRight: '8px' }}>音频下载</PopupTitle>
-					<Select
-						size={'small'}
-						defaultValue={0}
-						onChange={value => setAudioSource(value)}
-						dropdownStyle={{ zIndex: '9999999999' }}
-						getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+					{/* 视频下载标题以及线路选择 */}
+					<div style={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'start',
+					}}>
+						<PopupTitle style={{ marginRight: '8px' }}>视频下载(不包括音频)</PopupTitle>
+						<Select
+							size={'small'}
+							defaultValue={0}
+							onChange={value => setVideoSource(value)}
+							dropdownStyle={{ zIndex: '9999999999' }}
+							getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+						>
+							<Option value={0}>线路1</Option>
+							<Option value={1}>线路2</Option>
+							<Option value={2}>线路3</Option>
+						</Select>
+					</div>
+					{/* 不同清晰度视频下载按钮 */}
+					<Row
+						wrap
+						align={'middle'}
+						justify={'start'}
+						gutter={[8, 8]}
 					>
-						<Option value={0}>线路1</Option>
-						<Option value={1}>线路2</Option>
-						<Option value={2}>线路3</Option>
-					</Select>
-				</div>
-				{/* 不同清晰度音频下载按钮 */}
-				<Row
-					wrap
-					align={'middle'}
-					justify={'start'}
-					gutter={[8, 8]}
-				>
-					{
-						audioDownloadInfo.map((item: any) => (
-							<Col key={item?.id} span={6}>
-								<div style={{ position: 'relative' }}>
-									<Button
-										block
-										onClick={() => {
-											downloadVideoOrAudioByBrowser(item, audioSource);
-										}}
-									>
-										<a
-											type={item?.mimeType}
-											target={'_blank'}
-											rel={'noreferrer'}
-											href={
-												[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item?.baseUrl
-											}
+						{
+							videoDownloadInfo.map((item: any) => (
+								<Col key={`${item?.codecs}-${item?.id}`} span={6}>
+									<div style={{ position: 'relative' }}>
+										<Button
+											block
+											onClick={() => {
+												downloadVideoOrAudioByBrowser(item, videoSource);
+											}}
 										>
-											{AudioType[item?.id]}
-										</a>
-									</Button>
-								</div>
-							</Col>
-						))
-					}
-				</Row>
-				<div className='tun-tip' style={{
-					marginTop: '8px',
-				}}>
-					<ol>
-						<li>由于网站限制, 视频下载只包括画面不包括音频, 如需完整视频请自行合并 <a target={'_blank'} href='https://www.yuque.com/docs/share/1855fae2-513a-4abb-99d0-9260d26769ca' rel="noreferrer">合并参考</a></li>
-						<li>下载慢或者失败时可切换线路</li>
-						<li>如果切换线路后依然无法下载, 请<strong>右键按钮</strong>并点击<strong>链接另存为</strong>, 以此来下载内容</li>
-						<li>某些文字相同的按钮所下载的视频编码会有所不同, 按钮处悬浮可查看视频编码</li>
-						<li>视频与音频下载文件后缀名均为<strong>m4s</strong>, 实际编码为<strong>mp4</strong>, 下载后可更改拓展名为<strong>mp4</strong></li>
-					</ol>
-				</div>
-			</Space>
-		</Modal>
+											<a
+												type={item?.mimeType}
+												target={'_blank'}
+												rel={'noreferrer'}
+												title={item?.codecs}
+												href={
+													[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item.baseUrl
+												}
+												style={{
+													color: '#000',
+												}}
+											>
+												{
+													supportFormats.find((i: { quality: number; }) => (
+														i.quality === item?.id
+													))?.new_description ?? item?.codecs
+												}
+												<br/>
+											</a>
+										</Button>
+										{item?.id >= 112 ? <VipIcon style={{
+											position: 'absolute',
+											top: '2px',
+											left: '2px',
+											zIndex: 10,
+										}}></VipIcon> : null}
+									</div>
+								</Col>
+							))
+						}
+					</Row>
+					{/* 视频下载标题以及线路选择 */}
+					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+						<PopupTitle style={{ marginRight: '8px' }}>音频下载</PopupTitle>
+						<Select
+							size={'small'}
+							defaultValue={0}
+							onChange={value => setAudioSource(value)}
+							dropdownStyle={{ zIndex: '9999999999' }}
+							getPopupContainer={() => document.querySelector('#tun-tool-popup').shadowRoot as any}
+						>
+							<Option value={0}>线路1</Option>
+							<Option value={1}>线路2</Option>
+							<Option value={2}>线路3</Option>
+						</Select>
+					</div>
+					{/* 不同清晰度音频下载按钮 */}
+					<Row
+						wrap
+						align={'middle'}
+						justify={'start'}
+						gutter={[8, 8]}
+					>
+						{
+							audioDownloadInfo.map((item: any) => (
+								<Col key={item?.id} span={6}>
+									<div style={{ position: 'relative' }}>
+										<Button
+											block
+											onClick={() => {
+												downloadVideoOrAudioByBrowser(item, audioSource);
+											}}
+										>
+											<a
+												type={item?.mimeType}
+												target={'_blank'}
+												rel={'noreferrer'}
+												href={
+													[item?.baseUrl, ...(item?.backupUrl ?? [])][videoSource] ?? item?.baseUrl
+												}
+												style={{
+													color: '#000',
+												}}
+											>
+												{AudioType[item?.id]}
+											</a>
+										</Button>
+									</div>
+								</Col>
+							))
+						}
+					</Row>
+					<div className='tun-tip' style={{
+						marginTop: '8px',
+					}}>
+						<ol>
+							<li>由于网站限制, 视频下载只包括画面不包括音频, 如需完整视频请自行合并 <a target={'_blank'} href='https://www.yuque.com/docs/share/1855fae2-513a-4abb-99d0-9260d26769ca' rel="noreferrer">合并参考</a></li>
+							<li>下载慢或者失败时可切换线路</li>
+							<li>如果切换线路后依然无法下载, 请<strong>右键按钮</strong>并点击<strong>链接另存为</strong>, 以此来下载内容</li>
+							<li>某些文字相同的按钮所下载的视频编码会有所不同, 按钮处悬浮可查看视频编码</li>
+							<li>视频与音频下载文件后缀名均为<strong>m4s</strong>, 实际编码为<strong>mp4</strong>, 下载后可更改拓展名为<strong>mp4</strong></li>
+						</ol>
+					</div>
+				</Space>
+			</Modal>
+		</>
 	);
 };
