@@ -7,9 +7,6 @@ export const ThemeProvider = ({ children }: { children: null | ReactNode }) => (
 		theme={{
 			token: {
 				colorPrimary: '#fb7299',
-				colorSuccess: '#52c41a',
-				colorWarning: '#faad14',
-				colorError: '#f5222d',
 			},
 		}}
 		locale={zhCN}
