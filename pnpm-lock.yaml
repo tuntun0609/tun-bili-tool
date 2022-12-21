@@ -30,7 +30,7 @@ specifiers:
   husky: ^8.0.2
   lodash: ^4.17.21
   moment: ^2.29.4
-  plasmo: ^0.60.1
+  plasmo: ^0.60.2
   prettier: 2.7.1
   react: 18.2.0
   react-dom: 18.2.0
@@ -50,7 +50,7 @@ dependencies:
   html2canvas: 1.4.1
   lodash: 4.17.21
   moment: 2.29.4
-  plasmo: 0.60.1_pvnihi4muhoy7kenlmiyxwzuqy
+  plasmo: 0.60.2_pvnihi4muhoy7kenlmiyxwzuqy
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-infinite-scroll-component: 6.1.0_react@18.2.0
@@ -5469,8 +5469,8 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
 
-  /minimatch/5.1.1:
-    resolution: {integrity: sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==}
+  /minimatch/5.1.2:
+    resolution: {integrity: sha512-bNH9mmM9qsJ2X4r2Nat1B//1dJVcn3+iBLa3IgqJ7EbGaDNepL9QSHOxN4ng33s52VMMhhIfgCYDk3C4ZmlDAg==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
@@ -5927,8 +5927,8 @@ packages:
     engines: {node: '>= 6'}
     dev: false
 
-  /plasmo/0.60.1_pvnihi4muhoy7kenlmiyxwzuqy:
-    resolution: {integrity: sha512-Ci3r1v2r+MqwLhwnW5uE7pR9IRKV/278oXit1KZVkUTgSgn87wELabALnhzNVZg47/+SNBrp0sfkVamjRJ4vmw==}
+  /plasmo/0.60.2_pvnihi4muhoy7kenlmiyxwzuqy:
+    resolution: {integrity: sha512-sWI6eU5gdHyRR5SaC1ZlMvbGci7b+nNaVX0e9dJpBuAM9tr2sPqf3iBoRZ1XT+RsjD1Ma05rdeGMSa+ClPkQdA==}
     hasBin: true
     dependencies:
       '@expo/spawn-async': 1.7.0
@@ -6840,7 +6840,7 @@ packages:
   /readdir-glob/1.1.2:
     resolution: {integrity: sha512-6RLVvwJtVwEDfPdn6X6Ille4/lxGl0ATOY4FN/B9nxQcgOazvvI0nodiD19ScKq0PvA/29VpaOQML36o5IzZWA==}
     dependencies:
-      minimatch: 5.1.1
+      minimatch: 5.1.2
     dev: false
 
   /readdirp/3.6.0:
