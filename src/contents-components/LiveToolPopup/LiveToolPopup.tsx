@@ -153,9 +153,9 @@ export const LiveToolPopup = () => {
 	const onCopyScreenshotBtnClicked = () => {
 		try {
 			Tool.copyImg(screenshotData ?? '');
-			messageApi.success('复制成功');
+			messageApi.success('复制截图成功');
 		} catch (error) {
-			messageApi.error('复制失败');
+			messageApi.error('复制截图失败');
 			console.error(error);
 		}
 	};
@@ -172,9 +172,9 @@ export const LiveToolPopup = () => {
 	const onCopyUserCoverBtnClicked = () => {
 		try {
 			Tool.copyImg(roomInfo.user_cover ?? '');
-			messageApi.success('复制成功');
+			messageApi.success('复制封面成功');
 		} catch (error) {
-			messageApi.error('复制失败');
+			messageApi.error('复制封面失败');
 			console.error(error);
 		}
 	};
@@ -191,9 +191,9 @@ export const LiveToolPopup = () => {
 	const onCopyBackgroundBtnClicked = () => {
 		try {
 			Tool.copyImg(roomInfo.background ?? '');
-			messageApi.success('复制成功');
+			messageApi.success('复制背景图成功');
 		} catch (error) {
-			messageApi.error('复制失败');
+			messageApi.error('复制背景图失败');
 			console.error(error);
 		}
 	};
@@ -204,10 +204,10 @@ export const LiveToolPopup = () => {
 		const copyText = `【${roomInfo.title}】\nup主: ${upName}\n直播间链接: https://live.bilibili.com/${roomInfo.room_id}`;
 		try {
 			Tool.copyDataToClipboard(copyText);
-			messageApi.success('复制成功');
+			messageApi.success('复制分享信息成功');
 		} catch (error) {
 			console.error(error);
-			messageApi.error('复制失败');
+			messageApi.error('复制分享信息失败');
 		}
 	};
 

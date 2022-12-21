@@ -57,10 +57,10 @@ export const VideoToolPopup = () => {
 			const copyText = `【${data.title}】\nup主: ${data.owner?.name ?? ''}\n视频链接: https://www.bilibili.com/video/${data.bvid ?? ''}`;
 			try {
 				Tool.copyDataToClipboard(copyText);
-				messageApi.success('复制成功');
+				messageApi.success('复制分享信息成功');
 			} catch (error) {
 				console.error(error);
-				messageApi.error('复制失败');
+				messageApi.error('复制分享信息失败');
 			}
 		};
 		return (<Button size={'small'} onClick={copyData}>获取视频分享信息</Button>);
@@ -112,13 +112,13 @@ export const VideoToolPopup = () => {
 	const picModalCancel = () => {
 		setPicModalOpen(false);
 	};
-	// 复制图片至剪贴板按钮
+	// 复制视频封面至剪贴板
 	const onCopyPicBtnClicked = async () => {
 		try {
 			Tool.copyImg(videoInfo.pic ?? '');
-			messageApi.success('复制成功');
+			messageApi.success('复制封面成功');
 		} catch (error) {
-			messageApi.error('复制失败');
+			messageApi.error('复制封面失败');
 			console.error(error);
 		}
 	};
@@ -146,9 +146,9 @@ export const VideoToolPopup = () => {
 	const onCopyScreenshotBtnClicked = () => {
 		try {
 			Tool.copyImg(screenshotData ?? '');
-			messageApi.success('复制成功');
+			messageApi.success('复制截图成功');
 		} catch (error) {
-			messageApi.error('复制失败');
+			messageApi.error('复制截图失败');
 			console.error(error);
 		}
 	};
