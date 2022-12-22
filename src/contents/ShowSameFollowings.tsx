@@ -115,7 +115,7 @@ const ShowSameFollowings = () => {
 							<Modal
 								destroyOnClose
 								centered
-								title={'查询共同关注'}
+								title={`共同关注总数: ${total}`}
 								open={modalOpen}
 								onCancel={() => setModalOpen(false)}
 								footer={null}
