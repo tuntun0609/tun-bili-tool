@@ -3,16 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
-import { API, Tool, log, isInIframe, TOOL_ID, getMessageConfig } from '../../utils';
+import { API, Tool, log, isInIframe, TOOL_ID, getMessageConfig, liveShieldCss } from '~utils';
 import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal } from '~contents-components';
 import { useStorage } from '@plasmohq/storage/hook';
 import { useMutationObservable } from '~utils/useMutationObservable';
-
-interface ShieldOption {
-	name: string | number,
-	label?: string | number,
-	style?: string,
-}
 
 const scList: {
 	danmu: any,
@@ -239,53 +233,10 @@ export const LiveToolPopup = () => {
 		setLiveShield(allValues);
 	};
 
-	const shieldOptions: ShieldOption[] = [
-		{
-			name: 2233,
-			label: '2233娘',
-			style: '#my-dear-haruna-vm {display:none !important;}',
-		},
-		{
-			name: 'fansMedal',
-			label: '粉丝勋章',
-			style: '.chat-item .fans-medal-item-ctnr,.chat-item .title-label {display:none !important;}',
-		},
-		{
-			name: 'gift',
-			label: '礼物信息',
-			style: '.chat-item.top3-notice, .chat-item.gift-item, #chat-gift-bubble-vm, #penury-gift-msg, #lottery-gift-toast {display:none !important;}',
-		},
-		{
-			name: 'chatBottom',
-			label: '聊天栏底部信息',
-			style: '#brush-prompt, #welcome-area-bottom-vm {display:none !important;} .chat-history-panel .chat-history-list.with-brush-prompt {height: 100% !important;}',
-		},
-		{
-			name: 'emoticon-chat',
-			label: '表情(聊天栏)',
-			style: '.chat-emoticon, .emoji-animation-area {display:none !important;}',
-		},
-		{
-			name: 'emoticon-danmu',
-			label: '表情(弹幕)',
-			style: '.danmaku-item-container .danmaku-emoji img {display:none !important;}',
-		},
-		{
-			name: 'systemMsg',
-			label: '系统公告',
-			style: '.chat-item.system-msg, .chat-item.convention-msg, .hot-rank-msg, .chat-item.common-danmuku-msg{display:none !important;}',
-		},
-		{
-			name: 'pk',
-			label: 'PK',
-			style: '#chaos-pk-vm {display:none !important;}',
-		},
-	];
-
 	// 插入屏蔽style
 	const injectShieldStyle = (options: { [key: string]: any }) => {
 		const shieldStyle = document.querySelector('#tun-shield-style');
-		const styleText = shieldOptions.map(item => (
+		const styleText = liveShieldCss.map(item => (
 			options[item.name]
 				? item.style : ''
 		)).join(' ');
@@ -422,7 +373,7 @@ export const LiveToolPopup = () => {
 					onValuesChange={shieldFormChange}
 				>
 					{
-						shieldOptions.map(item => (
+						liveShieldCss.map(item => (
 							<Form.Item
 								key={item.name}
 								label={item.label ?? item.name}
