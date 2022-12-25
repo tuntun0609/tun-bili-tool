@@ -100,4 +100,9 @@ export const liveShieldCss: LiveShieldItem[] = [
 		label: 'PK',
 		style: '#chaos-pk-vm {display:none !important;}',
 	},
+	{
+		name: 'shop',
+		label: '商品提示',
+		style: '#shop-popover-vm, .ecommerce-lot-icon {display: none !important;}',
+	},
 ];
