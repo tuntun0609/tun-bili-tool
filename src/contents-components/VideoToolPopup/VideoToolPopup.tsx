@@ -257,8 +257,8 @@ export const VideoToolPopup = () => {
 				{/* 视频工具 */}
 				<PopupTitle style={{ marginTop: '8px' }}>视频工具</PopupTitle>
 				<Row wrap gutter={[16, 8]} >
+					{/* 视频封面 */}
 					<Col span={8}>
-						{/* 视频封面 */}
 						<Button onClick={picBtnClicked} loading={picBtnLoading}>视频封面</Button>
 						<ImageModal
 							centered
@@ -275,8 +275,8 @@ export const VideoToolPopup = () => {
 							}
 						></ImageModal>
 					</Col>
+					{/* 视频画面 */}
 					<Col span={8}>
-						{/* 视频画面 */}
 						<Button onClick={screenshotBtnClicked}>视频截图</Button>
 						<ImageModal
 							centered
@@ -293,8 +293,8 @@ export const VideoToolPopup = () => {
 							}
 						></ImageModal>
 					</Col>
+					{/* 视频下载 */}
 					<Col span={8}>
-						{/* 视频下载 */}
 						<Button onClick={downloadVideoBtnClicked}>视频下载</Button>
 						<DownloadVideoModal
 							centered
@@ -309,8 +309,8 @@ export const VideoToolPopup = () => {
 							videoInfo={videoInfo}
 						></DownloadVideoModal>
 					</Col>
+					{/* 视频短链 */}
 					<Col span={8}>
-						{/* 视频短链 */}
 						<Button onClick={getShortUrl}>视频短链</Button>
 					</Col>
 					<Col span={8}>

@@ -251,11 +251,14 @@ export const LiveToolPopup = () => {
 			<Space style={{ width: '100%' }} direction="vertical">
 				{/* 在线活跃人数 */}
 				{
-					onlineNumShow ? <PopupTitle style={{ marginTop: '8px' }}>在线活跃人数: {onlineNum}</PopupTitle> : null
+					onlineNumShow ? <PopupTitle>在线活跃人数: {onlineNum}</PopupTitle> : null
 				}
 				{/* 直播工具 */}
-				<PopupTitle style={{ marginTop: '8px' }}>直播工具</PopupTitle>
+				<PopupTitle extra={
+					<Button size={'small'} onClick={shareLiveRoom}>分享直播</Button>
+				}>直播工具</PopupTitle>
 				<Row wrap gutter={[16, 8]} >
+					{/* 直播截图 */}
 					<Col span={8}>
 						<Button onClick={screenshotBtnClicked}>直播截图</Button>
 						<ImageModal
@@ -273,6 +276,7 @@ export const LiveToolPopup = () => {
 							}
 						></ImageModal>
 					</Col>
+					{/* 直播封面 */}
 					<Col span={8}>
 						<Button onClick={userCoverBtnClicked}>直播封面</Button>
 						<ImageModal
@@ -290,6 +294,7 @@ export const LiveToolPopup = () => {
 							}
 						></ImageModal>
 					</Col>
+					{/* 直播背景 */}
 					{
 						roomInfo.background
 							? <Col span={8}>
@@ -311,9 +316,7 @@ export const LiveToolPopup = () => {
 							</Col>
 							: null
 					}
-					<Col span={8}>
-						<Button onClick={shareLiveRoom}>分享直播</Button>
-					</Col>
+					{/* 独轮车 */}
 					<Col span={8}>
 						<Button style={{ width: '88px' }} onClick={wheelbarrowBtnClick}>独轮车</Button>
 						<WheelbarrowModal
@@ -329,6 +332,7 @@ export const LiveToolPopup = () => {
 							}
 						></WheelbarrowModal>
 					</Col>
+					{/* SC 列表 */}
 					<Col span={8}>
 						<Button style={{ width: '88px' }} onClick={scListBtnClick}>SC 列表</Button>
 						<ScListModal
@@ -353,7 +357,6 @@ export const LiveToolPopup = () => {
 					}
 				</Row>
 				{/* 直播屏蔽 */}
-				<PopupTitle style={{ marginTop: '8px' }}>直播屏蔽</PopupTitle>
 				<Form
 					form={form}
 					labelWrap
@@ -372,6 +375,7 @@ export const LiveToolPopup = () => {
 					}}
 					onValuesChange={shieldFormChange}
 				>
+					<PopupTitle>直播屏蔽</PopupTitle>
 					{
 						liveShieldCss.map(item => (
 							<Form.Item
