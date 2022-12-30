@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PlasmoContentScript, PlasmoGetOverlayAnchor } from 'plasmo';
+import type { PlasmoContentScript, PlasmoGetInlineAnchor } from 'plasmo';
 import { Avatar, Button, List, message, Modal } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { useStorage } from '@plasmohq/storage/hook';
@@ -15,8 +15,8 @@ export const config: PlasmoContentScript = {
 };
 
 // 获取挂载节点
-export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => (
-	document.querySelector('.n-statistics :first-child')
+export const getInlineAnchor: PlasmoGetInlineAnchor = async () => (
+	document.querySelector('#navigator .n-inner .n-statistics')
 );
 
 export const watchOverlayAnchor = (
@@ -73,6 +73,8 @@ const ShowSameFollowings = () => {
 				setModalOpen(true);
 			} else if (code === 22115) {
 				messageApi.error('该用户已设置关注列表不可见');
+			} else if (code === -101) {
+				messageApi.error('请先登录');
 			} else {
 				messageApi.error('查询共同关注出错');
 			}
@@ -95,8 +97,6 @@ const ShowSameFollowings = () => {
 						{contextHolder}
 						<div
 							style={{
-								position: 'absolute',
-								right: '14px',
 								width: '72px',
 								height: '66px',
 								display: 'flex',
@@ -104,6 +104,7 @@ const ShowSameFollowings = () => {
 								color: '#99a2aa',
 								fontSize: '14px',
 								zIndex: 100,
+								marginRight: '10px',
 							}}
 						>
 							<Button
