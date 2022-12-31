@@ -1,15 +1,17 @@
 import React from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Tool } from '~utils';
 
 type Props = any;
 
 export class ErrorBoundary extends React.Component<Props, {
 	hasError: boolean,
 	hide: boolean,
+	errorInfo: any,
 }> {
 	constructor(props: Props | Readonly<Props>) {
 		super(props);
-		this.state = { hasError: false, hide: false };
+		this.state = { hasError: false, hide: false, errorInfo: null };
 	}
 
 	static getDerivedStateFromError() {
@@ -17,6 +19,7 @@ export class ErrorBoundary extends React.Component<Props, {
 	}
 
 	componentDidCatch(error: any, errorInfo: any) {
+		this.setState({ errorInfo: `${error?.toString()}\n${errorInfo?.componentStack}` });
 		console.error(error, errorInfo);
 	}
 
@@ -62,13 +65,40 @@ export class ErrorBoundary extends React.Component<Props, {
 								onClick={() => this.setState({ hide: true })}
 							/>
 						</div>
-						有一些错误导致了插件崩溃,请联系
-						<a target={'_blank'} href='https://message.bilibili.com/#/whisper/mid47706697' rel="noreferrer">开发者</a>
+						有一些错误导致了插件崩溃，请点击
+						<a
+							style={{
+								cursor: 'pointer',
+								color: '#f77399',
+							}}
+							onClick={(e) => {
+								e.preventDefault();
+								Tool.copyDataToClipboard(`${window.location.href}\n\n${this.state.errorInfo}`);
+							}}
+						>
+							复制错误信息
+						</a>
+						后，联系
+						<a
+							style={{
+								cursor: 'pointer',
+								color: '#f77399',
+							}}
+							target={'_blank'}
+							href='https://message.bilibili.com/#/whisper/mid47706697'
+							rel="noreferrer"
+						>开发者</a>
 						或者重新
-						<a onClick={(e) => {
-							e.preventDefault();
-							location.reload();
-						}}>刷新页面</a>
+						<a
+							style={{
+								cursor: 'pointer',
+								color: '#f77399',
+							}}
+							onClick={(e) => {
+								e.preventDefault();
+								location.reload();
+							}}
+						>刷新页面</a>
 					</div>
 				</div>
 			);
