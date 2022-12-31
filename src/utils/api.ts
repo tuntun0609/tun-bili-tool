@@ -130,7 +130,7 @@ export const getVideoInfo = async (bvId: string) => {
 				...paramsData,
 			},
 			options: {
-				credentials: 'omit',
+				// credentials: 'omit',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -323,6 +323,18 @@ export const getSameFollowings = async (props: {
 			vmid: mid,
 			ps,
 			pn,
+		},
+	});
+	return res;
+};
+
+export const getEmoticons = async (roomid: number) => {
+	const baseUrl = 'https://api.live.bilibili.com/xlive/web-ucenter/v2/emoticon/GetEmoticons';
+	const res = await get({
+		url: baseUrl,
+		params: {
+			platform: 'pc',
+			room_id: roomid,
 		},
 	});
 	return res;
