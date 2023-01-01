@@ -1,8 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { List, Modal, ModalProps } from 'antd';
 
+export type ScItem = {
+	danmu: string,
+	price: string,
+	name: string,
+	uid: string,
+}
+
 interface ScListModalProps extends ModalProps {
-	scList: any[]
+	scList: ScItem[]
 }
 
 export const ScListModal = (props: ScListModalProps) => {

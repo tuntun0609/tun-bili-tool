@@ -4,16 +4,9 @@ import { Button, Col, Form, message, Row, Space, Switch } from 'antd';
 import { isUndefined } from 'lodash';
 
 import { API, Tool, log, isInIframe, TOOL_ID, getMessageConfig, liveShieldCss } from '~utils';
-import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal } from '~contents-components';
+import { ImageModal, PopupTitle, ScListModal, WheelbarrowModal, ScItem } from '~contents-components';
 import { useStorage } from '@plasmohq/storage/hook';
 import { useMutationObservable } from '~utils/useMutationObservable';
-
-const scList: {
-	danmu: any,
-	price: string,
-	name: string,
-	uid: string,
-}[] = [];
 
 // tool 弹出层
 export const LiveToolPopup = () => {
@@ -30,7 +23,7 @@ export const LiveToolPopup = () => {
 	const [liveShield, setLiveShield] = useStorage('liveShield', {});
 	const [onlineNum, setOnlineNum] = useState(0);
 	const [onlineNumShow, setOnlineNumShow] = useState(true);
-	const [scL, setScL] = useState([]);
+	const [scList, setScList] = useState<ScItem[]>([]);
 
 	const getRoomId = () => {
 		if (location.pathname.startsWith('/blanc')) {
@@ -44,13 +37,12 @@ export const LiveToolPopup = () => {
 		mutationsList.forEach((item) => {
 			item.addedNodes.forEach((i: HTMLElement) => {
 				if (i.className.indexOf('superChat-card-detail') !== -1 && !isUndefined(i.dataset.danmaku)) {
-					scList.push({
+					setScList(prevState => [...prevState, {
 						danmu: i.dataset.danmaku,
 						price: i.querySelector('.card-item-top-right')?.innerHTML ?? '未发现价格',
-						name: i.querySelector('.name').innerHTML,
+						name: i.querySelector('.name')?.innerHTML ?? '未发现名字',
 						uid: i.dataset.uid,
-					});
-					setScL([...scL, i.dataset.danmaku]);
+					}]);
 				}
 			});
 		});
