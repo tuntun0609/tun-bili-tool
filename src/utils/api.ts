@@ -301,12 +301,11 @@ export const sendDanmu = async (props: {
 			formData.append(key, item);
 		}
 	}
-	const res = await fetch(baseUrl, {
+	return fetch(baseUrl, {
 		method: 'post',
 		body: formData,
 		credentials: 'include',
-	});
-	return res;
+	}).then(res => res.json());
 };
 
 // 查询共同关注
