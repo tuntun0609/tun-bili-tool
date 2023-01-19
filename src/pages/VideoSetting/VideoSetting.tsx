@@ -4,7 +4,7 @@ import { useStorage } from '@plasmohq/storage/hook';
 import { Button, Checkbox, Form, message, Switch } from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
-import { videoWrapShieldCheckboxOptions } from '../../utils';
+import { videoWrapShieldCss } from '../../utils';
 
 const storage = new Storage();
 
@@ -122,7 +122,10 @@ export const VideoSetting: React.FC = () => {
 							name={'videoWrapShieldOptions'}
 						>
 							<Checkbox.Group
-								options={videoWrapShieldCheckboxOptions}
+								options={videoWrapShieldCss.map(item => ({
+									label: item.label,
+									value: item.value,
+								}))}
 								onChange={onVideoWrapShieldChange}
 							/>
 						</Form.Item>

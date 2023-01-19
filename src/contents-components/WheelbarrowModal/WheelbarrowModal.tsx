@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Form, Input, message, Modal, ModalProps, Switch } from 'antd';
 
 import { API, getMessageConfig, log, Tool, TOOL_ID } from '~utils';
@@ -11,7 +11,7 @@ interface WheelbarrowModalProps extends ModalProps {
 export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 	const { roomid } = props;
 	const [messageApi, contextHolder] = message.useMessage(getMessageConfig(`#${TOOL_ID}`));
-	const [id, setId] = useState(0);
+	const id = useRef(null);
 	const [isTaskRun, setIsTaskRun] = useState(false);
 	const [msg, setMsg] = useState<string>();
 	const [sendTime, setSendTime] = useState<any>(6);
@@ -26,11 +26,11 @@ export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 		}
 		const eventId = setInterval(async () => {
 			try {
-				const data = await (await API.sendDanmu({
+				const data = await API.sendDanmu({
 					msg: msg,
 					roomid: roomid,
 					csrf: Tool.getCookie('bili_jct'),
-				})).json();
+				});
 				if (data.code === 10031) {
 					messageApi.error('发送弹幕过快, 请调低发送频率');
 				} else if (data.msg === 'f') {
@@ -40,13 +40,13 @@ export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 				messageApi.error('发送弹幕失败');
 			}
 		}, parseInt(sendTime, 10) * 1000);
-		setId(eventId as unknown as number);
+		id.current = eventId;
 		setIsTaskRun(true);
 		log('开始独轮车');
 		messageApi.success('开始独轮车');
 	};
 	const stopSend = () => {
-		clearInterval(id);
+		clearInterval(id.current);
 		setIsTaskRun(false);
 		log('结束独轮车');
 		messageApi.success('结束独轮车');
