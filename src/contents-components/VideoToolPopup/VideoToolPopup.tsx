@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Descriptions, message, Row, Slider, Space } from 'antd';
 
 import { API, TOOL_ID, Tool, getMessageConfig } from '~utils';
-import { DownloadVideoModal, ImageModal, PopupTitle } from '~contents-components';
+import { DownloadVideoModal, ImageModal, PopupTitle, QuickReply } from '~contents-components';
 
 // tool 弹出层
 export const VideoToolPopup = () => {
@@ -345,6 +345,7 @@ export const VideoToolPopup = () => {
 						),
 					}}
 				></Slider>
+				<QuickReply></QuickReply>
 			</Space>
 		</div>
 	);
