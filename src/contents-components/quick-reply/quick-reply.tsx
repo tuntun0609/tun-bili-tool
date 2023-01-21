@@ -72,7 +72,7 @@ export const QuickReply = () => {
 				快速评论
 			</PopupTitle>
 			<div style={{
-				height: '150px',
+				height: '170px',
 				overflow: 'auto',
 			}}>
 				<List

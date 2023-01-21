@@ -34,11 +34,11 @@ export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 		}
 	};
 	// 发送弹幕v2版本
-	const sendDanmuV2 = async () => {
+	const sendDanmuV2 = async (text: string) => {
 		const textarea: HTMLTextAreaElement = document.querySelector('#chat-control-panel-vm .chat-input');
 		const sendBtn: HTMLButtonElement = document.querySelector('#chat-control-panel-vm .bl-button');
 		if (textarea && sendBtn) {
-			textarea.value = msg;
+			textarea.value = text;
 			textarea.dispatchEvent(new InputEvent('input'));
 			setTimeout(() => sendBtn.click(), 50);
 		}
@@ -54,7 +54,7 @@ export const WheelbarrowModal = (props: WheelbarrowModalProps) => {
 			return;
 		}
 		const eventId = setInterval(async () => {
-			sendDanmuV2();
+			sendDanmuV2(msg);
 		}, parseInt(sendTime, 10) * 1000);
 		id.current = eventId;
 		setIsTaskRun(true);
