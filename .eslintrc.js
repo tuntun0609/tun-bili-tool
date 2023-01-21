@@ -109,5 +109,6 @@ module.exports = {
 		'@typescript-eslint/no-var-requires': ['off'],
 		'@typescript-eslint/no-explicit-any': ['off'],
 		'react-hooks/exhaustive-deps': ['off'],
+		'react/react-in-jsx-scope': ['off'],
 	},
 };
