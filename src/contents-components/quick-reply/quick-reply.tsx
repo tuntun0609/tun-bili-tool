@@ -69,7 +69,7 @@ export const QuickReply = () => {
 			<PopupTitle
 				extra={<Button onClick={() => setAddModalOpen(true)} size={'small'}>添加新项</Button>}
 			>
-				快速回复
+				快速评论
 			</PopupTitle>
 			<div style={{
 				height: '150px',
