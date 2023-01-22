@@ -1,3 +1,5 @@
+@import url(../contents-components/popup-title/popup-title.scss);
+
 #plasmo-shadow-container {
   z-index: 99999 !important;
 }
@@ -82,15 +84,6 @@
 		opacity: 0;
 		visibility: hidden;
 	}
-}
-
-.popup-title {
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	font-size: 16px;
-	font-weight: 700;
-	line-height: 1.5715;
-	overflow: hidden;
 }
 
 .tun-vip-icon {
