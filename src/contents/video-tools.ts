@@ -1,4 +1,4 @@
-import type { PlasmoContentScript } from 'plasmo';
+import type { PlasmoCSConfig } from 'plasmo';
 import { Storage } from '@plasmohq/storage';
 
 const storage = new Storage();
@@ -6,7 +6,7 @@ const storage = new Storage();
 import historyWarp from 'url:~utils/history-wrap';
 import { injectScript, videoWrapShieldCss } from '~utils';
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://www.bilibili.com/video/*'],
 };
 

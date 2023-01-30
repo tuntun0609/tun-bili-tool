@@ -1,4 +1,4 @@
-import type { PlasmoContentScript } from 'plasmo';
+import type { PlasmoCSConfig } from 'plasmo';
 import hotkeys from 'hotkeys-js';
 import { Storage } from '@plasmohq/storage';
 
@@ -6,7 +6,7 @@ import { isOriginLive } from '~utils';
 
 const storage = new Storage();
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://live.bilibili.com/*'],
 	all_frames: true,
 };

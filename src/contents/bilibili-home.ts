@@ -1,4 +1,4 @@
-import type { PlasmoContentScript } from 'plasmo';
+import type { PlasmoCSConfig } from 'plasmo';
 import { Storage } from '@plasmohq/storage';
 
 import recCss from 'data-text:../css/bilibili-home-rec.css';
@@ -6,7 +6,7 @@ import closeFullSreenPreview from 'data-text:../css/home-close-full-screen-previ
 
 const storage = new Storage();
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://www.bilibili.com/*'],
 };
 

@@ -1,4 +1,4 @@
-import type { PlasmoContentScript } from 'plasmo';
+import type { PlasmoCSConfig } from 'plasmo';
 import React, {
 	MouseEventHandler,
 	useEffect, useMemo, useState,
@@ -17,7 +17,7 @@ import antdResetCssText from 'data-text:antd/dist/reset.css';
 
 const storage = new Storage();
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://live.bilibili.com/*'],
 	all_frames: true,
 };

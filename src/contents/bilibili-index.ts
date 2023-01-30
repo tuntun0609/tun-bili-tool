@@ -1,5 +1,5 @@
 /* eslint-disable no-empty */
-import type { PlasmoContentScript } from 'plasmo';
+import type { PlasmoCSConfig } from 'plasmo';
 import { Storage } from '@plasmohq/storage';
 import html2canvas from 'html2canvas';
 // import * as htmlToImage from 'html-to-image';
@@ -9,7 +9,7 @@ import dark from 'data-text:../css/bilibili-index-dark.css';
 
 const storage = new Storage();
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://t.bilibili.com/*'],
 };
 

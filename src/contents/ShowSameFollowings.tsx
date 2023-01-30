@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PlasmoContentScript, PlasmoGetInlineAnchor } from 'plasmo';
+import type { PlasmoCSConfig, PlasmoGetInlineAnchor } from 'plasmo';
 import { Avatar, Button, List, message, Modal } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { useStorage } from '@plasmohq/storage/hook';
@@ -10,7 +10,7 @@ import { ThemeProvider } from '~contents-components';
 import css from 'data-text:./ShowSameFollowings.scss';
 import antdResetCssText from 'data-text:antd/dist/reset.css';
 
-export const config: PlasmoContentScript = {
+export const config: PlasmoCSConfig = {
 	matches: ['*://space.bilibili.com/*'],
 };
 
