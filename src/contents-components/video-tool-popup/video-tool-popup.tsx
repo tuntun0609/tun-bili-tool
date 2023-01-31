@@ -19,8 +19,8 @@ export const VideoToolPopup = () => {
 
 	// 通过网址获取视频唯一标识
 	const getVideoId = () => {
-		const path = location.pathname;
-		const [id] = path.match(/(BV|bv).{10}/);
+		const path = location.href;
+		const [id] = path.match(/(BV).{10}/);
 		return id;
 	};
 
@@ -88,7 +88,7 @@ export const VideoToolPopup = () => {
 			if (videoId !== '') {
 				try {
 					const data = await API.getVideoInfo(videoId);
-					setVideoInfo(data);
+					setVideoInfo(data ?? {});
 				} catch (error) {
 					console.error(error);
 				}
@@ -219,11 +219,11 @@ export const VideoToolPopup = () => {
 	const VideoDesConfig = useMemo(() => ([
 		{
 			label: 'av号',
-			value: videoInfo.aid,
+			value: videoInfo?.aid,
 		},
 		{
 			label: 'bv号',
-			value: videoInfo.bvid,
+			value: videoInfo?.bvid,
 		},
 		// {
 		// 	label: 'cid',
@@ -264,7 +264,7 @@ export const VideoToolPopup = () => {
 							centered
 							width={720}
 							title={'视频封面'}
-							src={videoInfo.pic ?? ''}
+							src={videoInfo?.pic ?? ''}
 							cancelText={'返回'}
 							okText={'复制图片至剪切板'}
 							open={picModalOpen}

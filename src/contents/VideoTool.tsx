@@ -18,7 +18,10 @@ import antdResetCssText from 'data-text:antd/dist/reset.css';
 const storage = new Storage();
 
 export const config: PlasmoCSConfig = {
-	matches: ['*://www.bilibili.com/video/*'],
+	matches: [
+		'*://www.bilibili.com/video/*',
+		'*://www.bilibili.com/festival/*',
+	],
 };
 
 // 注入style

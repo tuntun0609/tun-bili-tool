@@ -25,16 +25,18 @@ export const QuickReply = () => {
 	};
 	const onSendReply = (msg: string) => {
 		try {
-			const textarea: HTMLTextAreaElement = document.querySelector('#comment .main-reply-box textarea');
-			const sendBtn: HTMLDivElement = document.querySelector('#comment .reply-box-send');
+			const textarea: HTMLTextAreaElement = document.querySelector('.comment .main-reply-box textarea');
+			const sendBtn: HTMLDivElement = document.querySelector('.comment .reply-box-send');
 			if (textarea && sendBtn) {
 				textarea.value = msg;
 				textarea.dispatchEvent(new InputEvent('input'));
 				setTimeout(() => sendBtn.click(), 50);
+				messageApi.success('发送成功');
+			} else {
+				messageApi.error('发送失败');
 			}
-			messageApi.success('发送成功');
 		} catch (error) {
-			message.error('发送失败');
+			messageApi.error('发送失败');
 		}
 	};
 	const onAddReply = () => {
