@@ -1,5 +1,8 @@
 # tun-bili-tool
 
+![star](https://img.shields.io/github/stars/tuntun0609/tun-bili-tool?color=%23fb7299)
+![release](https://img.shields.io/github/v/release/tuntun0609/tun-bili-tool?color=%23fb7299)
+
 ## 概述
 
 bilibili网页优化插件
