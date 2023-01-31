@@ -16,12 +16,17 @@ export const VideoToolPopup = () => {
 	const [videoId, setVideoId] = useState('');
 	const [videoInfo, setVideoInfo] = useState<any>({});
 	const [playbackrate, setPlaybackrate] = useState(1);
-
+	const bvidReg = /(BV).{10}/;
+	const aidReg = /(AV|av)[0-9]+/;
 	// 通过网址获取视频唯一标识
 	const getVideoId = () => {
 		const path = location.href;
-		const [id] = path.match(/(BV).{10}/);
-		return id;
+		if (bvidReg.test(path)) {
+			const [bvid] = path.match(bvidReg);
+			return bvid;
+		}
+		const [aid] = path.match(aidReg);
+		return aid.slice(2);
 	};
 
 	// url改变事件
