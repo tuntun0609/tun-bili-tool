@@ -118,11 +118,17 @@ export const getStatusZInfoByUids = async (midArr: number[]) => {
 		console.log('getStatusZInfoByUids', error);
 	}
 };
-export const getVideoInfo = async (bvId: string) => {
+export const getVideoInfo = async (videoId: string) => {
 	const baseUrl = 'https://api.bilibili.com/x/web-interface/view';
-	const paramsData = {
-		bvid: bvId,
-	};
+	const paramsData: {
+		bvid?: string,
+		aid?: string,
+	} = {};
+	if (videoId.startsWith('BV')) {
+		paramsData.bvid = videoId;
+	} else {
+		paramsData.aid = videoId;
+	}
 	try {
 		const res = await get({
 			url: baseUrl,
