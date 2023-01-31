@@ -3,3 +3,4 @@ build/
 .vscode/
 .plasmo
 .github
+/tsconfig.json
