@@ -23,7 +23,7 @@ const HeaderItems: HeaderProps[] = [
 	},
 	{
 		name: '插件功能文档',
-		url: 'https://tun-bili-tool-doc.vercel.app/',
+		url: 'https://bili-tool-docs.tuntun.site/',
 	},
 	{
 		name: 'GitHub',
