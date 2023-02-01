@@ -7,7 +7,7 @@
 
 bilibili网页优化插件
 
-具体功能文档：[功能文档](https://tun-bili-tool-doc.vercel.app/)
+具体功能文档：[功能文档](https://bili-tool-docs.tuntun.site/)
 
 > 由于b站网页不定时更新，部分功能可能在未来的某刻失效；如果发现插件功能异常请与开发者联系或者在本仓库发issue告知，方便尽快修复
 >
