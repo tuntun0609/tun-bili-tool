@@ -6,5 +6,8 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs":"active",
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "eslint.workingDirectories": ["./{PATH_TO_CLIENT}"]
+  "eslint.workingDirectories": [
+    "./{PATH_TO_CLIENT}"
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
