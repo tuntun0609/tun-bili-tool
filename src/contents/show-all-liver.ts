@@ -10,7 +10,8 @@ export const config: PlasmoCSConfig = {
 import { API, Tool } from '~utils';
 import style from 'data-text:../css/show-all-liver.css';
 
-const getListItemTemplete = prop => `
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getListItemTempleteOld = prop => `
     <div class="bili-dyn-live-users__item">
       <a href="${prop.link}" target="_blank" style="display: flex">
         <div class="bili-dyn-live-users__item__left">
@@ -32,6 +33,43 @@ const getListItemTemplete = prop => `
       </a>
     </div>
   `;
+
+const getListItemTemplete = prop => `
+	<div class="bili-dyn-live-users__item">
+		<a href="${prop.link}" target="_blank" style="display: flex">
+			<div class="bili-dyn-live-users__item__left">
+				<div class="bili-dyn-live-users__item__face-container">
+					<div class="bili-dyn-live-users__item__face">
+						<div class="b-img--face b-img">
+							<picture class="b-img__inner"
+								><source
+									type="image/avif"
+									srcset="
+									${prop.face.slice(6)}@76w_76h_!web-dynamic.avif
+									" />
+								<source
+									type="image/webp"
+									srcset="
+									${prop.face.slice(6)}@76w_76h_!web-dynamic.webp
+									" />
+								<img
+									src="${prop.face.slice(6)}@76w_76h_!web-dynamic.webp"
+									loading="lazy"
+									onload="bmgCmptOnload(this)"
+							/></picture>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bili-dyn-live-users__item__right">
+				<div class="bili-dyn-live-users__item__uname bili-ellipsis">${prop.uname}</div>
+				<div class="bili-dyn-live-users__item__title bili-ellipsis">
+					${prop.title}
+				</div>
+			</div>
+		</a>
+	</div>
+`;
 
 const init = async (isReflash = false) => {
 	const firstGet = await API.getLiver();
