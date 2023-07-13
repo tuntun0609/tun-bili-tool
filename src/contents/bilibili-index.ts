@@ -43,7 +43,6 @@ const styleStr = `
   }
 
   .bili-dyn-list__item .bili-dyn-item {
-    width: calc(50% - 4px) !important;
     height: calc(100%) !important;
   }
 
