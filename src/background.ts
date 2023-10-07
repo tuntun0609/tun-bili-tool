@@ -1,7 +1,8 @@
-import { API, log } from './utils';
 import { Storage } from '@plasmohq/storage';
 
-export { };
+import { API, log } from './utils';
+
+export {};
 
 const storage = new Storage();
 
@@ -9,9 +10,13 @@ const storage = new Storage();
 const listenLiveRoomName = 'listenLiveRooms';
 
 // 监听member开播(新)
-const listenLiveRoomStatus = async (info: any, rooms: any[], liveStatus: { [x: string]: boolean; }) => {
+const listenLiveRoomStatus = async (
+	info: any,
+	rooms: any[],
+	liveStatus: { [x: string]: boolean },
+) => {
 	if (info) {
-		const { key } = rooms.find(item => item.roomid === info.room_id);
+		const { key } = rooms.find((item) => item.roomid === info.room_id);
 		// 如果监控列表无此项，则添加并设置值为false
 		if (liveStatus[key] === undefined) {
 			liveStatus[key] = false;
@@ -29,7 +34,10 @@ const listenLiveRoomStatus = async (info: any, rooms: any[], liveStatus: { [x: s
 					imageUrl: info.cover_from_user,
 					message: info.title,
 				};
-				chrome.notifications.create(`${key}-${info.room_id}-${(new Date()).getTime()}`, notifyOptions);
+				chrome.notifications.create(
+					`${key}-${info.room_id}-${new Date().getTime()}`,
+					notifyOptions,
+				);
 				// 修改liveStatus
 				liveStatus[key] = !liveStatus[key];
 			}
@@ -43,8 +51,8 @@ const listenLiveRoomStatus = async (info: any, rooms: any[], liveStatus: { [x: s
 };
 
 const listenLiveRoomMain = async () => {
-	const listenLiveRooms: any[] = await storage.get('listenLiveRooms') ?? [];
-	const midArr = listenLiveRooms.map(member => (member.key));
+	const listenLiveRooms: any[] = (await storage.get('listenLiveRooms')) ?? [];
+	const midArr = listenLiveRooms.map((member) => member.key);
 	log(midArr, new Date());
 	try {
 		if (midArr?.length !== 0) {
@@ -56,7 +64,7 @@ const listenLiveRoomMain = async () => {
 				return;
 			}
 			const { data } = info;
-			const liveStatus = await storage.get('liveStatus') ?? {};
+			const liveStatus = (await storage.get('liveStatus')) ?? {};
 			for (const key in data) {
 				if (Object.hasOwnProperty.call(data, key)) {
 					const item = data[key];
@@ -85,18 +93,15 @@ const listenLiveRoom = async (time = 1) => {
 
 // 停止监听直播间
 const closeAlarm = (name: string) => {
-	chrome.alarms.clear(
-		name,
-		() => {
-			console.log('停止监听直播间');
-			storage.set('liveStatus', {});
-		},
-	);
+	chrome.alarms.clear(name, () => {
+		console.log('停止监听直播间');
+		storage.set('liveStatus', {});
+	});
 };
 
 // 当提示信息被点击时
 chrome.notifications.onClicked.addListener((e) => {
-	const [ , roomid] = e.split('-');
+	const [, roomid] = e.split('-');
 	const createProperties = {
 		url: `https://live.bilibili.com/${roomid}`,
 	};
@@ -115,7 +120,7 @@ chrome.runtime.onInstalled.addListener(async (_details) => {
 	storage.set('liveStatus', {});
 
 	// popup页面 快速导航页面默认数据
-	if (await storage.get('quickNavigationData') === undefined) {
+	if ((await storage.get('quickNavigationData')) === undefined) {
 		storage.set('quickNavigationData', [
 			{
 				name: '番剧',
@@ -142,13 +147,15 @@ chrome.contextMenus.create({
 });
 chrome.contextMenus.onClicked.addListener((info) => {
 	if (info.menuItemId === 'bilibili') {
-		chrome.tabs.create({url: `https://search.bilibili.com/all?keyword=${info.selectionText}`});
+		chrome.tabs.create({
+			url: `https://search.bilibili.com/all?keyword=${info.selectionText}`,
+		});
 	}
 });
 
 // 监听直播监听开启状态
 storage.watch({
-	'isListenLiveRoom': async (data) => {
+	isListenLiveRoom: async (data) => {
 		if (data.newValue) {
 			listenLiveRoom();
 		} else {
